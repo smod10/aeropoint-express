@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Filter, ArrowRightLeft, Search, CheckCircle2, ChevronDown, X, Calendar, Phone, MessageCircle, Mail, Headset } from 'lucide-react';
-import FlightCard from '../components/flights/FlightCard';
+import FlightCard from '../components/Tempflights/FlightCard';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
 
 const FlightSearchResults: React.FC = () => {
