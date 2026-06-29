@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plane, Mail, Lock, User as UserIcon } from 'lucide-react';
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real application, authenticating logic goes here.
+    // If successfully authenticated, or if user is already signed up, redirect to profile:
+    navigate('/profile');
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 pt-16 px-4">
@@ -24,7 +32,7 @@ const Auth: React.FC = () => {
         <div className="w-full md:w-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-center bg-white relative">
           
           {/* Form Header */}
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-center mb-8">
             <Link to="/" className="flex items-center gap-2 group">
               <div className="bg-blue-900 p-2.5 rounded-xl group-hover:bg-amber-500 transition-colors duration-300">
                 <Plane className="w-5 h-5 text-white transform -rotate-45" />
@@ -35,7 +43,7 @@ const Auth: React.FC = () => {
             </Link>
           </div>
 
-          <div className="flex space-x-4 border-b border-slate-100 mb-8">
+          <div className="flex space-x-4 border-b border-slate-100 mb-6">
             <button 
               onClick={() => setIsLogin(true)}
               className={`pb-4 flex-1 text-sm font-black text-center transition-colors uppercase tracking-wider ${isLogin ? 'text-blue-900 border-b-2 border-blue-900' : 'text-slate-400 hover:text-slate-600'}`}
@@ -50,22 +58,46 @@ const Auth: React.FC = () => {
             </button>
           </div>
 
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          {/* Social Logins */}
+          <div className="space-y-3 mb-6">
+            <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-3" /> 
+              Continue with Google
+            </button>
+            <div className="grid grid-cols-2 gap-3">
+              <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5 mr-2" />
+                Facebook
+              </button>
+              <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+                <img src="https://www.svgrepo.com/show/475661/microsoft-color.svg" alt="Microsoft" className="w-5 h-5 mr-2" />
+                Microsoft
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center mb-6">
+            <div className="flex-1 border-t border-slate-200"></div>
+            <span className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Or continue with email</span>
+            <div className="flex-1 border-t border-slate-200"></div>
+          </div>
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {!isLogin && (
               <div className="relative">
                 <UserIcon className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-                <input type="text" placeholder="Full Name" className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+                <input type="text" placeholder="Full Name" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
               </div>
             )}
             
             <div className="relative">
               <Mail className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-              <input type="email" placeholder="Email Address" className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+              <input type="email" placeholder="Email Address" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
             </div>
 
             <div className="relative">
               <Lock className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-              <input type="password" placeholder="Password" className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+              <input type="password" placeholder="Password" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
             </div>
 
             {isLogin && (
@@ -74,7 +106,7 @@ const Auth: React.FC = () => {
               </div>
             )}
 
-            <button className="w-full bg-blue-900 hover:bg-blue-950 text-white font-black text-lg py-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 mt-6">
+            <button type="submit" className="w-full bg-blue-900 hover:bg-blue-950 text-white font-black text-lg py-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 mt-2">
               {isLogin ? 'Sign In Securely' : 'Join Aeropoint'}
             </button>
           </form>

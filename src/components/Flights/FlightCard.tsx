@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plane, Luggage, ChevronDown, Clock, ShieldAlert } from 'lucide-react';
 
+interface Layover {
+  airport: string;
+  duration: string;
+}
+
 interface FlightCardProps {
   airline: string;
   flightNumber: string;
@@ -13,14 +18,21 @@ interface FlightCardProps {
   stops: number;
   price: string;
   isCheapest?: boolean;
+  layovers?: Layover[];
 }
 
 const FlightCard: React.FC<FlightCardProps> = ({ 
   airline, flightNumber, departureTime, arrivalTime, 
-  departureAirport, arrivalAirport, duration, stops, price, isCheapest 
+  departureAirport, arrivalAirport, duration, stops, price, isCheapest, layovers 
 }) => {
   const navigate = useNavigate();
   const [showDetails, setShowDetails] = useState(false);
+
+  // Generate fallback layovers if stops exist but layovers array is not provided
+  const displayLayovers = layovers || Array.from({ length: stops }).map((_, i) => ({
+    airport: ['Paris (CDG)', 'Frankfurt (FRA)', 'Amsterdam (AMS)'][i % 3],
+    duration: ['2h 15m', '1h 45m', '3h 30m'][i % 3]
+  }));
 
   return (
     <div className={`bg-white border rounded-xl shadow-sm hover:shadow-md transition-shadow mb-4 overflow-hidden ${isCheapest ? 'border-amber-400' : 'border-slate-200'}`}>
@@ -75,11 +87,23 @@ const FlightCard: React.FC<FlightCardProps> = ({
           </div>
 
           {/* Price & Action */}
-          <div className="w-full md:w-1/4 flex flex-col items-end border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
-            <div className="flex items-center text-xs text-slate-500 font-semibold mb-2 bg-slate-50 px-2 py-1 rounded">
-              <Luggage className="w-3.5 h-3.5 mr-1.5 text-blue-900" /> 2PC (23kg) Included
+          <div className="w-full md:w-1/4 flex flex-col border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6 mt-2 md:mt-0">
+            
+            {/* Wrapper forces Row on Mobile, Column on Desktop */}
+            <div className="flex flex-row md:flex-col justify-between items-center md:items-end w-full mb-4 md:mb-3">
+              
+              {/* Price (Left on mobile, Bottom Right on desktop) */}
+              <div className="text-2xl md:text-3xl font-black text-blue-950 order-1 md:order-2">
+                {price}
+              </div>
+
+              {/* Luggage (Right on mobile, Top Right on desktop) */}
+              <div className="flex items-center text-[10px] md:text-xs text-slate-500 font-semibold bg-slate-50 px-2 py-1 rounded w-max order-2 md:order-1 md:mb-2">
+                <Luggage className="w-3.5 h-3.5 mr-1.5 text-blue-900" /> 2PC (23kg) Included
+              </div>
+
             </div>
-            <div className="text-3xl font-black text-blue-950 mb-3">{price}</div>
+
             <button 
               onClick={() => navigate('/flights/checkout')}
               className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 px-4 rounded-xl transition-colors shadow-sm"
@@ -107,22 +131,47 @@ const FlightCard: React.FC<FlightCardProps> = ({
       {/* Expanded Details */}
       {showDetails && (
         <div className="border-t border-slate-200 p-4 md:p-6 bg-white animate-fade-in text-sm">
-          <div className="flex flex-col border-l-2 border-blue-900 ml-3 pl-4 space-y-4 relative">
-            <div className="absolute w-3 h-3 rounded-full bg-blue-900 -left-[7px] top-0 border-[3px] border-white"></div>
-            <div>
-              <div className="font-bold text-slate-800">{departureTime} - {departureAirport}</div>
-              <div className="text-slate-500 text-xs mt-1">Murtala Muhammed International Airport (Terminal 2)</div>
-            </div>
-            
-            <div className="py-2 flex items-center text-xs font-bold text-slate-400">
-              <Plane className="w-4 h-4 mr-2" /> {airline} {flightNumber} | Boeing 777-300ER | Economy
+          <div className="flex flex-col ml-3 relative">
+            {/* Continuous vertical line for timeline */}
+            <div className="absolute left-[5px] top-2 bottom-2 w-0.5 bg-blue-900/20"></div>
+
+            {/* Departure Segment */}
+            <div className="relative pl-6 pb-6">
+              <div className="absolute w-3 h-3 rounded-full bg-blue-900 left-0 top-1.5 border-[3px] border-white box-content -translate-x-[4px]"></div>
+              <div>
+                <div className="font-bold text-slate-800">{departureTime} - {departureAirport}</div>
+                <div className="text-slate-500 text-xs mt-1">Departure Terminal</div>
+              </div>
+              
+              <div className="py-4 flex items-center text-xs font-bold text-slate-400">
+                <Plane className="w-4 h-4 mr-2" /> {airline} {flightNumber} | Boeing 777-300ER | Economy
+              </div>
             </div>
 
-            <div className="absolute w-3 h-3 rounded-full bg-blue-900 -left-[7px] bottom-0 border-[3px] border-white"></div>
-            <div>
-              <div className="font-bold text-slate-800">{arrivalTime} - {arrivalAirport}</div>
-              <div className="text-slate-500 text-xs mt-1">London Heathrow (Terminal 3)</div>
+            {/* Layover Segments (if any) */}
+            {displayLayovers.map((layover, index) => (
+              <div key={index} className="relative pl-6 pb-6">
+                <div className="absolute w-3 h-3 rounded-full bg-amber-500 left-0 top-1.5 border-[3px] border-white box-content -translate-x-[4px]"></div>
+                <div>
+                  <div className="font-bold text-slate-800">Layover: {layover.airport}</div>
+                  <div className="text-amber-600 text-xs mt-1 font-semibold">Wait time: {layover.duration}</div>
+                </div>
+                
+                <div className="py-4 flex items-center text-xs font-bold text-slate-400">
+                  <Plane className="w-4 h-4 mr-2" /> {airline} (Connecting) | Boeing 777-300ER | Economy
+                </div>
+              </div>
+            ))}
+
+            {/* Arrival Segment */}
+            <div className="relative pl-6">
+              <div className="absolute w-3 h-3 rounded-full bg-blue-900 left-0 top-1.5 border-[3px] border-white box-content -translate-x-[4px]"></div>
+              <div>
+                <div className="font-bold text-slate-800">{arrivalTime} - {arrivalAirport}</div>
+                <div className="text-slate-500 text-xs mt-1">Arrival Terminal</div>
+              </div>
             </div>
+
           </div>
         </div>
       )}

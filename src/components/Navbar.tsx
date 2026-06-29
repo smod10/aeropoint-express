@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Plane, Menu, X } from 'lucide-react';
+import { Plane, Menu, X, Headset, Phone, MessageCircle, Mail, User } from 'lucide-react';
 
 interface NavbarProps {
   isScrolled: boolean;
@@ -47,12 +47,12 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
         </div>
 
         <div className="hidden lg:flex items-center space-x-4">
-          <button className={`font-medium text-sm transition-colors hover:text-amber-500 ${solidNav ? 'text-slate-700' : 'text-white'}`}>
-            Log in
-          </button>
-          <button className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-2.5 px-6 rounded-full shadow-lg shadow-amber-500/30 transition-transform hover:-translate-y-0.5">
-            Sign Up
-          </button>
+          <Link 
+            to="/auth" 
+            className={`flex items-center font-bold py-2.5 px-6 rounded-full transition-all shadow-sm ${solidNav ? 'bg-amber-500 text-blue-950 hover:bg-amber-600' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30'}`}
+          >
+            <User className="w-4 h-4 mr-2" /> My Account
+          </Link>
         </div>
 
         <button 
@@ -68,21 +68,48 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-24 px-6 pb-6 shadow-2xl lg:hidden flex flex-col space-y-6">
-          {[{name: 'Home', path: '/'}, ...links].map((item) => (
-            <Link 
-              key={item.name} 
-              to={item.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`text-lg font-semibold text-left border-b pb-2 ${location.pathname === item.path ? 'text-amber-500 border-amber-500' : 'text-slate-800 border-slate-100'}`}
-            >
-              {item.name}
-            </Link>
-          ))}
-          <div className="flex flex-col space-y-3 mt-auto">
-            <button className="w-full py-3 text-blue-900 font-semibold border border-blue-900 rounded-lg">Log in</button>
-            <button className="w-full py-3 bg-amber-500 text-white font-semibold rounded-lg shadow-lg">Sign up</button>
+        <div className="fixed inset-0 z-40 bg-white pt-24 px-6 pb-6 shadow-2xl lg:hidden flex flex-col overflow-y-auto">
+          <div className="flex flex-col space-y-6">
+            {[{name: 'Home', path: '/'}, ...links].map((item) => (
+              <Link 
+                key={item.name} 
+                to={item.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-lg font-semibold text-left border-b pb-2 ${location.pathname === item.path ? 'text-amber-500 border-amber-500' : 'text-slate-800 border-slate-100'}`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
+
+          {/* Need Help Flyer (Mobile Menu) */}
+          <div className="bg-slate-50 rounded-2xl p-5 mt-8 border border-slate-100 shrink-0">
+            <h4 className="font-black text-blue-950 mb-4 flex items-center">
+              <Headset className="w-5 h-5 mr-2 text-amber-500" /> Need Help?
+            </h4>
+            <div className="space-y-4 text-sm font-semibold text-slate-600">
+              <a href="tel:+2348000000000" className="flex items-center hover:text-blue-900 transition-colors">
+                <Phone className="w-4 h-4 mr-3 text-slate-400" /> +234 800 000 0000
+              </a>
+              <a href="#" className="flex items-center hover:text-blue-900 transition-colors">
+                <MessageCircle className="w-4 h-4 mr-3 text-slate-400" /> WhatsApp Us
+              </a>
+              <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-blue-900 transition-colors">
+                <Mail className="w-4 h-4 mr-3 text-slate-400" /> support@aeropoint.com
+              </a>
+            </div>
+          </div>
+          
+          <div className="flex flex-col space-y-3 mt-8 mb-4">
+            <Link 
+              to="/auth" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3.5 bg-amber-500 text-blue-950 font-bold rounded-xl shadow-lg flex items-center justify-center transition-colors hover:bg-amber-600"
+            >
+              <User className="w-5 h-5 mr-2" /> My Account
+            </Link>
+          </div>
+
         </div>
       )}
     </nav>
@@ -90,4 +117,3 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
 };
 
 export default Navbar;
-
