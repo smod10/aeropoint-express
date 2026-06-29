@@ -12,6 +12,8 @@ import Contact from '../pages/Contact';
 // New Pages
 import FlightSearchResults from '../pages/FlightSearchResults';
 import FlightCheckout from '../pages/FlightCheckout';
+import HotelSearchResults from '../pages/HotelSearchResults';
+import HotelCheckout from '../pages/HotelCheckout';
 import Auth from '../pages/Auth';
 
 const AppRoutes: React.FC = () => {
@@ -25,6 +27,8 @@ const AppRoutes: React.FC = () => {
           <Route path="/flights/checkout" element={<FlightCheckout />} />
           
           <Route path="/hotels" element={<Hotels />} />
+          <Route path="/hotels/search" element={<HotelSearchResults />} />
+          <Route path="/hotels/checkout" element={<HotelCheckout />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/visas" element={<Visas />} />
           <Route path="/umrah" element={<Umrah />} />
