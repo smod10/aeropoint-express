@@ -34,7 +34,7 @@ const FlightsForm: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4 mb-2">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2">
         <div className="flex space-x-2 bg-slate-100 p-1 rounded-lg w-max">
           {['Return', 'One-way', 'Multi-city'].map((type) => (
             <button 

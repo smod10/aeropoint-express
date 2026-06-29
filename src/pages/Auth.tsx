@@ -11,7 +11,7 @@ const Auth: React.FC = () => {
         
         {/* Left Image Panel */}
         <div className="hidden md:block md:w-1/2 relative">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('[https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000&q=80](https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000&q=80)')" }} />
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000&q=80')" }} />
           <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-900/40 to-transparent" />
           <div className="absolute bottom-12 left-10 right-10 text-white">
             <div className="bg-amber-500 text-slate-900 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full w-max mb-4">Aeropoint Club</div>

@@ -33,13 +33,18 @@ const FlightFAQs: React.FC = () => {
 };
 
 const Flights: React.FC = () => {
+  // Added 2 extra items (10 total) so the slider has overflow to scroll to on desktop (where 8 are visible at once).
   const flightDeals = [
-    { from: 'Lagos (LOS)', to: 'London (LHR)', price: '₦1,250,000', type: 'Return', airline: 'Virgin Atlantic', img: '[https://images.unsplash.com/photo-1513635269975-5969336cd1f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1513635269975-5969336cd1f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
-    { from: 'Abuja (ABV)', to: 'Dubai (DXB)', price: '₦850,000', type: 'Return', airline: 'Emirates', img: '[https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
-    { from: 'Lagos (LOS)', to: 'New York (JFK)', price: '₦1,650,000', type: 'Return', airline: 'Delta', img: '[https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
-    { from: 'Kano (KAN)', to: 'Jeddah (JED)', price: '₦750,000', type: 'Return', airline: 'Saudi Airlines', img: '[https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
-    { from: 'Port Harcourt (PHC)', to: 'Paris (CDG)', price: '₦1,550,000', type: 'Return', airline: 'Air France', img: '[https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
-    { from: 'Lagos (LOS)', to: 'Johannesburg (JNB)', price: '₦950,000', type: 'Return', airline: 'South African', img: '[https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)' },
+    { from: 'Lagos (LOS)', to: 'London (LHR)', price: '₦1,250,000', type: 'Return', airline: 'Virgin Atlantic', img: 'https://images.unsplash.com/photo-1513635269975-5969336cd1f7?w=800&q=80' },
+    { from: 'Abuja (ABV)', to: 'Dubai (DXB)', price: '₦850,000', type: 'Return', airline: 'Emirates', img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' },
+    { from: 'Lagos (LOS)', to: 'New York (JFK)', price: '₦1,650,000', type: 'Return', airline: 'Delta', img: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80' },
+    { from: 'Kano (KAN)', to: 'Jeddah (JED)', price: '₦750,000', type: 'Return', airline: 'Saudi Airlines', img: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80' },
+    { from: 'Port Harcourt (PHC)', to: 'Paris (CDG)', price: '₦1,550,000', type: 'Return', airline: 'Air France', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80' },
+    { from: 'Lagos (LOS)', to: 'Johannesburg (JNB)', price: '₦950,000', type: 'Return', airline: 'South African', img: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80' },
+    { from: 'Abuja (ABV)', to: 'Doha (DOH)', price: '₦1,100,000', type: 'Return', airline: 'Qatar Airways', img: 'https://images.unsplash.com/photo-1549449339-1bc0b533e458?w=800&q=80' },
+    { from: 'Lagos (LOS)', to: 'Toronto (YYZ)', price: '₦1,850,000', type: 'Return', airline: 'Air Canada', img: 'https://images.unsplash.com/photo-1503932824905-2eab21711718?w=800&q=80' },
+    { from: 'Accra (ACC)', to: 'London (LHR)', price: '₦1,150,000', type: 'Return', airline: 'British Airways', img: 'https://images.unsplash.com/photo-1520939817895-060bdaf4fe1b?w=800&q=80' },
+    { from: 'Nairobi (NBO)', to: 'Dubai (DXB)', price: '₦750,000', type: 'Return', airline: 'Kenya Airways', img: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80' },
   ];
 
   const partners = ["Emirates", "QATAR", "BRITISH AIRWAYS", "DELTA", "ETHIOPIAN", "AIR PEACE", "KLM", "VIRGIN ATLANTIC", "LUFTHANSA", "KENYA AIRWAYS"];
@@ -65,7 +70,7 @@ const Flights: React.FC = () => {
 
       {/* Page Header */}
       <div className="bg-blue-950 pt-32 pb-24 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('[https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80](https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80)')] bg-cover bg-center"></div>
+        <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=2000&q=80')] bg-cover bg-center"></div>
         <div className="relative z-10 max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Compare & Book Cheap Flights</h1>
           <p className="text-blue-200 text-lg">Find the best deals across 500+ global airlines with zero hidden fees.</p>
@@ -117,14 +122,14 @@ const Flights: React.FC = () => {
         </div>
       </section>
 
-      {/* Top Flight Deals - Slider matching Curated Experiences */}
+      {/* Top Flight Deals - Grid Slider (2x2 Mobile, 4x2 Desktop) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 overflow-hidden">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-8">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-950 mb-2">Trending Flight Deals</h2>
-            <p className="text-slate-500">Discover low fares to top destinations around the world.</p>
+        <div className="flex flex-row justify-between items-end mb-8">
+          <div className="flex-1 pr-4">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-950 mb-1">Trending Flight Deals</h2>
+            <p className="text-sm md:text-base text-slate-500">Discover low fares to top destinations around the world.</p>
           </div>
-          <div className="hidden md:flex gap-2 mr-4">
+          <div className="hidden md:flex gap-2">
             <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-blue-900 hover:text-white transition-colors">
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -134,18 +139,19 @@ const Flights: React.FC = () => {
           </div>
         </div>
 
-        <div ref={scrollRef} className="flex overflow-x-auto gap-4 md:gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth">
+        {/* 2-Row Horizontal Slider utilizing CSS Grid */}
+        <div ref={scrollRef} className="grid grid-rows-2 grid-flow-col gap-4 md:gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth auto-cols-[calc(50%-0.5rem)] lg:auto-cols-[calc(25%-1.125rem)] overflow-x-auto">
           {flightDeals.map((deal, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start shrink-0 w-[45vw] sm:w-[45vw] lg:w-[calc(25%-1.125rem)]">
-              <div className="h-36 md:h-48 overflow-hidden relative">
+            <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start h-full">
+              <div className="h-32 md:h-40 overflow-hidden relative shrink-0">
                 <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{ backgroundImage: `url('${deal.img}')` }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <span className="absolute top-4 left-4 text-xs font-bold px-2 py-1 bg-amber-500 text-slate-900 rounded">{deal.type}</span>
+                <span className="absolute top-4 left-4 text-[10px] md:text-xs font-bold px-2 py-1 bg-amber-500 text-slate-900 rounded">{deal.type}</span>
                 <span className="absolute bottom-4 left-4 text-xs md:text-sm font-bold text-white tracking-wide shadow-sm">{deal.airline}</span>
               </div>
               
-              <div className="p-4 md:p-5 flex-grow flex flex-col justify-between">
-                <div className="flex justify-between items-center space-x-2 mb-6">
+              <div className="p-3 md:p-5 flex-grow flex flex-col justify-between">
+                <div className="flex justify-between items-center space-x-1 md:space-x-2 mb-4">
                   <div className="flex-1 overflow-hidden">
                     <div className="text-xs md:text-sm font-bold text-slate-800 group-hover:text-amber-500 transition-colors truncate" title={deal.from}>{deal.from.split(' ')[0]}</div>
                     <div className="text-[10px] md:text-xs text-slate-400 truncate">{deal.from.match(/\(([^)]+)\)/)?.[1]}</div>
@@ -156,7 +162,7 @@ const Flights: React.FC = () => {
                     <div className="text-[10px] md:text-xs text-slate-400 truncate">{deal.to.match(/\(([^)]+)\)/)?.[1]}</div>
                   </div>
                 </div>
-                <div className="border-t border-slate-100 pt-4 flex justify-between items-end">
+                <div className="border-t border-slate-100 pt-3 md:pt-4 flex justify-between items-end">
                   <div>
                     <div className="text-[10px] md:text-xs text-slate-400 mb-0.5 md:mb-1">From</div>
                     <div className="text-sm md:text-lg font-black text-blue-900">{deal.price}</div>
@@ -188,4 +194,3 @@ const Flights: React.FC = () => {
 };
 
 export default Flights;
-

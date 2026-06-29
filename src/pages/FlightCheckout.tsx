@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { User, Mail, Luggage, ShieldCheck, LockKeyhole, Plane, AlertCircle, CreditCard, Landmark } from 'lucide-react';
+import { User, Mail, Luggage, ShieldCheck, LockKeyhole, Plane, AlertCircle, CreditCard, Landmark, ArrowRight } from 'lucide-react';
 
 const FlightCheckout: React.FC = () => {
-  const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('card');
 
   return (
