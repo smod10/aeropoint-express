@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, Luggage, ShieldCheck, LockKeyhole, Plane, AlertCircle, CreditCard, Landmark, ArrowRight } from 'lucide-react';
+import { countryNames, dialingCodes } from '../data/countries';
 
 const FlightCheckout: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -48,9 +49,20 @@ const FlightCheckout: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nationality</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800">
-                    <option>Nigeria</option><option>United Kingdom</option><option>United States</option>
-                  </select>
+                  <>
+                    <input
+                      type="text"
+                      list="flight-country-list"
+                      defaultValue="Nigeria"
+                      placeholder="Search nationality"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800"
+                    />
+                    <datalist id="flight-country-list">
+                      {countryNames.map((countryName) => (
+                        <option key={countryName} value={countryName} />
+                      ))}
+                    </datalist>
+                  </>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Passport Number</label>
@@ -79,9 +91,20 @@ const FlightCheckout: React.FC = () => {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
                   <div className="flex">
-                    <select className="bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0">
-                      <option>+234</option><option>+44</option><option>+1</option>
-                    </select>
+                    <>
+                      <input
+                        type="text"
+                        list="flight-dial-code-list"
+                        defaultValue="+234"
+                        placeholder="Code"
+                        className="w-28 bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0"
+                      />
+                      <datalist id="flight-dial-code-list">
+                        {dialingCodes.map((dialCode) => (
+                          <option key={dialCode} value={dialCode} />
+                        ))}
+                      </datalist>
+                    </>
                     <input type="tel" placeholder="800 000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
                   </div>
                 </div>

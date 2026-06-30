@@ -30,12 +30,12 @@ const HotelsForm: React.FC = () => {
           <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Destination</span>
         </div>
 
-        <div className="flex flex-col md:flex-row flex-[2] border border-slate-200 rounded-xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 focus-within:ring-2 focus-within:ring-blue-900/20">
+        <div className="flex flex-col md:flex-row flex-[1.35] border border-slate-200 rounded-xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 focus-within:ring-2 focus-within:ring-blue-900/20">
           <div className="flex-1 relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Calendar className="h-5 w-5 text-slate-400" />
             </div>
-            <div className="w-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold flex items-center h-full">
+            <div className="w-full pl-12 pr-3 py-4 md:py-5 bg-white text-slate-800 font-semibold flex items-center h-full text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis">
               {checkInDate ? checkInDate : <span className="text-slate-400">Check-in</span>}
             </div>
             {checkInDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Check-in</span>}
@@ -48,7 +48,7 @@ const HotelsForm: React.FC = () => {
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Calendar className="h-5 w-5 text-slate-400" />
             </div>
-            <div className="w-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold flex items-center h-full">
+            <div className="w-full pl-12 pr-3 py-4 md:py-5 bg-white text-slate-800 font-semibold flex items-center h-full text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis">
               {checkOutDate ? checkOutDate : <span className="text-slate-400">Check-out</span>}
             </div>
             {checkOutDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Check-out</span>}
@@ -59,15 +59,18 @@ const HotelsForm: React.FC = () => {
           </div>
         </div>
         
-        <div className={`flex-1 relative border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-blue-900/20 ${showGuests ? 'z-40' : ''}`}>
+        <div className={`flex-[0.9] min-w-0 relative border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-blue-900/20 ${showGuests ? 'z-40' : ''}`}>
           <div 
             onClick={() => setShowGuests(!showGuests)}
-            className="w-full h-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold rounded-xl flex items-center cursor-pointer"
+            className="w-full h-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold rounded-xl flex items-center cursor-pointer min-w-0"
+            title={`${guests.adults + guests.children} Guest${guests.adults + guests.children > 1 ? 's' : ''}, ${guests.rooms} Room${guests.rooms > 1 ? 's' : ''}`}
           >
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Users className="h-5 w-5 text-slate-400" />
             </div>
-            <span>{guests.adults + guests.children} Guest{guests.adults + guests.children > 1 ? 's' : ''}, {guests.rooms} Room{guests.rooms > 1 ? 's' : ''}</span>
+            <span className="block min-w-0 truncate whitespace-nowrap overflow-hidden text-ellipsis text-sm md:text-base">
+              {guests.adults + guests.children} Guest{guests.adults + guests.children > 1 ? 's' : ''}, {guests.rooms} Room{guests.rooms > 1 ? 's' : ''}
+            </span>
             <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Guests & Rooms</span>
           </div>
 

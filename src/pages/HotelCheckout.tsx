@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, ShieldCheck, LockKeyhole, AlertCircle, CreditCard, Landmark, ArrowRight, BedDouble, MapPin, Calendar, Users } from 'lucide-react';
+import { countryNames, dialingCodes } from '../data/countries';
 
 const HotelCheckout: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -30,6 +31,26 @@ const HotelCheckout: React.FC = () => {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
                   <input type="text" placeholder="e.g. Doe" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nationality</label>
+                  <>
+                    <input
+                      type="text"
+                      list="hotel-country-list"
+                      defaultValue="Nigeria"
+                      placeholder="Search nationality"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800"
+                    />
+                    <datalist id="hotel-country-list">
+                      {countryNames.map((countryName) => (
+                        <option key={countryName} value={countryName} />
+                      ))}
+                    </datalist>
+                  </>
                 </div>
               </div>
 
@@ -67,9 +88,20 @@ const HotelCheckout: React.FC = () => {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
                   <div className="flex">
-                    <select className="bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0">
-                      <option>+234</option><option>+44</option><option>+1</option>
-                    </select>
+                    <>
+                      <input
+                        type="text"
+                        list="hotel-dial-code-list"
+                        defaultValue="+234"
+                        placeholder="Code"
+                        className="w-28 bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0"
+                      />
+                      <datalist id="hotel-dial-code-list">
+                        {dialingCodes.map((dialCode) => (
+                          <option key={dialCode} value={dialCode} />
+                        ))}
+                      </datalist>
+                    </>
                     <input type="tel" placeholder="800 000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
                   </div>
                 </div>
