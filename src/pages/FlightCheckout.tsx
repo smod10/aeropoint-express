@@ -1,250 +1,310 @@
 import React, { useState } from 'react';
-import { User, Mail, Luggage, ShieldCheck, LockKeyhole, Plane, AlertCircle, CreditCard, Landmark, ArrowRight } from 'lucide-react';
-import { countryNames, dialingCodes } from '../data/countries';
+import { Check, User, Mail, CreditCard, Clock, ShieldCheck, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { dialingCodes } from '../data/countries';
 
 const FlightCheckout: React.FC = () => {
+  const location = useLocation();
+  const booking = (location.state as any) ?? {};
+
+  const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('card');
+  const [couponCode, setCouponCode] = useState('');
+  const [couponApplied, setCouponApplied] = useState(false);
+
+  const tripType = booking.tripType ?? 'Return';
+  const isDomestic = Boolean(booking.isDomestic);
+  const showPassportFields = !isDomestic;
+  const fare = booking.fare ?? 450000;
+  const taxesAndFees = booking.taxesAndFees ?? 85000;
+  const total = fare + taxesAndFees - (couponApplied ? 15000 : 0);
+
+  const nextStep = () => setStep(prev => Math.min(prev + 1, 3));
+  const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+
+  const handleApplyCoupon = () => {
+    if (couponCode.length > 3) setCouponApplied(true);
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main Form Area */}
-        <main className="w-full lg:w-2/3">
-          <h1 className="text-2xl md:text-3xl font-extrabold text-blue-950 mb-2">Secure Your Booking</h1>
-          <p className="text-slate-500 mb-8 font-medium">Please enter your details exactly as they appear on your passport.</p>
+        {/* Checkout Header & Stepper */}
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-extrabold text-blue-950 mb-6">Complete Your Flight Booking</h1>
+          <div className="flex justify-center items-center max-w-2xl mx-auto">
+            {[1, 2, 3].map((num, i) => (
+              <React.Fragment key={num}>
+                <div className="flex flex-col items-center relative z-10">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-sm transition-colors duration-300 ${step >= num ? 'bg-amber-500 text-slate-900' : 'bg-white text-slate-400 border border-slate-200'}`}>
+                    {step > num ? <Check className="w-5 h-5" /> : num}
+                  </div>
+                  <span className={`text-xs font-bold mt-2 absolute -bottom-6 w-32 text-center ${step >= num ? 'text-blue-950' : 'text-slate-400'}`}>
+                    {num === 1 ? 'Traveler Info' : num === 2 ? 'Extras & Review' : 'Payment'}
+                  </span>
+                </div>
+                {i < 2 && (
+                  <div className={`flex-1 h-1 mx-2 rounded-full transition-colors duration-300 ${step > i + 1 ? 'bg-amber-500' : 'bg-slate-200'}`}></div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
 
-          {/* Passenger Details */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 overflow-hidden">
-            <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-              <div className="flex items-center">
-                <User className="w-5 h-5 text-blue-900 mr-2" />
-                <h2 className="font-bold text-slate-800 text-lg">Passenger 1 (Adult)</h2>
+        <div className="flex flex-col lg:flex-row gap-8 mt-16">
+          
+          {/* Main Form Area */}
+          <main className="w-full lg:w-2/3">
+            
+            {/* STEP 1: TRAVELER INFO */}
+            {step === 1 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start">
+                  <AlertCircle className="w-5 h-5 text-blue-900 mr-3 shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-900 font-medium">
+                    {showPassportFields
+                      ? 'Please ensure names match exactly as they appear on your passport. Passport details are required for international ticketing.'
+                      : 'Please ensure names match exactly as they appear on the government-issued ID you will use to travel. Passport details are not required for domestic flights.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
+                    <User className="w-5 h-5 text-blue-900 mr-2" />
+                    <h2 className="font-bold text-slate-800 text-lg">Traveler Details (Adult 1)</h2>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                      <div className="md:col-span-1">
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Title</label>
+                        <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800">
+                          <option>Mr</option><option>Mrs</option><option>Ms</option>
+                        </select>
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First & Middle Name</label>
+                        <input type="text" placeholder="e.g. John Edward" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name (Surname)</label>
+                        <input type="text" placeholder="e.g. Doe" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Date of Birth</label>
+                        <input type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                      </div>
+                    </div>
+
+                    {showPassportFields && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Passport Number</label>
+                          <input type="text" placeholder="e.g. A12345678" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Passport Expiry Date</label>
+                          <input type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
+                    <Mail className="w-5 h-5 text-blue-900 mr-2" />
+                    <h2 className="font-bold text-slate-800 text-lg">Contact Information</h2>
+                  </div>
+                  <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
+                      <input type="email" placeholder="Tickets will be sent here" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
+                      <div className="flex">
+                        <select className="bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0 w-24">
+                          {dialingCodes?.map((code) => <option key={code} value={code}>{code}</option>)}
+                        </select>
+                        <input type="tel" placeholder="800 000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2 py-1 rounded">Primary Contact</span>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div className="md:col-span-1">
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Title</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800">
-                    <option>Mr</option><option>Mrs</option><option>Ms</option><option>Miss</option>
-                  </select>
+            )}
+
+            {/* STEP 2: EXTRAS & REVIEW */}
+            {step === 2 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start">
+                  <AlertCircle className="w-5 h-5 text-blue-900 mr-3 shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-900 font-medium">
+                    Seat selection is managed directly by the airline after ticket issuance or during online check-in.
+                  </p>
                 </div>
-                <div className="md:col-span-3">
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First & Middle Name</label>
-                  <input type="text" placeholder="e.g. John Edward" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name (Surname)</label>
-                  <input type="text" placeholder="e.g. Doe" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Date of Birth</label>
-                  <input type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6">
+                   <h2 className="font-bold text-slate-800 text-lg mb-4">Travel Insurance</h2>
+                   <label className="flex items-start cursor-pointer group">
+                     <input type="checkbox" className="w-5 h-5 text-blue-900 rounded border-slate-300 mt-1 focus:ring-blue-900" />
+                     <div className="ml-4">
+                       <span className="font-bold text-slate-800 block group-hover:text-blue-900">Add Comprehensive Travel Insurance (+₦15,000)</span>
+                       <span className="text-sm text-slate-500 mt-1 block">Covers trip cancellation, medical emergencies, and lost baggage. Highly recommended.</span>
+                     </div>
+                   </label>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nationality</label>
-                  <>
-                    <input
-                      type="text"
-                      list="flight-country-list"
-                      defaultValue="Nigeria"
-                      placeholder="Search nationality"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800"
+            )}
+
+            {/* STEP 3: PAYMENT */}
+            {step === 3 && (
+              <div className="space-y-6 animate-fade-in">
+                
+                {/* Coupon Code Section */}
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                  <h2 className="font-bold text-slate-800 text-lg mb-4">Have a Promo Code?</h2>
+                  <div className="flex gap-3">
+                    <input 
+                      type="text" 
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      placeholder="Enter code here" 
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 uppercase" 
+                      disabled={couponApplied}
                     />
-                    <datalist id="flight-country-list">
-                      {countryNames.map((countryName) => (
-                        <option key={countryName} value={countryName} />
-                      ))}
-                    </datalist>
-                  </>
+                    <button 
+                      onClick={handleApplyCoupon}
+                      disabled={couponApplied || !couponCode}
+                      className="bg-slate-800 hover:bg-slate-900 disabled:bg-slate-300 text-white font-bold px-6 py-3.5 rounded-xl transition-colors"
+                    >
+                      {couponApplied ? 'Applied!' : 'Apply'}
+                    </button>
+                  </div>
+                  {couponApplied && <p className="text-emerald-600 font-bold text-sm mt-3 flex items-center"><Check className="w-4 h-4 mr-1" /> Coupon APPLIED (-₦15,000)</p>}
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Passport Number</label>
-                  <input type="text" placeholder="A00000000" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Contact Details */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 overflow-hidden">
-            <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
-              <Mail className="w-5 h-5 text-blue-900 mr-2" />
-              <h2 className="font-bold text-slate-800 text-lg">Contact Information</h2>
-            </div>
-            <div className="p-6">
-              <div className="flex items-start bg-blue-50 p-4 rounded-xl mb-6">
-                <AlertCircle className="w-5 h-5 text-blue-900 mr-3 mt-0.5 shrink-0" />
-                <p className="text-sm text-blue-900 font-medium">We'll send your e-ticket, booking updates, and gate changes to these details. Please ensure they are accurate.</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
-                  <input type="email" placeholder="john@example.com" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
-                  <div className="flex">
-                    <>
-                      <input
-                        type="text"
-                        list="flight-dial-code-list"
-                        defaultValue="+234"
-                        placeholder="Code"
-                        className="w-28 bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0"
-                      />
-                      <datalist id="flight-dial-code-list">
-                        {dialingCodes.map((dialCode) => (
-                          <option key={dialCode} value={dialCode} />
-                        ))}
-                      </datalist>
-                    </>
-                    <input type="tel" placeholder="800 000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
+                    <CreditCard className="w-5 h-5 text-blue-900 mr-2" />
+                    <h2 className="font-bold text-slate-800 text-lg">How would you like to pay?</h2>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      
+                      <button 
+                        onClick={() => setPaymentMethod('card')}
+                        className={`w-full p-4 rounded-xl border-2 flex items-center transition-all text-left ${paymentMethod === 'card' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
+                      >
+                        <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center shrink-0 ${paymentMethod === 'card' ? 'border-blue-900' : 'border-slate-300'}`}>
+                          {paymentMethod === 'card' && <div className="w-2.5 h-2.5 bg-blue-900 rounded-full"></div>}
+                        </div>
+                        <div>
+                          <div className={`font-bold ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-800'}`}>Pay Now (Credit/Debit Card)</div>
+                          <div className="text-sm text-slate-500 mt-0.5">Instant ticket issuance</div>
+                        </div>
+                      </button>
 
-          {/* Payment Method */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 overflow-hidden">
-            <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
-              <LockKeyhole className="w-5 h-5 text-blue-900 mr-2" />
-              <h2 className="font-bold text-slate-800 text-lg">Payment Method</h2>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button 
-                  onClick={() => setPaymentMethod('card')}
-                  className={`p-4 rounded-xl border-2 flex items-center transition-all ${paymentMethod === 'card' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                >
-                  <CreditCard className={`w-6 h-6 mr-3 ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-400'}`} />
-                  <div className="text-left">
-                    <div className={`font-bold ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-700'}`}>Debit/Credit Card</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Instant confirmation</div>
-                  </div>
-                </button>
+                      <button 
+                        onClick={() => setPaymentMethod('hold')}
+                        className={`w-full p-4 rounded-xl border-2 flex items-center transition-all text-left ${paymentMethod === 'hold' ? 'border-amber-500 bg-amber-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
+                      >
+                         <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center shrink-0 ${paymentMethod === 'hold' ? 'border-amber-500' : 'border-slate-300'}`}>
+                          {paymentMethod === 'hold' && <div className="w-2.5 h-2.5 bg-amber-500 rounded-full"></div>}
+                        </div>
+                        <div className="flex-1">
+                          <div className={`font-bold flex items-center ${paymentMethod === 'hold' ? 'text-amber-700' : 'text-slate-800'}`}>
+                            Reserve Ticket (Hold for 72 Hrs) <Clock className="w-4 h-4 ml-2" />
+                          </div>
+                          <div className="text-sm text-slate-500 mt-0.5">Secure this price now without paying immediately. Ticket will be canceled if unpaid after 72 hours.</div>
+                        </div>
+                      </button>
 
-                <button 
-                  onClick={() => setPaymentMethod('transfer')}
-                  className={`p-4 rounded-xl border-2 flex items-center transition-all ${paymentMethod === 'transfer' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                >
-                  <Landmark className={`w-6 h-6 mr-3 ${paymentMethod === 'transfer' ? 'text-blue-900' : 'text-slate-400'}`} />
-                  <div className="text-left">
-                    <div className={`font-bold ${paymentMethod === 'transfer' ? 'text-blue-900' : 'text-slate-700'}`}>Bank Transfer</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Pay via local bank</div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Card Details Mock */}
-              {paymentMethod === 'card' && (
-                <div className="mt-6 pt-6 border-t border-slate-100 animate-fade-in">
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cardholder Name</label>
-                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Card Number</label>
-                    <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 tracking-widest" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Expiry Date</label>
-                      <input type="text" placeholder="MM/YY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">CVV</label>
-                      <input type="text" placeholder="123" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                    </div>
+
+                    {paymentMethod === 'card' && (
+                      <div className="mt-6 pt-6 border-t border-slate-100 animate-fade-in space-y-4">
+                        <input type="text" placeholder="Cardholder Name" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                        <input type="text" placeholder="Card Number (0000 0000 0000 0000)" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 tracking-widest" />
+                        <div className="grid grid-cols-2 gap-4">
+                          <input type="text" placeholder="MM/YY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                          <input type="text" placeholder="CVV" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Stepper Navigation Controls */}
+            <div className="flex justify-between mt-8 border-t border-slate-200 pt-6">
+              {step > 1 ? (
+                <button onClick={prevStep} className="px-6 py-3.5 font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 flex items-center transition-colors">
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                </button>
+              ) : <div></div>}
+              
+              {step < 3 ? (
+                <button onClick={nextStep} className="px-8 py-3.5 font-bold text-slate-900 bg-amber-500 rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/20 flex items-center transition-all">
+                  Continue to Next Step <ArrowRight className="w-4 h-4 ml-2" />
+                </button>
+              ) : (
+                <button className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
+                  {paymentMethod === 'hold' ? 'Confirm Reservation' : 'Complete Payment'} <ShieldCheck className="w-5 h-5 ml-2" />
+                </button>
               )}
             </div>
-          </div>
-
-        </main>
-
-        {/* Sidebar Summary */}
-        <aside className="w-full lg:w-1/3">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm sticky top-24 overflow-hidden">
             
-            {/* Flight Overview */}
-            <div className="bg-blue-950 p-6 text-white relative overflow-hidden">
-              <Plane className="absolute -right-6 -bottom-6 w-32 h-32 text-white/5 transform -rotate-12" />
-              <h3 className="font-bold text-lg mb-6 relative z-10 flex items-center"><Plane className="w-5 h-5 mr-2 text-amber-500" /> Outbound Flight</h3>
-              
-              <div className="flex justify-between items-center mb-2 relative z-10">
-                <div>
-                  <div className="font-black text-3xl tracking-tight">LOS</div>
-                  <div className="text-xs text-blue-300 font-medium">10:30</div>
+          </main>
+
+          {/* Sidebar Summary */}
+          <aside className="w-full lg:w-1/3">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm sticky top-24 overflow-hidden">
+              <div className="p-6 border-b border-slate-100">
+                <h3 className="font-extrabold text-blue-950 mb-4 uppercase tracking-wider text-sm">Booking Summary</h3>
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Flight</p>
+                  <p className="font-bold text-slate-800">{booking.from ?? 'Lagos (LOS)'} to {booking.to ?? 'London (LHR)'}</p>
+                  <p className="text-sm text-slate-500 mt-1">{booking.airline ?? 'Virgin Atlantic'} • {booking.travelClass ?? 'Economy'} Class</p>
+                  <p className="text-sm font-semibold text-slate-600 mt-2">
+                    {booking.departDate ?? '2026-11-24'}
+                    {tripType === 'Return' && (booking.returnDate ? ` - ${booking.returnDate}` : ' - Return')}
+                  </p>
                 </div>
-                <div className="flex-1 flex flex-col items-center mx-4">
-                  <span className="text-[10px] text-blue-200 uppercase font-bold tracking-widest mb-1">6h 45m</span>
-                  <div className="w-full border-t border-dashed border-blue-700 relative flex justify-center items-center">
-                    <div className="absolute bg-blue-950 px-1"><Plane className="w-3 h-3 text-amber-500" /></div>
+              </div>
+              
+              <div className="p-6 bg-slate-50">
+                <div className="space-y-3 mb-4 border-b border-slate-200 pb-4">
+                  <div className="flex justify-between text-sm text-slate-600 font-medium">
+                    <span>Adult x 1</span><span className="text-slate-800 font-bold">₦{fare.toLocaleString()}</span>
                   </div>
-                  <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-widest mt-1">Direct</span>
+                  <div className="flex justify-between text-sm text-slate-600 font-medium">
+                    <span>Taxes & Fees</span><span className="text-slate-800 font-bold">₦{taxesAndFees.toLocaleString()}</span>
+                  </div>
+                  {couponApplied && (
+                    <div className="flex justify-between text-sm text-emerald-600 font-medium">
+                      <span>Promo Code Applied</span><span>-₦15,000</span>
+                    </div>
+                  )}
                 </div>
-                <div className="text-right">
-                  <div className="font-black text-3xl tracking-tight">LHR</div>
-                  <div className="text-xs text-blue-300 font-medium">17:15</div>
+                
+                <div className="flex justify-between items-end mb-4">
+                  <span className="font-black text-slate-800 text-lg">Total</span>
+                  <span className="text-3xl font-black text-blue-900">₦{total.toLocaleString()}</span>
                 </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-blue-900/50 flex justify-between items-center relative z-10">
-                <span className="text-sm font-bold">Virgin Atlantic (VS 412)</span>
-                <span className="text-xs bg-white/10 px-2 py-1 rounded font-semibold">Economy</span>
-              </div>
-            </div>
-            
-            {/* Add-ons & Details */}
-            <div className="p-6 border-b border-slate-100 space-y-4">
-              <div className="flex items-center text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <Luggage className="w-5 h-5 mr-3 text-blue-900" /> 
-                <div>
-                  <div className="font-bold">2 Checked Bags Included</div>
-                  <div className="text-xs text-slate-500 font-medium">Up to 23kg each per passenger</div>
+                
+                <div className="flex items-center justify-center space-x-2 text-[10px] uppercase tracking-wider text-emerald-700 font-bold bg-emerald-50 border border-emerald-100 py-2 rounded-lg">
+                  <ShieldCheck className="w-4 h-4" /> <span>Bank-Grade Encryption</span>
                 </div>
               </div>
             </div>
+          </aside>
 
-            {/* Price Breakdown */}
-            <div className="p-6 bg-slate-50">
-              <h4 className="font-black text-slate-800 mb-4 uppercase tracking-wider text-sm">Price Breakdown</h4>
-              <div className="space-y-3 mb-4 border-b border-slate-200 pb-4">
-                <div className="flex justify-between text-sm text-slate-600 font-medium">
-                  <span>Adult x 1</span><span className="text-slate-800 font-bold">₦1,050,000</span>
-                </div>
-                <div className="flex justify-between text-sm text-slate-600 font-medium">
-                  <span>Taxes & Airline Fees</span><span className="text-slate-800 font-bold">₦200,000</span>
-                </div>
-              </div>
-              
-              <div className="flex justify-between items-end mb-6">
-                <div>
-                  <span className="font-black text-slate-800 text-lg block">Total Price</span>
-                  <span className="text-xs font-bold text-slate-400">Includes all taxes & fees</span>
-                </div>
-                <span className="text-3xl font-black text-blue-900">₦1,250,000</span>
-              </div>
-
-              <div className="flex items-center justify-center space-x-2 text-xs text-emerald-700 font-bold mb-6 bg-emerald-50 border border-emerald-100 py-2.5 rounded-xl">
-                <ShieldCheck className="w-4 h-4" /> <span>100% Safe & Secure Payment</span>
-              </div>
-
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-lg">
-                Pay ₦1,250,000 <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-            </div>
-          </div>
-        </aside>
-
+        </div>
       </div>
     </div>
   );

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Filter, Search, ChevronDown, X, MapPin, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import HotelCard from '../components/hotels/HotelCard';
 import HotelsForm from '../components/BookingWidget/HotelsForm';
 
 const HotelSearchResults: React.FC = () => {
+  const navigate = useNavigate();
   const [priceRange, setPriceRange] = useState(2500000);
   const [activeTab, setActiveTab] = useState('recommended');
-  
+
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [showMobileSearchModal, setShowMobileSearchModal] = useState(false);
   const [showDesktopModifyForm, setShowDesktopModifyForm] = useState(false);
@@ -16,26 +18,24 @@ const HotelSearchResults: React.FC = () => {
     price: true,
     starRating: true,
     propertyType: false,
-    amenities: false
+    amenities: false,
   });
 
   const toggleFilter = (filterKey: keyof typeof openFilters) => {
-    setOpenFilters(prev => ({ ...prev, [filterKey]: !prev[filterKey] }));
+    setOpenFilters((prev) => ({ ...prev, [filterKey]: !prev[filterKey] }));
   };
 
   const mockHotels = [
-    { id: 1, name: "The Ritz London", location: "Mayfair, London", distance: "0.5 miles to center", rating: 4.8, reviews: 1240, stars: 5, pricePerNight: "₦850,000", totalPrice: "₦4,250,000", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80", amenities: ['Free Wi-Fi', 'Breakfast Included', 'Spa', 'Gym'], isTopPick: true },
-    { id: 2, name: "Hilton London Metropole", location: "Paddington, London", distance: "1.2 miles to center", rating: 4.2, reviews: 856, stars: 4, pricePerNight: "₦350,000", totalPrice: "₦1,750,000", image: "https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?w=800&q=80", amenities: ['Free Wi-Fi', 'Pool', 'Restaurant'] },
-    { id: 3, name: "The Savoy", location: "Strand, London", distance: "0.2 miles to center", rating: 4.9, reviews: 2100, stars: 5, pricePerNight: "₦1,100,000", totalPrice: "₦5,500,000", image: "https://images.unsplash.com/photo-1542314831-c6a4d142104d?w=800&q=80", amenities: ['Free Wi-Fi', 'River View', 'Spa', 'Bar'] },
+    { id: 1, name: 'The Ritz London', location: 'Mayfair, London', distance: '0.5 miles to center', rating: 4.8, reviews: 1240, stars: 5, pricePerNight: '₦850,000', totalPrice: '₦4,250,000', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80', amenities: ['Free Wi-Fi', 'Breakfast Included', 'Spa', 'Gym'], isTopPick: true },
+    { id: 2, name: 'Hilton London Metropole', location: 'Paddington, London', distance: '1.2 miles to center', rating: 4.2, reviews: 856, stars: 4, pricePerNight: '₦350,000', totalPrice: '₦1,750,000', image: 'https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?w=800&q=80', amenities: ['Free Wi-Fi', 'Pool', 'Restaurant'] },
+    { id: 3, name: 'The Savoy', location: 'Strand, London', distance: '0.2 miles to center', rating: 4.9, reviews: 2100, stars: 5, pricePerNight: '₦1,100,000', totalPrice: '₦5,500,000', image: 'https://images.unsplash.com/photo-1542314831-c6a4d142104d?w=800&q=80', amenities: ['Free Wi-Fi', 'River View', 'Spa', 'Bar'] },
   ];
 
   return (
     <div className="bg-slate-50 min-h-screen pb-20">
-      
       {/* Modification Header */}
       <div className="bg-blue-950 text-white pt-28 pb-6 shadow-md relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          
           {/* Desktop Header */}
           <div className="hidden md:flex items-center space-x-4 cursor-pointer hover:text-amber-500 transition-colors" onClick={() => setShowDesktopModifyForm(!showDesktopModifyForm)}>
             <div className="p-3 bg-white/10 rounded-xl"><MapPin className="w-6 h-6 text-amber-500" /></div>
@@ -44,7 +44,7 @@ const HotelSearchResults: React.FC = () => {
               <div className="text-xs text-blue-200">28 Jun - 03 Jul 2026 • 2 Guests, 1 Room</div>
             </div>
           </div>
-          
+
           <button onClick={() => setShowDesktopModifyForm(!showDesktopModifyForm)} className="hidden md:flex bg-[#FFA500] hover:bg-amber-400 text-blue-950 px-6 py-2.5 rounded-lg font-bold transition-colors shadow-lg items-center">
             <Search className="w-4 h-4 mr-2" /> Modify Search
           </button>
@@ -54,7 +54,7 @@ const HotelSearchResults: React.FC = () => {
             <button onClick={() => setShowMobileSearchModal(true)} className="font-bold text-xl tracking-wide hover:text-amber-500 transition-colors truncate w-full text-center">
               London, UK
             </button>
-            
+
             <div className="flex flex-row items-center justify-center gap-2 w-full max-w-sm">
               <button onClick={() => setShowMobileSearchModal(true)} className="flex-1 bg-white/10 px-3 py-2.5 rounded-lg border border-white/20 text-xs text-white text-center font-bold truncate transition-colors hover:bg-white/20">
                 28 Jun - 03 Jul
@@ -95,12 +95,11 @@ const HotelSearchResults: React.FC = () => {
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 lg:mt-8 flex flex-col lg:flex-row gap-4 lg:gap-8">
-        
         {/* Sidebar Filters */}
         <aside className="w-full lg:w-[30%] shrink-0">
           <div className="sticky top-24 space-y-4 lg:space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200 p-4 lg:p-6 shadow-sm">
-              <div 
+              <div
                 className="flex items-center justify-between cursor-pointer lg:cursor-default"
                 onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
               >
@@ -114,7 +113,6 @@ const HotelSearchResults: React.FC = () => {
               </div>
 
               <div className={`${isMobileFilterOpen ? 'block' : 'hidden'} lg:block pt-5 mt-5 border-t border-slate-100`}>
-                
                 {/* Price Accordion */}
                 <div className="mb-6 border-b border-slate-100 pb-6">
                   <div className="flex justify-between items-center cursor-pointer group" onClick={() => toggleFilter('price')}>
@@ -127,7 +125,7 @@ const HotelSearchResults: React.FC = () => {
                         <span className="text-xs font-bold text-slate-400">₦50k</span>
                         <span className="text-xs font-black text-blue-900 bg-blue-50 px-2 py-1 rounded">₦{(priceRange / 1000000).toFixed(2)}M</span>
                       </div>
-                      <input 
+                      <input
                         type="range" min="50000" max="3000000" step="10000"
                         value={priceRange} onChange={(e) => setPriceRange(Number(e.target.value))}
                         className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
@@ -193,7 +191,6 @@ const HotelSearchResults: React.FC = () => {
                     </div>
                   )}
                 </div>
-
               </div>
             </div>
           </div>
@@ -226,8 +223,8 @@ const HotelSearchResults: React.FC = () => {
 
           {/* Render Hotel Cards */}
           <div>
-            {mockHotels.map(hotel => (
-              <HotelCard key={hotel.id} {...hotel} />
+            {mockHotels.map((hotel) => (
+              <HotelCard key={hotel.id} {...hotel} onBookNow={() => navigate('/hotels/details', { state: { hotel } })} />
             ))}
           </div>
 

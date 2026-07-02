@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { Filter, ArrowRightLeft, Search, CheckCircle2, ChevronDown, X, Calendar, Phone, MessageCircle, Mail, Headset } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import FlightCard from '../components/flights/FlightCard';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
+import FlightDetailsModal from '../components/FlightDetailsModal';
 
 const FlightSearchResults: React.FC = () => {
+  const location = useLocation();
+  const searchContext = (location.state as any) ?? {};
+
   const [priceRange, setPriceRange] = useState(2500000);
   const [activeTab, setActiveTab] = useState('cheapest');
+  const tripType = searchContext.tripType ?? 'Return';
   
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [showMobileSearchModal, setShowMobileSearchModal] = useState(false);
   const [showDesktopModifyForm, setShowDesktopModifyForm] = useState(false);
   const [showFareCalendarModal, setShowFareCalendarModal] = useState(false);
+  const [selectedFlight, setSelectedFlight] = useState<any>(null);
 
   // Added state for swapping airports on the interactive header
   const [origin, setOrigin] = useState({ city: 'Lagos', code: 'LOS', name: 'Murtala Muhammed International' });
@@ -36,11 +43,25 @@ const FlightSearchResults: React.FC = () => {
     setOpenFilters(prev => ({ ...prev, [filterKey]: !prev[filterKey] }));
   };
 
+  const inferredDomestic =
+    searchContext.isDomestic ?? (['LOS', 'ABV', 'KAN', 'PHC', 'ENU'].includes(origin.code) && ['LOS', 'ABV', 'KAN', 'PHC', 'ENU'].includes(destination.code));
+
+  const bookingContext = {
+    tripType,
+    isDomestic: inferredDomestic,
+    from: `${origin.city} (${origin.code})`,
+    to: `${destination.city} (${destination.code})`,
+    departDate: searchContext.departDate || '2026-11-24',
+    returnDate: tripType === 'Return' ? (searchContext.returnDate || '2026-12-01') : '',
+    travelClass: searchContext.travelClass || 'Economy',
+    passengers: searchContext.passengers || { adults: 1, children: 0, infants: 0 },
+  };
+
   const mockFlights = [
     { id: 1, airline: "Virgin Atlantic", flightNumber: "VS 412", departureTime: "10:30", arrivalTime: "17:15", departureAirport: "LOS", arrivalAirport: "LHR", duration: "6h 45m", stops: 0, price: "₦1,250,000", isCheapest: true },
     { id: 2, airline: "British Airways", flightNumber: "BA 075", departureTime: "22:55", arrivalTime: "05:30", departureAirport: "LOS", arrivalAirport: "LHR", duration: "6h 35m", stops: 0, price: "₦1,380,000" },
-    { id: 3, airline: "Air France", flightNumber: "AF 114", departureTime: "08:15", arrivalTime: "18:40", departureAirport: "LOS", arrivalAirport: "LHR", duration: "10h 25m", stops: 1, price: "₦1,150,000" },
-    { id: 4, airline: "Lufthansa", flightNumber: "LH 567", departureTime: "23:05", arrivalTime: "10:15", departureAirport: "LOS", arrivalAirport: "LHR", duration: "11h 10m", stops: 1, price: "₦1,100,000" },
+    { id: 3, airline: "Air France", flightNumber: "AF 114", departureTime: "08:15", arrivalTime: "18:40", departureAirport: "LOS", arrivalAirport: "LHR", duration: "10h 25m", stops: 1, price: "₦1,150,000", layovers: [{ airport: 'CDG', country: 'France', duration: '2h 10m' }] },
+    { id: 4, airline: "Lufthansa", flightNumber: "LH 567", departureTime: "23:05", arrivalTime: "10:15", departureAirport: "LOS", arrivalAirport: "LHR", duration: "11h 10m", stops: 1, price: "₦1,100,000", layovers: [{ airport: 'FRA', country: 'Germany', duration: '2h 45m' }] },
   ];
 
   const dateCarousel = [
@@ -453,11 +474,17 @@ const FlightSearchResults: React.FC = () => {
 
           <div className="space-y-5">
             {mockFlights.map(flight => (
-              <FlightCard key={flight.id} {...flight} />
+              <FlightCard key={flight.id} {...flight} onBookNow={() => setSelectedFlight({ ...flight, ...bookingContext })} />
             ))}
           </div>
         </main>
       </div>
+
+      <FlightDetailsModal 
+        isOpen={!!selectedFlight} 
+        onClose={() => setSelectedFlight(null)} 
+        flight={selectedFlight} 
+      />
     </div>
   );
 };

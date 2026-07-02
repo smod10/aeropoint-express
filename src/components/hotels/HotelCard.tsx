@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MapPin, Star, Wifi, Coffee, ChevronRight, Check, CheckCircle2 } from 'lucide-react';
 
 interface HotelCardProps {
@@ -15,14 +14,13 @@ interface HotelCardProps {
   image: string;
   amenities: string[];
   isTopPick?: boolean;
+  onBookNow?: () => void;
 }
 
 const HotelCard: React.FC<HotelCardProps> = ({ 
   name, location, distance, rating, reviews, stars, 
-  pricePerNight, totalPrice, image, amenities, isTopPick 
+  pricePerNight, totalPrice, image, amenities, isTopPick, onBookNow 
 }) => {
-  const navigate = useNavigate();
-
   return (
     <div className={`bg-white border rounded-xl shadow-sm hover:shadow-md transition-shadow mb-5 overflow-hidden flex flex-col md:flex-row ${isTopPick ? 'border-amber-400' : 'border-slate-200'}`}>
       
@@ -85,10 +83,10 @@ const HotelCard: React.FC<HotelCardProps> = ({
               <span className="text-xs text-slate-500 font-medium">{pricePerNight} / night</span>
             </div>
             <button 
-              onClick={() => navigate('/hotels/checkout')}
+              onClick={onBookNow}
               className="md:mt-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm flex items-center shrink-0"
             >
-              Choose Room <ChevronRight className="w-4 h-4 ml-1" />
+              Book Now <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
         </div>

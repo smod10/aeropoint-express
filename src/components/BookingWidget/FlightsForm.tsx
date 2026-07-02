@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Plane, MapPin, Calendar, Users, ChevronDown, Search, Plus, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AirportInput from './AirportInput.tsx';
 
 const FlightsForm: React.FC = () => {
+  const navigate = useNavigate();
   const [tripType, setTripType] = useState('Return');
   const [multiFlights, setMultiFlights] = useState([{ id: 1, from: '', to: '', date: '' }, { id: 2, from: '', to: '', date: '' }]);
   
@@ -18,6 +20,46 @@ const FlightsForm: React.FC = () => {
 
   const today = new Date().toISOString().split('T')[0];
   const totalPassengers = passengers.adults + passengers.children + passengers.infants;
+
+  const getAirportCode = (location: string) => {
+    const match = location.match(/\(([A-Z]{3})\)/);
+    return match?.[1] ?? '';
+  };
+
+  const localAirportCodes = ['LOS', 'ABV', 'KAN', 'PHC', 'ENU', 'IBA', 'QRW', 'ILR', 'SKO', 'MIU'];
+
+  const isDomesticRoute = (from: string, to: string) => {
+    const fromCode = getAirportCode(from);
+    const toCode = getAirportCode(to);
+    return Boolean(fromCode && toCode && localAirportCodes.includes(fromCode) && localAirportCodes.includes(toCode));
+  };
+
+  const handleSearch = () => {
+    if (tripType === 'Multi-city') {
+      navigate('/flights/search', {
+        state: {
+          tripType,
+          multiFlights,
+          travelClass,
+          passengers,
+        },
+      });
+      return;
+    }
+
+    navigate('/flights/search', {
+      state: {
+        tripType,
+        fromLocation,
+        toLocation,
+        departDate,
+        returnDate: tripType === 'Return' ? returnDate : '',
+        travelClass,
+        passengers,
+        isDomestic: isDomesticRoute(fromLocation, toLocation),
+      },
+    });
+  };
 
   const addFlight = () => setMultiFlights([...multiFlights, { id: Date.now(), from: '', to: '', date: '' }]);
   const removeFlight = (id: number) => setMultiFlights(multiFlights.filter(f => f.id !== id));
@@ -144,7 +186,7 @@ const FlightsForm: React.FC = () => {
               </div>
             )}
           </div>
-          <button className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-4 md:py-5 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20 lg:w-auto w-full">
+          <button onClick={handleSearch} className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-4 md:py-5 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20 lg:w-auto w-full">
             <Search className="w-5 h-5 mr-2" /> Search
           </button>
         </div>
@@ -189,7 +231,7 @@ const FlightsForm: React.FC = () => {
             <button onClick={addFlight} className="flex items-center text-blue-900 font-semibold hover:text-blue-700 transition-colors bg-blue-50 hover:bg-blue-100 px-5 py-3 rounded-xl w-full sm:w-auto justify-center">
               <Plus className="w-5 h-5 mr-2" /> Add another flight
             </button>
-            <button className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-3 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20 w-full sm:w-auto">
+            <button onClick={handleSearch} className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-3 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20 w-full sm:w-auto">
               <Search className="w-5 h-5 mr-2" /> Search Flights
             </button>
           </div>

@@ -10,8 +10,10 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMenuOpen }) => {
   const location = useLocation();
-  // Ensure transparent nav on Home, Flights, and Search Results pages
-  const isTransparentTop = location.pathname === '/' || location.pathname === '/flights' || location.pathname === '/flights/search';
+  
+  // Apply transparent navbar logic to all relevant landing and search pages
+  const transparentRoutes = ['/', '/flights', '/flights/search', '/hotels', '/hotels/search', '/packages', '/umrah'];
+  const isTransparentTop = transparentRoutes.includes(location.pathname);
   const solidNav = isScrolled || mobileMenuOpen || !isTransparentTop;
 
   const links = [
