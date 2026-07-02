@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trendingPackages } from '../../data/packages';
+import { imageFallbacks } from '../../utils/imageFallbacks';
 
 const TrendingPackages: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +55,14 @@ const TrendingPackages: React.FC = () => {
               className="bg-white rounded-2xl overflow-hidden shadow-2xl group cursor-pointer flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(25%-1.125rem)] transform transition duration-300 hover:-translate-y-2"
             >
               <div className="relative h-56 overflow-hidden">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${pkg.image}')` }} />
+                <img
+                  src={pkg.image}
+                  alt={pkg.title}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.package;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute top-4 right-4 bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">{pkg.badge}</div>
                 <div className="absolute bottom-4 left-4 text-white">

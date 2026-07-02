@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Star, Wifi, Coffee, ChevronRight, Check, CheckCircle2 } from 'lucide-react';
+import { imageFallbacks } from '../../utils/imageFallbacks';
 
 interface HotelCardProps {
   id: number;
@@ -26,7 +27,14 @@ const HotelCard: React.FC<HotelCardProps> = ({
       
       {/* Image Section */}
       <div className="w-full md:w-1/3 lg:w-1/4 h-56 md:h-auto relative shrink-0">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${image}')` }} />
+        <img
+          src={image}
+          alt={name}
+          onError={(event) => {
+            event.currentTarget.src = imageFallbacks.hotel;
+          }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         {isTopPick && (
           <div className="absolute top-4 left-0 bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-r-lg shadow-sm">
             Our Top Pick

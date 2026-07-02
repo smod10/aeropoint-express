@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { imageFallbacks } from '../../utils/imageFallbacks';
 
 const BlogSection: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,7 +54,14 @@ const BlogSection: React.FC = () => {
           {posts.map((post) => (
             <div key={post.id} className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden group hover:shadow-lg transition-all duration-300 snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]">
               <div className="h-56 overflow-hidden relative">
-                <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" style={{ backgroundImage: `url('${post.image}')` }} />
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.blog;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
                 <div className="absolute top-4 left-4 bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">
                   {post.category}
                 </div>

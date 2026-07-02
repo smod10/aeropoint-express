@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Star, Calendar, Users, CheckCircle2, Plane, Hotel, Car, ArrowRight, Share2, Heart, ChevronDown } from 'lucide-react';
+import { imageFallbacks } from '../utils/imageFallbacks';
 
 const PackageDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -42,12 +43,26 @@ const PackageDetails: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 h-[40vh] md:h-[60vh] rounded-2xl overflow-hidden">
           <div className="md:col-span-3 bg-slate-200 relative group cursor-pointer">
-            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url('${pkg.image}')` }}></div>
+            <img
+              src={pkg.image}
+              alt={pkg.title}
+              onError={(event) => {
+                event.currentTarget.src = imageFallbacks.package;
+              }}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
           </div>
           <div className="hidden md:flex flex-col gap-4 h-full">
             {pkg.images.slice(0, 2).map((img, i) => (
               <div key={i} className="flex-1 bg-slate-200 relative group cursor-pointer overflow-hidden rounded-xl">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url('${img}')` }}></div>
+                <img
+                  src={img}
+                  alt={`${pkg.title} gallery ${i + 1}`}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.package;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
             ))}
             <div className="flex-1 bg-blue-900 relative group cursor-pointer overflow-hidden rounded-xl flex items-center justify-center border border-blue-800">

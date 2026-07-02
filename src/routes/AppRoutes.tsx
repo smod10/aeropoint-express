@@ -6,6 +6,7 @@ import Flights from '../pages/Flights';
 import Hotels from '../pages/Hotels';
 import Packages from '../pages/Packages';
 import Visas from '../pages/Visas';
+import VisaApplication from '../pages/VisaApplication';
 import Umrah from '../pages/Umrah';
 import Contact from '../pages/Contact';
 
@@ -40,6 +41,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/packages/checkout" element={<PackageCheckout />} />
 
           <Route path="/visas" element={<Visas />} />
+          <Route path="/visas/apply" element={<VisaApplication />} />
           <Route path="/umrah" element={<Umrah />} />
           <Route path="/contact" element={<Contact />} />
 

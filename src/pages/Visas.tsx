@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Search,
   FileText,
@@ -10,69 +10,40 @@ import {
   Award,
   HelpCircle,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { countryNames } from '../data/countries';
+import {
+  getVisaCountryByCode,
+  popularVisaDestinations,
+  visaCountryOptions,
+} from '../data/visaData';
+import { imageFallbacks } from '../utils/imageFallbacks';
 
 const Visas: React.FC = () => {
+  const navigate = useNavigate();
   const [nationality, setNationality] = useState('Nigeria');
-  const [destination, setDestination] = useState('');
+  const [destinationCode, setDestinationCode] = useState('');
+  const [visaType, setVisaType] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('All');
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
-  const popularVisas = [
-    {
-      country: 'United Arab Emirates',
-      type: 'Tourist / e-Visa',
-      time: '3 - 5 Working Days',
-      validity: '30 Days or 60 Days',
-      price: 'From ₦250,000',
-      image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
-      flag: '🇦🇪',
-      popular: true,
-    },
-    {
-      country: 'United Kingdom',
-      type: 'Standard Visitor Visa',
-      time: '15 - 21 Working Days',
-      validity: '6 Months (Multiple Entry)',
-      price: 'Service Fee: ₦150,000',
-      image: 'https://images.unsplash.com/photo-1513635269975-5969336cd1f7?w=800&q=80',
-      flag: '🇬🇧',
-    },
-    {
-      country: 'Schengen Area',
-      type: 'Short Stay (C-Type)',
-      time: '15 - 30 Working Days',
-      validity: 'Varies by Embassy',
-      price: 'Service Fee: ₦180,000',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
-      flag: '🇪🇺',
-    },
-    {
-      country: 'United States',
-      type: 'B1/B2 Tourist Visa',
-      time: 'Depends on Interview',
-      validity: 'Up to 5 Years',
-      price: 'Service Fee: ₦200,000',
-      image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
-      flag: '🇺🇸',
-    },
-    {
-      country: 'Canada',
-      type: 'Temporary Resident Visa',
-      time: '30 - 60 Working Days',
-      validity: 'Up to Passport Expiry',
-      price: 'Service Fee: ₦180,000',
-      image: 'https://images.unsplash.com/photo-1503932824905-2eab21711718?w=800&q=80',
-      flag: '🇨🇦',
-    },
-    {
-      country: 'South Africa',
-      type: 'Tourist / e-Visa',
-      time: '10 - 15 Working Days',
-      validity: 'Up to 90 Days',
-      price: 'Service Fee: ₦120,000',
-      image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80',
-      flag: '🇿🇦',
-    },
-  ];
+  const popularVisas = popularVisaDestinations.slice(0, 6);
+  const regions = useMemo(() => ['All', ...new Set(visaCountryOptions.map((item) => item.region))], []);
+
+  const filteredCountries = useMemo(
+    () =>
+      visaCountryOptions.filter((item) => {
+        const normalizedSearch = countrySearch.trim().toLowerCase();
+        const searchMatches =
+          normalizedSearch.length === 0 ||
+          item.country.toLowerCase().includes(normalizedSearch) ||
+          item.visaTypes.some((type) => type.toLowerCase().includes(normalizedSearch));
+        const regionMatches = selectedRegion === 'All' || item.region === selectedRegion;
+        return searchMatches && regionMatches;
+      }),
+    [countrySearch, selectedRegion],
+  );
 
   const steps = [
     {
@@ -120,10 +91,27 @@ const Visas: React.FC = () => {
     },
   ];
 
+  const handleStartApplication = (countryCode: string, visaType?: string) => {
+    navigate('/visas/apply', {
+      state: {
+        nationality,
+        destinationCode: countryCode,
+        visaType,
+      },
+    });
+  };
+
+  const handleDestinationChange = (newCode: string) => {
+    setDestinationCode(newCode);
+    const destination = getVisaCountryByCode(newCode);
+    setVisaType(destination?.visaTypes[0] ?? '');
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (destination) {
-      document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' });
+    if (destinationCode) {
+      const selectedDestination = getVisaCountryByCode(destinationCode);
+      handleStartApplication(destinationCode, visaType || selectedDestination?.visaTypes[0]);
     }
   };
 
@@ -148,41 +136,79 @@ const Visas: React.FC = () => {
           </p>
 
           {/* Visa Search Widget */}
-          <div className="bg-white p-3 rounded-2xl shadow-2xl max-w-3xl mx-auto">
-            <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-3">
-              <div className="flex-1 relative border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-left focus-within:ring-2 focus-within:ring-blue-900/20 transition-all">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">I am a citizen of</label>
+          <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 max-w-6xl mx-auto">
+            <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-4 mt-2">
+              <div className="flex-1 relative h-[60px] border border-slate-200 bg-white rounded-xl focus-within:ring-2 focus-within:ring-blue-900/20">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                  <Search className="h-5 w-5 text-slate-400" />
+                </div>
                 <select
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
-                  className="w-full bg-transparent font-bold text-slate-800 focus:outline-none appearance-none cursor-pointer"
+                  className="w-full h-full pl-12 pr-10 pt-4 pb-1 bg-transparent text-slate-800 font-bold focus:outline-none rounded-xl appearance-none cursor-pointer relative z-20"
                 >
-                  <option value="Nigeria">Nigeria</option>
-                  <option value="Ghana">Ghana</option>
-                  <option value="Kenya">Kenya</option>
-                  <option value="South Africa">South Africa</option>
+                  {countryNames.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
                 </select>
-                <ChevronDown className="absolute right-4 bottom-3 w-5 h-5 text-slate-400 pointer-events-none" />
+                <span className="absolute top-1.5 left-12 text-[10px] text-slate-400 font-bold uppercase tracking-wider z-10">Nationality</span>
+                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
+                  <ChevronDown className="h-5 w-5 text-slate-400" />
+                </div>
               </div>
-              <div className="flex-1 relative border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-left focus-within:ring-2 focus-within:ring-blue-900/20 transition-all">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Traveling to</label>
+
+              <div className="flex-1 relative h-[60px] border border-slate-200 bg-white rounded-xl focus-within:ring-2 focus-within:ring-blue-900/20">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                  <ChevronDown className="h-5 w-5 text-slate-400 rotate-90" />
+                </div>
                 <select
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className="w-full bg-transparent font-bold text-slate-800 focus:outline-none appearance-none cursor-pointer"
+                  value={destinationCode}
+                  onChange={(e) => handleDestinationChange(e.target.value)}
+                  className="w-full h-full pl-12 pr-10 pt-4 pb-1 bg-transparent text-slate-800 font-bold focus:outline-none rounded-xl appearance-none cursor-pointer relative z-20"
                   required
                 >
                   <option value="" disabled>Select Destination...</option>
-                  <option value="UAE">United Arab Emirates</option>
-                  <option value="UK">United Kingdom</option>
-                  <option value="Schengen">Schengen Area</option>
-                  <option value="USA">United States</option>
-                  <option value="Canada">Canada</option>
+                  {visaCountryOptions.map((destination) => (
+                    <option key={destination.code} value={destination.code}>
+                      {destination.country}
+                    </option>
+                  ))}
                 </select>
-                <ChevronDown className="absolute right-4 bottom-3 w-5 h-5 text-slate-400 pointer-events-none" />
+                <span className="absolute top-1.5 left-12 text-[10px] text-slate-400 font-bold uppercase tracking-wider z-10">Destination</span>
+                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
+                  <ChevronDown className="h-5 w-5 text-slate-400" />
+                </div>
               </div>
-              <button type="submit" className="bg-amber-500 hover:bg-amber-600 text-blue-950 font-black px-8 py-4 rounded-xl transition-colors flex items-center justify-center h-full">
-                Check Visas
+
+              <div className="flex-1 relative h-[60px] border border-slate-200 bg-white rounded-xl focus-within:ring-2 focus-within:ring-blue-900/20">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                  <FileText className="h-5 w-5 text-slate-400" />
+                </div>
+                <select
+                  value={visaType}
+                  onChange={(e) => setVisaType(e.target.value)}
+                  className="w-full h-full pl-12 pr-10 pt-4 pb-1 bg-transparent text-slate-800 font-bold focus:outline-none rounded-xl appearance-none cursor-pointer relative z-20 disabled:text-slate-400"
+                  disabled={!destinationCode}
+                  required
+                >
+                  {!destinationCode && <option value="">Select visa type...</option>}
+                  {destinationCode &&
+                    getVisaCountryByCode(destinationCode)?.visaTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                </select>
+                <span className="absolute top-1.5 left-12 text-[10px] text-slate-400 font-bold uppercase tracking-wider z-10">Visa Type</span>
+                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
+                  <ChevronDown className="h-5 w-5 text-slate-400" />
+                </div>
+              </div>
+
+              <button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg h-[60px] px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20 shrink-0 w-full lg:w-auto">
+                <Search className="w-5 h-5 mr-2" /> Start
               </button>
             </form>
           </div>
@@ -245,7 +271,14 @@ const Visas: React.FC = () => {
             {popularVisas.map((visa, idx) => (
               <div key={idx} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all group">
                 <div className="h-48 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" style={{ backgroundImage: `url('${visa.image}')` }}></div>
+                  <img
+                    src={visa.image}
+                    alt={visa.country}
+                    onError={(event) => {
+                      event.currentTarget.src = imageFallbacks.visa;
+                    }}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 to-transparent"></div>
 
                   {visa.popular && (
@@ -254,33 +287,36 @@ const Visas: React.FC = () => {
 
                   <div className="absolute bottom-4 left-4 right-4 text-white flex items-end justify-between">
                     <div>
-                      <span className="text-3xl mr-2 leading-none">{visa.flag}</span>
                       <h3 className="text-xl font-bold inline-block leading-tight">{visa.country}</h3>
+                      <p className="text-xs text-blue-100 mt-1 font-semibold uppercase tracking-wider">{visa.region}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="p-6">
                   <div className="inline-block bg-blue-50 text-blue-900 text-xs font-bold px-3 py-1 rounded-full mb-4">
-                    {visa.type}
+                    {visa.visaTypes[0]}
                   </div>
 
                   <div className="space-y-3 mb-6">
                     <div className="flex justify-between items-center text-sm border-b border-slate-100 pb-2">
                       <span className="text-slate-500">Processing Time</span>
-                      <span className="font-semibold text-slate-800 text-right">{visa.time}</span>
+                      <span className="font-semibold text-slate-800 text-right">{visa.processingTime}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm border-b border-slate-100 pb-2">
                       <span className="text-slate-500">Validity</span>
                       <span className="font-semibold text-slate-800 text-right">{visa.validity}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm pt-1">
-                      <span className="text-slate-500">Pricing</span>
-                      <span className="font-black text-amber-600 text-right">{visa.price}</span>
+                      <span className="text-slate-500">Service Fee</span>
+                      <span className="font-black text-amber-600 text-right">{visa.serviceFee}</span>
                     </div>
                   </div>
 
-                  <button className="w-full bg-white border-2 border-slate-200 text-slate-800 hover:border-blue-900 hover:bg-blue-50 hover:text-blue-900 font-bold py-3 rounded-xl transition-colors flex items-center justify-center group-hover:border-blue-900 group-hover:bg-blue-900 group-hover:text-white">
+                  <button
+                    onClick={() => handleStartApplication(visa.code, visa.visaTypes[0])}
+                    className="w-full bg-white border-2 border-slate-200 text-slate-800 hover:border-blue-900 hover:bg-blue-50 hover:text-blue-900 font-bold py-3 rounded-xl transition-colors flex items-center justify-center group-hover:border-blue-900 group-hover:bg-blue-900 group-hover:text-white"
+                  >
                     Start Application <ArrowRight className="w-4 h-4 ml-2" />
                   </button>
                 </div>
@@ -290,10 +326,100 @@ const Visas: React.FC = () => {
 
           <div className="text-center mt-12">
             <p className="text-slate-500 font-medium mb-4">Do not see your destination listed?</p>
-            <button className="bg-white border border-slate-200 shadow-sm text-blue-900 font-bold px-8 py-3 rounded-xl hover:bg-slate-50 transition-colors">
+            <button
+              onClick={() => document.getElementById('all-countries')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-white border border-slate-200 shadow-sm text-blue-900 font-bold px-8 py-3 rounded-xl hover:bg-slate-50 transition-colors"
+            >
               View All 50+ Countries
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* All Countries */}
+      <section id="all-countries" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-3xl font-extrabold text-blue-950 mb-2">All Supported Visa Countries</h2>
+            <p className="text-slate-500">50 destinations with visa categories, timelines, and service guidance.</p>
+          </div>
+          <div className="text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-lg px-4 py-2 self-start md:self-auto">
+            Showing {filteredCountries.length} of {visaCountryOptions.length}
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm mb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 relative border border-slate-200 rounded-xl overflow-hidden">
+            <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <input
+              value={countrySearch}
+              onChange={(e) => setCountrySearch(e.target.value)}
+              placeholder="Search by country or visa type"
+              className="w-full pl-12 pr-4 py-3.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-semibold text-slate-800"
+            />
+          </div>
+
+          <div className="border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              className="w-full py-3.5 px-4 bg-transparent font-semibold text-slate-800 focus:outline-none"
+            >
+              {regions.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {filteredCountries.map((item) => (
+            <article key={item.code} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 hover:shadow-lg transition-shadow">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-blue-950 leading-tight">{item.country}</h3>
+                  <p className="text-xs uppercase tracking-wider text-slate-500 font-bold mt-1">{item.region}</p>
+                </div>
+                {item.popular && (
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-rose-100 text-rose-700 px-2 py-1 rounded-full">
+                    Popular
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-5">
+                {item.visaTypes.map((type) => (
+                  <span key={`${item.code}-${type}`} className="text-xs font-bold bg-blue-50 text-blue-900 px-2.5 py-1 rounded-full">
+                    {type}
+                  </span>
+                ))}
+              </div>
+
+              <div className="space-y-2 text-sm mb-5">
+                <div className="flex justify-between border-b border-slate-100 pb-2">
+                  <span className="text-slate-500">Timeline</span>
+                  <span className="font-semibold text-slate-800 text-right">{item.processingTime}</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-100 pb-2">
+                  <span className="text-slate-500">Validity</span>
+                  <span className="font-semibold text-slate-800 text-right">{item.validity}</span>
+                </div>
+                <div className="flex justify-between pt-1">
+                  <span className="text-slate-500">Service Fee</span>
+                  <span className="font-black text-amber-600 text-right">{item.serviceFee}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleStartApplication(item.code, item.visaTypes[0])}
+                className="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center"
+              >
+                Start Application <ArrowRight className="w-4 h-4 ml-2" />
+              </button>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -339,8 +465,19 @@ const Visas: React.FC = () => {
               <button className="bg-amber-500 hover:bg-amber-400 text-blue-950 font-black py-4 px-8 rounded-xl transition-all shadow-lg shadow-amber-500/20">
                 Talk to an Expert
               </button>
-              <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl border border-white/20 transition-all backdrop-blur-sm">
-                Check Requirements
+              <button
+                onClick={() => {
+                  const fallbackDestination = popularVisas[0];
+                  if (destinationCode) {
+                    const destination = getVisaCountryByCode(destinationCode);
+                    handleStartApplication(destinationCode, destination?.visaTypes[0]);
+                    return;
+                  }
+                  handleStartApplication(fallbackDestination.code, fallbackDestination.visaTypes[0]);
+                }}
+                className="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl border border-white/20 transition-all backdrop-blur-sm"
+              >
+                Start Online Application
               </button>
             </div>
           </div>

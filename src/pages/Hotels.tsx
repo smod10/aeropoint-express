@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDown, MapPin, Star, ShieldCheck, CheckCircle2, ChevronLeft, ChevronRight, Hotel } from 'lucide-react';
 import HotelsForm from '../components/BookingWidget/HotelsForm';
+import { imageFallbacks } from '../utils/imageFallbacks';
 
 const HotelFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -118,7 +119,14 @@ const Hotels: React.FC = () => {
           {trendingHotels.map((hotel, idx) => (
             <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]">
               <div className="h-56 overflow-hidden relative">
-                <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{ backgroundImage: `url('${hotel.img}')` }} />
+                <img
+                  src={hotel.img}
+                  alt={hotel.name}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.hotel;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-slate-800 shadow-sm flex items-center">
                   <Star className="w-3.5 h-3.5 text-amber-500 mr-1 fill-amber-500" /> {hotel.rating}
                 </div>

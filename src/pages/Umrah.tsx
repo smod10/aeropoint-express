@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Star, Calendar, ArrowRight, ShieldCheck, CheckCircle2, HeartHandshake, BookOpen } from 'lucide-react';
+import { imageFallbacks } from '../utils/imageFallbacks';
 
 const Umrah: React.FC = () => {
   const navigate = useNavigate();
@@ -182,7 +183,14 @@ const Umrah: React.FC = () => {
               className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group cursor-pointer flex flex-col h-full transform transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-64 overflow-hidden shrink-0">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url('${pkg.image}')` }} />
+                <img
+                  src={pkg.image}
+                  alt={pkg.name}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.package;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-900/30 to-transparent" />
                 
                 {/* Tier Badge */}

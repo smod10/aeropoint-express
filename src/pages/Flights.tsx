@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDown, ArrowRight, ArrowRightLeft, CalendarCheck, CreditCard, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
+import { imageFallbacks } from '../utils/imageFallbacks';
 
 const FlightFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -144,7 +145,14 @@ const Flights: React.FC = () => {
           {flightDeals.map((deal, idx) => (
             <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start h-full">
               <div className="h-32 md:h-40 overflow-hidden relative shrink-0">
-                <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{ backgroundImage: `url('${deal.img}')` }} />
+                <img
+                  src={deal.img}
+                  alt={`${deal.from} to ${deal.to}`}
+                  onError={(event) => {
+                    event.currentTarget.src = imageFallbacks.flight;
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <span className="absolute top-4 left-4 text-[10px] md:text-xs font-bold px-2 py-1 bg-amber-500 text-slate-900 rounded">{deal.type}</span>
                 <span className="absolute bottom-4 left-4 text-xs md:text-sm font-bold text-white tracking-wide shadow-sm">{deal.airline}</span>
