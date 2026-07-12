@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { MapPin, Calendar, Users, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const HotelsForm: React.FC = () => {
+  const navigate = useNavigate();
   const [showGuests, setShowGuests] = useState(false);
   const [guests, setGuests] = useState({ rooms: 1, adults: 2, children: 0 });
   const [checkInDate, setCheckInDate] = useState('');
@@ -17,6 +19,10 @@ const HotelsForm: React.FC = () => {
       if (type === 'adults' && newVal < 1) return prev; 
       return { ...prev, [type]: newVal };
     });
+  };
+
+  const handleSearch = () => {
+    navigate('/hotels/search');
   };
 
   return (
@@ -101,7 +107,7 @@ const HotelsForm: React.FC = () => {
           )}
         </div>
 
-        <button className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-4 md:py-5 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20">
+        <button onClick={handleSearch} className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg py-4 md:py-5 px-8 rounded-xl flex items-center justify-center transition-all shadow-lg shadow-amber-500/20">
           <Search className="w-5 h-5 mr-2" /> Search
         </button>
       </div>

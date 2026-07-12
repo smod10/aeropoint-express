@@ -93,9 +93,9 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
               <a href="tel:+2348000000000" className="flex items-center hover:text-blue-900 transition-colors">
                 <Phone className="w-4 h-4 mr-3 text-slate-400" /> +234 800 000 0000
               </a>
-              <a href="#" className="flex items-center hover:text-blue-900 transition-colors">
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center hover:text-blue-900 transition-colors">
                 <MessageCircle className="w-4 h-4 mr-3 text-slate-400" /> WhatsApp Us
-              </a>
+              </Link>
               <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-blue-900 transition-colors">
                 <Mail className="w-4 h-4 mr-3 text-slate-400" /> support@aeropoint.com
               </a>

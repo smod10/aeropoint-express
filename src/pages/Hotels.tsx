@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ChevronDown, MapPin, Star, ShieldCheck, CheckCircle2, ChevronLeft, ChevronRight, Hotel } from 'lucide-react';
 import HotelsForm from '../components/BookingWidget/HotelsForm';
 import { imageFallbacks } from '../utils/imageFallbacks';
+import { useNavigate } from 'react-router-dom';
 
 const HotelFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -34,6 +35,7 @@ const HotelFAQs: React.FC = () => {
 };
 
 const Hotels: React.FC = () => {
+  const navigate = useNavigate();
   const trendingHotels = [
     { name: 'The Ritz London', location: 'Mayfair, London', price: '₦850,000', rating: 5.0, reviews: 1240, img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80' },
     { name: 'Burj Al Arab', location: 'Dubai, UAE', price: '₦1,250,000', rating: 5.0, reviews: 3420, img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' },
@@ -143,7 +145,12 @@ const Hotels: React.FC = () => {
                     <span className="text-xs text-slate-400 uppercase tracking-wider block mb-0.5">Per Night</span>
                     <span className="text-xl font-black text-blue-900">{hotel.price}</span>
                   </div>
-                  <button className="bg-slate-50 text-blue-900 px-4 py-2 rounded-lg font-semibold text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors">Select</button>
+                  <button
+                    onClick={() => navigate('/hotels/search')}
+                    className="bg-slate-50 text-blue-900 px-4 py-2 rounded-lg font-semibold text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors"
+                  >
+                    Select
+                  </button>
                 </div>
               </div>
             </div>

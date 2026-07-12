@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Mail, ShieldCheck, LockKeyhole, AlertCircle, CreditCard, Landmark, ArrowRight, MapPin, Calendar, Users, Plane, Hotel } from 'lucide-react';
 
 // Temporarily mock country names and dialing codes to resolve imports
@@ -6,6 +7,7 @@ const countryNames = ['Nigeria', 'United Kingdom', 'United States', 'Canada', 'S
 const dialingCodes = ['+234', '+44', '+1', '+966', '+255'];
 
 const PackageCheckout: React.FC = () => {
+  const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('card');
 
   return (
@@ -236,7 +238,7 @@ const PackageCheckout: React.FC = () => {
                 <ShieldCheck className="w-4 h-4" /> <span>100% Safe & Secure Payment</span>
               </div>
 
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-lg">
+              <button onClick={() => navigate('/contact')} className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-lg">
                 Pay ₦3,700,000 <ArrowRight className="w-5 h-5 ml-2" />
               </button>
             </div>

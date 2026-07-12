@@ -229,7 +229,7 @@ const HotelSearchResults: React.FC = () => {
           </div>
 
           <div className="mt-8 text-center">
-            <button className="bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold py-3 px-8 rounded-xl transition-colors border border-blue-100">
+            <button onClick={() => navigate('/hotels')} className="bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold py-3 px-8 rounded-xl transition-colors border border-blue-100">
               Load More Hotels
             </button>
           </div>

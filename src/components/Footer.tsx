@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plane } from 'lucide-react';
 
-const Footer: React.FC = () => (
+const Footer: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
   <footer className="bg-slate-900 text-slate-300 pt-16 pb-8 px-4 sm:px-6 lg:px-8 mt-auto">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 border-b border-slate-800 pb-12">
       <div className="flex flex-col space-y-4">
@@ -33,8 +36,8 @@ const Footer: React.FC = () => (
         <h4 className="text-white font-bold mb-6 uppercase text-sm tracking-wider">Support</h4>
         <ul className="space-y-3 text-sm">
           <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Help Center</Link></li>
-          <li><Link to="/" className="hover:text-amber-500 transition-colors">Manage Booking</Link></li>
-          <li><Link to="/" className="hover:text-amber-500 transition-colors">Cancellation Policy</Link></li>
+          <li><Link to="/flights/search" className="hover:text-amber-500 transition-colors">Manage Booking</Link></li>
+          <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Cancellation Policy</Link></li>
           <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link></li>
         </ul>
       </div>
@@ -44,7 +47,7 @@ const Footer: React.FC = () => (
         <p className="text-sm text-slate-400 mb-4">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
         <div className="flex">
           <input type="email" placeholder="Enter your email" className="bg-slate-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-amber-500 w-full" />
-          <button className="bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-r-lg font-bold transition-colors">
+          <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-r-lg font-bold transition-colors">
             Subscribe
           </button>
         </div>
@@ -54,11 +57,12 @@ const Footer: React.FC = () => (
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
       <p>&copy; {new Date().getFullYear()} Aeropoint Express. All rights reserved.</p>
       <div className="flex space-x-4 mt-4 md:mt-0">
-        <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
-        <Link to="/" className="hover:text-white transition-colors">Terms of Service</Link>
+        <Link to="/contact" className="hover:text-white transition-colors">Privacy Policy</Link>
+        <Link to="/contact" className="hover:text-white transition-colors">Terms of Service</Link>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

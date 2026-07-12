@@ -462,7 +462,7 @@ const Visas: React.FC = () => {
               Speak with one of our immigration consultants today for a free profile assessment and requirements checklist.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="bg-amber-500 hover:bg-amber-400 text-blue-950 font-black py-4 px-8 rounded-xl transition-all shadow-lg shadow-amber-500/20">
+              <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-400 text-blue-950 font-black py-4 px-8 rounded-xl transition-all shadow-lg shadow-amber-500/20">
                 Talk to an Expert
               </button>
               <button

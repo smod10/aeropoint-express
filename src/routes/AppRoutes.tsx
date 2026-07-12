@@ -14,7 +14,7 @@ import Contact from '../pages/Contact';
 import FlightSearchResults from '../pages/FlightSearchResults';
 import FlightCheckout from '../pages/FlightCheckout';
 import HotelSearchResults from '../pages/HotelSearchResults';
-import HotelDetails from '../pages/HotelDetails.tsx';
+import HotelDetails from '../pages/HotelDetails';
 import HotelCheckout from '../pages/HotelCheckout';
 import PackageDetails from '../pages/PackageDetails';
 import PackageCheckout from '../pages/PackageCheckout';

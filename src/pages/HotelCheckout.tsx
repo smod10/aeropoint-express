@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Check, User, CreditCard, Clock, ShieldCheck, Coffee, ArrowRight, ArrowLeft, BedDouble } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const dialingCodes = ['+1', '+44', '+234', '+971', '+254', '+27'];
 
 const HotelCheckout: React.FC = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [couponCode, setCouponCode] = useState('');
@@ -223,7 +225,7 @@ const HotelCheckout: React.FC = () => {
                   Continue to Next Step <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
               ) : (
-                <button className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
+                <button onClick={() => navigate('/contact')} className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
                   {paymentMethod === 'hold' ? 'Confirm Reservation' : 'Complete Booking'} <ShieldCheck className="w-5 h-5 ml-2" />
                 </button>
               )}

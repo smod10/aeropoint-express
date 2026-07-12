@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Filter, ArrowRightLeft, Search, CheckCircle2, ChevronDown, X, Calendar, Phone, MessageCircle, Mail, Headset } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FlightCard from '../components/flights/FlightCard';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
 import FlightDetailsModal from '../components/FlightDetailsModal';
 
 const FlightSearchResults: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const searchContext = (location.state as any) ?? {};
 
   const [priceRange, setPriceRange] = useState(2500000);
@@ -378,7 +379,7 @@ const FlightSearchResults: React.FC = () => {
                     <a href="tel:+2348000000000" className="flex items-center hover:text-amber-500 transition-colors">
                       <Phone className="w-4 h-4 mr-3 text-amber-500" /> +234 800 000 0000
                     </a>
-                    <a href="#" className="flex items-center hover:text-amber-500 transition-colors">
+                    <a href="/contact" className="flex items-center hover:text-amber-500 transition-colors">
                       <MessageCircle className="w-4 h-4 mr-3 text-amber-500" /> WhatsApp Us
                     </a>
                     <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-amber-500 transition-colors">
@@ -400,14 +401,14 @@ const FlightSearchResults: React.FC = () => {
                 <a href="tel:+2348000000000" className="flex items-center hover:text-amber-500 transition-colors">
                   <Phone className="w-4 h-4 mr-3 text-amber-500" /> +234 800 000 0000
                 </a>
-                <a href="#" className="flex items-center hover:text-amber-500 transition-colors">
+                <a href="/contact" className="flex items-center hover:text-amber-500 transition-colors">
                   <MessageCircle className="w-4 h-4 mr-3 text-amber-500" /> WhatsApp Us
                 </a>
                 <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-amber-500 transition-colors">
                   <Mail className="w-4 h-4 mr-3 text-amber-500" /> support@aeropoint.com
                 </a>
               </div>
-              <button className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-blue-950 font-bold rounded-xl transition-colors text-sm shadow-sm flex items-center justify-center">
+              <button onClick={() => navigate('/contact')} className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-blue-950 font-bold rounded-xl transition-colors text-sm shadow-sm flex items-center justify-center">
                 Contact Us
               </button>
             </div>

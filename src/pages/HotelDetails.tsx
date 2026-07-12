@@ -39,8 +39,8 @@ const HotelDetails: React.FC = () => {
             <h1 className="text-3xl md:text-4xl font-extrabold text-blue-950">{hotel.name}</h1>
           </div>
           <div className="hidden md:flex space-x-3">
-            <button className="p-2.5 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-100 transition-colors shadow-sm bg-white"><Share2 className="w-5 h-5" /></button>
-            <button className="p-2.5 rounded-full border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 transition-colors shadow-sm bg-white"><Heart className="w-5 h-5" /></button>
+            <button onClick={() => navigate('/contact')} className="p-2.5 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-100 transition-colors shadow-sm bg-white"><Share2 className="w-5 h-5" /></button>
+            <button onClick={() => navigate('/auth')} className="p-2.5 rounded-full border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 transition-colors shadow-sm bg-white"><Heart className="w-5 h-5" /></button>
           </div>
         </div>
 

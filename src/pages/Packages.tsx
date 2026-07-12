@@ -141,7 +141,7 @@ const Packages: React.FC = () => {
                     <a href="tel:+2348000000000" className="flex items-center hover:text-amber-500 transition-colors">
                       <Phone className="w-4 h-4 mr-3 text-amber-500" /> +234 800 000 0000
                     </a>
-                    <a href="#" className="flex items-center hover:text-amber-500 transition-colors">
+                    <a href="/contact" className="flex items-center hover:text-amber-500 transition-colors">
                       <MessageCircle className="w-4 h-4 mr-3 text-amber-500" /> WhatsApp Us
                     </a>
                     <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-amber-500 transition-colors">
@@ -170,7 +170,7 @@ const Packages: React.FC = () => {
                   <Mail className="w-4 h-4 mr-3 text-amber-500" /> support@aeropoint.com
                 </a>
               </div>
-              <button className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-blue-950 font-bold rounded-xl transition-colors text-sm shadow-sm flex items-center justify-center">
+              <button onClick={() => navigate('/contact')} className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-blue-950 font-bold rounded-xl transition-colors text-sm shadow-sm flex items-center justify-center">
                 Contact Us
               </button>
             </div>
@@ -229,7 +229,7 @@ const Packages: React.FC = () => {
                       <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Per Person from</span>
                       <span className="text-xl font-black text-blue-900">{pkg.price}</span>
                     </div>
-                    <button className="bg-amber-500 text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm group-hover:bg-amber-600 transition-colors shadow-sm">
+                    <button onClick={() => navigate('/packages/details')} className="bg-amber-500 text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm group-hover:bg-amber-600 transition-colors shadow-sm">
                       View Details
                     </button>
                   </div>

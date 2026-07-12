@@ -10,7 +10,7 @@ const Auth: React.FC = () => {
     e.preventDefault();
     // In a real application, authenticating logic goes here.
     // If successfully authenticated, or if user is already signed up, redirect to profile:
-    navigate('/profile');
+    navigate('/');
   };
 
   return (
@@ -60,16 +60,16 @@ const Auth: React.FC = () => {
 
           {/* Social Logins */}
           <div className="space-y-3 mb-6">
-            <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+            <button onClick={() => navigate('/')} className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-3" /> 
               Continue with Google
             </button>
             <div className="grid grid-cols-2 gap-3">
-              <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+              <button onClick={() => navigate('/')} className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
                 <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5 mr-2" />
                 Facebook
               </button>
-              <button className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
+              <button onClick={() => navigate('/')} className="w-full flex items-center justify-center py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-bold text-slate-700 shadow-sm">
                 <img src="https://www.svgrepo.com/show/475661/microsoft-color.svg" alt="Microsoft" className="w-5 h-5 mr-2" />
                 Microsoft
               </button>
@@ -102,7 +102,7 @@ const Auth: React.FC = () => {
 
             {isLogin && (
               <div className="flex justify-end pt-1">
-                <a href="#" className="text-sm font-bold text-blue-600 hover:text-amber-500 transition-colors">Forgot Password?</a>
+                <Link to="/contact" className="text-sm font-bold text-blue-600 hover:text-amber-500 transition-colors">Forgot Password?</Link>
               </div>
             )}
 
@@ -112,7 +112,7 @@ const Auth: React.FC = () => {
           </form>
 
           <div className="mt-8 text-center text-xs text-slate-500 font-medium">
-            By continuing, you agree to Aeropoint's <br/><a href="#" className="font-bold text-blue-900 hover:text-amber-500 transition-colors">Terms of Service</a> and <a href="#" className="font-bold text-blue-900 hover:text-amber-500 transition-colors">Privacy Policy</a>.
+            By continuing, you agree to Aeropoint's <br/><Link to="/contact" className="font-bold text-blue-900 hover:text-amber-500 transition-colors">Terms of Service</Link> and <Link to="/contact" className="font-bold text-blue-900 hover:text-amber-500 transition-colors">Privacy Policy</Link>.
           </div>
         </div>
       </div>

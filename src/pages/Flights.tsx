@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ChevronDown, ArrowRight, ArrowRightLeft, CalendarCheck, CreditCard, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
 import { imageFallbacks } from '../utils/imageFallbacks';
+import { useNavigate } from 'react-router-dom';
 
 const FlightFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -34,6 +35,7 @@ const FlightFAQs: React.FC = () => {
 };
 
 const Flights: React.FC = () => {
+  const navigate = useNavigate();
   // Added 2 extra items (10 total) so the slider has overflow to scroll to on desktop (where 8 are visible at once).
   const flightDeals = [
     { from: 'Lagos (LOS)', to: 'London (LHR)', price: '₦1,250,000', type: 'Return', airline: 'Virgin Atlantic', img: 'https://images.unsplash.com/photo-1513635269975-5969336cd1f7?w=800&q=80' },
@@ -175,7 +177,20 @@ const Flights: React.FC = () => {
                     <div className="text-[10px] md:text-xs text-slate-400 mb-0.5 md:mb-1">From</div>
                     <div className="text-sm md:text-lg font-black text-blue-900">{deal.price}</div>
                   </div>
-                  <button className="bg-slate-50 text-blue-900 px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors">Select</button>
+                  <button
+                    onClick={() =>
+                      navigate('/flights/search', {
+                        state: {
+                          tripType: deal.type,
+                          from: deal.from,
+                          to: deal.to,
+                        },
+                      })
+                    }
+                    className="bg-slate-50 text-blue-900 px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors"
+                  >
+                    Select
+                  </button>
                 </div>
               </div>
             </div>

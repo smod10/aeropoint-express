@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Check, User, Mail, CreditCard, Clock, ShieldCheck, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { dialingCodes } from '../data/countries';
 
 const FlightCheckout: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const booking = (location.state as any) ?? {};
 
@@ -253,7 +254,7 @@ const FlightCheckout: React.FC = () => {
                   Continue to Next Step <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
               ) : (
-                <button className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
+                <button onClick={() => navigate('/contact')} className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
                   {paymentMethod === 'hold' ? 'Confirm Reservation' : 'Complete Payment'} <ShieldCheck className="w-5 h-5 ml-2" />
                 </button>
               )}

@@ -231,7 +231,7 @@ const Umrah: React.FC = () => {
                   ))}
                 </div>
                 
-                <button className="w-full bg-blue-50 text-blue-900 py-3.5 rounded-xl font-bold text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors flex justify-center items-center">
+                <button onClick={() => navigate('/packages/details')} className="w-full bg-blue-50 text-blue-900 py-3.5 rounded-xl font-bold text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors flex justify-center items-center">
                   View Full Itinerary <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
               </div>
@@ -246,10 +246,10 @@ const Umrah: React.FC = () => {
           <h2 className="text-2xl md:text-3xl font-extrabold mb-4">Custom Spiritual Packages Available</h2>
           <p className="text-blue-200 mb-8 text-lg">Traveling with a large family, group, or need specific dates? Our consultants can tailor a bespoke package perfectly suited to your requirements.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-xl transition-colors shadow-lg shadow-amber-500/20">
+            <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-xl transition-colors shadow-lg shadow-amber-500/20">
               Request Custom Quote
             </button>
-            <button className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl border border-blue-700 transition-colors">
+            <button onClick={() => navigate('/contact')} className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl border border-blue-700 transition-colors">
               Speak to a Consultant
             </button>
           </div>
