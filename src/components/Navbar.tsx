@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Headset, Phone, MessageCircle, Mail, User } from 'lucide-react';
 import brandLogo from '../assets/aeropoint-express-logo.svg';
+import brandLogoWhite from '../assets/aeropoint-express-logo-white.svg';
 import { contactInfo } from '../data/contactInfo';
 
 interface NavbarProps {
@@ -30,8 +31,8 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${solidNav ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <Link to="/" className="z-50 inline-flex items-center rounded-md bg-white px-2 py-1 shadow-sm" aria-label="Aeropoint Express home">
-          <img src={brandLogo} alt="Aeropoint Express Travel Ltd" className="h-auto w-[150px] sm:w-[190px]" />
+        <Link to="/" className={`z-50 inline-flex items-center ${solidNav ? 'rounded-md bg-white px-2 py-1 shadow-sm' : ''}`} aria-label="Aeropoint Express home">
+          <img src={solidNav ? brandLogo : brandLogoWhite} alt="Aeropoint Express Travel Ltd" className="h-auto w-[150px] sm:w-[190px]" />
         </Link>
 
         <div className="hidden lg:flex space-x-8 items-center">
