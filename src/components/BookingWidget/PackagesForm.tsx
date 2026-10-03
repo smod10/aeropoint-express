@@ -113,7 +113,7 @@ const PackagesForm: React.FC = () => {
 
         <button 
           onClick={handleSearch}
-          className="bg-[#FFA500] hover:bg-amber-500 text-slate-900 font-bold text-lg h-[60px] px-8 rounded-xl flex items-center justify-center transition-all shadow-sm shrink-0 w-full lg:w-auto"
+          className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-lg h-[60px] px-8 rounded-xl flex items-center justify-center transition-all shadow-sm shrink-0 w-full lg:w-auto"
         >
           <Search className="w-5 h-5 mr-2" /> Explore
         </button>

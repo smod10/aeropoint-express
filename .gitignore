@@ -26,4 +26,6 @@ dist-ssr
 node_modules
 dist
 .env
+.venv/
+aeropoint-express-main*.zip
 .vscode

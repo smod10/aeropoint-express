@@ -23,24 +23,23 @@ const TrendingPackages: React.FC = () => {
       `}</style>
       
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-10">
+        <div className="mb-8">
           <div className="text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">Curated Experiences</h2>
-            <p className="text-blue-200 max-w-xl text-lg">Discover our handpicked holiday and pilgrimage packages designed for ultimate comfort and memorable moments.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3">Curated Experiences</h2>
+            <p className="text-blue-200 max-w-xl text-base sm:text-lg">Discover our handpicked holiday and pilgrimage packages designed for ultimate comfort and memorable moments.</p>
           </div>
-          
-          <div className="flex items-center gap-4 mt-6 md:mt-0">
-            <div className="hidden md:flex gap-2 mr-4">
-              <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-blue-800 flex items-center justify-center text-blue-200 hover:bg-blue-800 hover:text-white transition-colors">
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button onClick={() => scroll('right')} className="w-10 h-10 rounded-full border border-blue-800 flex items-center justify-center text-blue-200 hover:bg-blue-800 hover:text-white transition-colors">
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+          <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
             <Link to="/packages" className="text-amber-500 font-semibold flex items-center hover:text-amber-400 transition-colors">
               View All <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
+            <div className="flex gap-2">
+              <button type="button" aria-label="Scroll curated experiences left" onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-blue-800 flex items-center justify-center text-blue-200 hover:bg-blue-800 hover:text-white transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button type="button" aria-label="Scroll curated experiences right" onClick={() => scroll('right')} className="w-10 h-10 rounded-full border border-blue-800 flex items-center justify-center text-blue-200 hover:bg-blue-800 hover:text-white transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -49,10 +48,12 @@ const TrendingPackages: React.FC = () => {
           ref={scrollRef} 
           className="flex overflow-x-auto gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth"
         >
-          {trendingPackages.map((pkg, idx) => (
-            <div 
-              key={idx} 
-              className="bg-white rounded-2xl overflow-hidden shadow-2xl group cursor-pointer flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(25%-1.125rem)] transform transition duration-300 hover:-translate-y-2"
+          {trendingPackages.map((pkg) => (
+            <Link
+              key={pkg.slug}
+              to={`/packages/details/${pkg.slug}`}
+              aria-label={`View ${pkg.title} package details`}
+              className="bg-white rounded-2xl overflow-hidden shadow-2xl group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(25%-1.125rem)] transform transition duration-300 hover:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <div className="relative h-56 overflow-hidden">
                 <img
@@ -87,7 +88,7 @@ const TrendingPackages: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

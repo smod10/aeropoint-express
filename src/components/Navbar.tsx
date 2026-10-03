@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Plane, Menu, X, Headset, Phone, MessageCircle, Mail, User } from 'lucide-react';
+import { Menu, X, Headset, Phone, MessageCircle, Mail, User } from 'lucide-react';
+import brandLogo from '../assets/aeropoint-express-logo.svg';
+import { contactInfo } from '../data/contactInfo';
 
 interface NavbarProps {
   isScrolled: boolean;
@@ -21,19 +23,15 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
     { name: 'Hotels', path: '/hotels' },
     { name: 'Packages', path: '/packages' },
     { name: 'Visas', path: '/visas' },
+    { name: 'Study', path: '/study' },
     { name: 'Hajj & Umrah', path: '/umrah' }
   ];
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${solidNav ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 z-50">
-          <div className="bg-blue-900 p-2 rounded-lg">
-            <Plane className="w-6 h-6 text-white transform -rotate-45" />
-          </div>
-          <span className={`text-2xl font-black tracking-tight ${solidNav ? 'text-blue-950' : 'text-white'}`}>
-            AERO<span className="text-amber-500">POINT</span>
-          </span>
+        <Link to="/" className="z-50 inline-flex items-center rounded-md bg-white px-2 py-1 shadow-sm" aria-label="Aeropoint Express home">
+          <img src={brandLogo} alt="Aeropoint Express Travel Ltd" className="h-auto w-[150px] sm:w-[190px]" />
         </Link>
 
         <div className="hidden lg:flex space-x-8 items-center">
@@ -90,14 +88,14 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
               <Headset className="w-5 h-5 mr-2 text-amber-500" /> Need Help?
             </h4>
             <div className="space-y-4 text-sm font-semibold text-slate-600">
-              <a href="tel:+2348000000000" className="flex items-center hover:text-blue-900 transition-colors">
-                <Phone className="w-4 h-4 mr-3 text-slate-400" /> +234 800 000 0000
+              <a href={contactInfo.phoneHref} className="flex items-center hover:text-blue-900 transition-colors">
+                <Phone className="w-4 h-4 mr-3 text-slate-400" /> {contactInfo.phone}
               </a>
-              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center hover:text-blue-900 transition-colors">
+              <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center hover:text-blue-900 transition-colors">
                 <MessageCircle className="w-4 h-4 mr-3 text-slate-400" /> WhatsApp Us
-              </Link>
-              <a href="mailto:support@aeropoint.com" className="flex items-center hover:text-blue-900 transition-colors">
-                <Mail className="w-4 h-4 mr-3 text-slate-400" /> support@aeropoint.com
+              </a>
+              <a href={contactInfo.emailHref} className="flex items-center hover:text-blue-900 transition-colors">
+                <Mail className="w-4 h-4 mr-3 text-slate-400" /> {contactInfo.email}
               </a>
             </div>
           </div>

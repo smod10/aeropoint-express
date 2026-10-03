@@ -198,7 +198,7 @@ const VisaApplication: React.FC = () => {
                       type="tel"
                       value={form.phone}
                       onChange={(event) => updateField('phone', event.target.value)}
-                      placeholder="+234 800 000 0000"
+                      placeholder="Enter your phone number"
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-semibold text-slate-800"
                       required
                     />

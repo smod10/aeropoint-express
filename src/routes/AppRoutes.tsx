@@ -9,6 +9,14 @@ import Visas from '../pages/Visas';
 import VisaApplication from '../pages/VisaApplication';
 import Umrah from '../pages/Umrah';
 import Contact from '../pages/Contact';
+import Study from '../pages/Study';
+import FAQ from '../pages/FAQ';
+import About from '../pages/About';
+import PrivacyPolicy from '../pages/PrivacyPolicy';
+import TermsOfService from '../pages/TermsOfService';
+import CancellationPolicy from '../pages/CancellationPolicy';
+import Blog from '../pages/Blog';
+import BlogPost from '../pages/BlogPost';
 
 // Search Results & Checkouts
 import FlightSearchResults from '../pages/FlightSearchResults';
@@ -38,12 +46,21 @@ const AppRoutes: React.FC = () => {
 
           <Route path="/packages" element={<Packages />} />
           <Route path="/packages/details" element={<PackageDetails />} />
+          <Route path="/packages/details/:slug" element={<PackageDetails />} />
           <Route path="/packages/checkout" element={<PackageCheckout />} />
 
           <Route path="/visas" element={<Visas />} />
           <Route path="/visas/apply" element={<VisaApplication />} />
           <Route path="/umrah" element={<Umrah />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/study" element={<Study />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/cancellations" element={<CancellationPolicy />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           <Route path="/auth" element={<Auth />} />
         </Route>

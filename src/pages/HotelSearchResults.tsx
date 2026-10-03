@@ -45,7 +45,7 @@ const HotelSearchResults: React.FC = () => {
             </div>
           </div>
 
-          <button onClick={() => setShowDesktopModifyForm(!showDesktopModifyForm)} className="hidden md:flex bg-[#FFA500] hover:bg-amber-400 text-blue-950 px-6 py-2.5 rounded-lg font-bold transition-colors shadow-lg items-center">
+          <button onClick={() => setShowDesktopModifyForm(!showDesktopModifyForm)} className="hidden md:flex bg-amber-500 hover:bg-amber-400 text-blue-950 px-6 py-2.5 rounded-lg font-bold transition-colors shadow-lg items-center">
             <Search className="w-4 h-4 mr-2" /> Modify Search
           </button>
 
@@ -62,7 +62,7 @@ const HotelSearchResults: React.FC = () => {
               <button onClick={() => setShowMobileSearchModal(true)} className="flex-1 bg-white/10 px-3 py-2.5 rounded-lg border border-white/20 text-xs text-white text-center font-bold truncate transition-colors hover:bg-white/20">
                 2 Guests, 1 Rm
               </button>
-              <button onClick={() => setShowMobileSearchModal(true)} className="bg-[#FFA500] hover:bg-amber-400 text-blue-950 p-2.5 rounded-lg shrink-0 flex items-center justify-center shadow-lg transition-colors">
+              <button onClick={() => setShowMobileSearchModal(true)} className="bg-amber-500 hover:bg-amber-400 text-blue-950 p-2.5 rounded-lg shrink-0 flex items-center justify-center shadow-lg transition-colors">
                 <Search className="w-4 h-4" />
               </button>
             </div>
