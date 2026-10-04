@@ -4,6 +4,12 @@ import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaTiktok, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import brandLogoWhite from '../assets/aeropoint-express-logo-white.svg';
 import { contactInfo } from '../data/contactInfo';
+import amadeusLogo from '../assets/partners/amadeus.png';
+import iataLogo from '../assets/partners/iata.png';
+import nantaLogo from '../assets/partners/nanta.png';
+import paystackLogo from '../assets/partners/paystack.png';
+import sabreLogo from '../assets/partners/sabre.png';
+import travelportLogo from '../assets/partners/travelport.png';
 
 const Footer: React.FC = () => {
   const navigate = useNavigate();
@@ -70,6 +76,23 @@ const Footer: React.FC = () => {
           <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-r-lg font-bold transition-colors">
             Subscribe
           </button>
+        </div>
+        <div className="pt-3">
+          <h5 className="mb-3 text-xs font-bold uppercase tracking-wider text-[#D7C4F0]">Travel & payment networks</h5>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { name: 'Amadeus', src: amadeusLogo },
+              { name: 'Sabre', src: sabreLogo },
+              { name: 'Travelport', src: travelportLogo },
+              { name: 'Paystack', src: paystackLogo },
+              { name: 'IATA', src: iataLogo },
+              { name: 'NANTA', src: nantaLogo },
+            ].map((partner) => (
+              <div key={partner.name} className="flex h-12 items-center justify-center rounded bg-[#21143B] p-2" title={partner.name}>
+                <img src={partner.src} alt={partner.name} className="max-h-full max-w-full object-contain" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

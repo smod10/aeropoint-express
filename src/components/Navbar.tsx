@@ -20,12 +20,12 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
   const solidNav = isScrolled || mobileMenuOpen || !isTransparentTop;
 
   const links = [
-    { name: 'Flights', path: '/flights' },
-    { name: 'Hotels', path: '/hotels' },
-    { name: 'Packages', path: '/packages' },
-    { name: 'Visas', path: '/visas' },
+    { name: 'Flight', path: '/flights' },
+    { name: 'Hotel', path: '/hotels' },
+    { name: 'Visa', path: '/visas' },
     { name: 'Study', path: '/study' },
-    { name: 'Hajj & Umrah', path: '/umrah' }
+    { name: 'Hajj & Umrah', path: '/umrah' },
+    { name: 'Packages', path: '/packages' }
   ];
 
   return (
