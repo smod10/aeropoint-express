@@ -16,7 +16,7 @@ const BookingWidget: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-[60px] sm:px-6 lg:px-8 relative z-20 mt-[-208px] lg:mt-[-260px]">
+    <div className="max-w-6xl mx-auto px-4 pt-[40px] sm:px-6 lg:px-8 relative z-20 mt-[-208px] lg:mt-[-260px]">
       <div className="bg-white rounded-2xl shadow-2xl p-2 md:p-4 border border-slate-100">
         
         <div className="flex overflow-x-auto hide-scrollbar space-x-2 md:space-x-4 mb-4 p-2 border-b border-slate-100">

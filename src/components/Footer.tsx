@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
           Your trusted partner for global travel, specializing in premium flights, luxury stays, and seamless Umrah packages.
         </p>
         <div className="space-y-2 text-xs leading-relaxed text-[#D7C4F0]">
-          <a href={contactInfo.phoneHref} className="flex items-center gap-2 hover:text-white"><Phone className="h-3.5 w-3.5 shrink-0" />{contactInfo.phone}</a>
+          {contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="flex items-center gap-2 hover:text-white"><Phone className="h-3.5 w-3.5 shrink-0" />{phone.number}</a>)}
           <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="h-3.5 w-3.5 shrink-0" />WhatsApp us</a>
           <a href={contactInfo.emailHref} className="flex items-center gap-2 hover:text-white"><Mail className="h-3.5 w-3.5 shrink-0" />{contactInfo.email}</a>
           <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />{contactInfo.address}</p>
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
         <div className="flex items-center gap-3 pt-2" aria-label="Aeropoint social media">
           {[
             { label: 'Facebook', href: 'https://www.facebook.com/aeropointexpress', Icon: FaFacebookF },
-            { label: 'Instagram', href: 'https://www.instagram.com/aeropointexpress', Icon: FaInstagram },
+            { label: 'Instagram', href: 'https://www.instagram.com/aeropointexpresstravel', Icon: FaInstagram },
             { label: 'TikTok', href: 'https://www.tiktok.com/@aeropointexpress', Icon: FaTiktok },
             { label: 'X / Twitter', href: 'https://x.com/aeropointexpress', Icon: FaXTwitter },
             { label: 'YouTube', href: 'https://www.youtube.com/@aeropointexpress', Icon: FaYoutube },
@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
         <h4 className="text-white font-bold mb-6 uppercase text-sm tracking-wider">Support</h4>
         <ul className="space-y-3 text-sm">
           <li><Link to="/faq" className="hover:text-amber-500 transition-colors">FAQs</Link></li>
-          <li><Link to="/flights/search" className="hover:text-amber-500 transition-colors">Manage Booking</Link></li>
+          <li><Link to="/dashboard" className="hover:text-amber-500 transition-colors">Manage Booking</Link></li>
           <li><Link to="/cancellations" className="hover:text-amber-500 transition-colors">Cancellations & Refunds</Link></li>
           <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link></li>
           <li><Link to="/about" className="hover:text-amber-500 transition-colors">About Us</Link></li>

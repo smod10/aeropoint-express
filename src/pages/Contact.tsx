@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
             <h2 className="mb-4 text-lg font-bold text-blue-950">Contact channels</h2>
             <div className="space-y-4 text-sm">
               <a href={contactInfo.emailHref} className="flex items-start gap-3 text-slate-700 hover:text-blue-900"><Mail className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" /><span><strong className="block text-slate-900">Email</strong>{contactInfo.email}</span></a>
-              <a href={contactInfo.phoneHref} className="flex items-start gap-3 text-slate-700 hover:text-blue-900"><Phone className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" /><span><strong className="block text-slate-900">Phone</strong>{contactInfo.phone}</span></a>
+              <div className="flex items-start gap-3 text-slate-700"><Phone className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" /><span><strong className="mb-1 block text-slate-900">Phone</strong>{contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="block hover:text-blue-900">{phone.number}</a>)}</span></div>
               <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-start gap-3 text-slate-700 hover:text-blue-900"><MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" /><span><strong className="block text-slate-900">WhatsApp</strong>{contactInfo.phone}</span></a>
               <div className="flex items-start gap-3 text-slate-700"><MapPin className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" /><span><strong className="block text-slate-900">Office</strong>{contactInfo.address}</span></div>
             </div>
@@ -77,7 +77,7 @@ const Contact: React.FC = () => {
             <label className="text-sm font-semibold text-slate-700 sm:col-span-2">Message<textarea name="message" required rows={6} placeholder="Describe what happened or how we can help. Please do not include sensitive payment or identity details." className="mt-2 w-full resize-y rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>
           </div>
           <label className="mt-5 flex items-start gap-3 text-sm leading-relaxed text-slate-600"><input type="checkbox" required className="mt-1 h-4 w-4 accent-blue-900" /><span>I agree that Aeropoint Express may use the details above to respond to this request. See our <Link to="/privacy" className="font-semibold text-blue-900 underline">Privacy Policy</Link>.</span></label>
-          <button type="submit" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-900 px-6 py-3 font-bold text-white transition hover:bg-blue-800"><Plane className="h-4 w-4" /> Continue to email <ArrowRight className="h-4 w-4" /></button>
+          <button type="submit" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-900 px-6 py-3 font-bold text-white transition hover:bg-blue-800"><Plane className="h-4 w-4" /> Submit</button>
           <p className="mt-3 text-xs leading-relaxed text-slate-500">Submitting opens your default email application with the enquiry details. This website does not transmit or store this form.</p>
           {status && <p role="status" className="mt-4 rounded-md bg-green-50 p-3 text-sm text-green-800">{status}</p>}
         </form>

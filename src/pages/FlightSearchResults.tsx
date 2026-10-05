@@ -380,6 +380,9 @@ const FlightSearchResults: React.FC = () => {
                     <a href={contactInfo.phoneHref} className="flex items-center hover:text-amber-500 transition-colors">
                       <Phone className="w-4 h-4 mr-3 text-amber-500" /> {contactInfo.phone}
                     </a>
+                    <a href={contactInfo.phone2Href} className="flex items-center hover:text-amber-500 transition-colors">
+                      <Phone className="w-4 h-4 mr-3 text-amber-500" /> {contactInfo.phone2}
+                    </a>
                     <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center hover:text-amber-500 transition-colors">
                       <MessageCircle className="w-4 h-4 mr-3 text-amber-500" /> WhatsApp Us
                     </a>
@@ -401,6 +404,9 @@ const FlightSearchResults: React.FC = () => {
               <div className="space-y-4 text-sm font-medium">
                 <a href={contactInfo.phoneHref} className="flex items-center hover:text-amber-500 transition-colors">
                   <Phone className="w-4 h-4 mr-3 text-amber-500" /> {contactInfo.phone}
+                </a>
+                <a href={contactInfo.phone2Href} className="flex items-center hover:text-amber-500 transition-colors">
+                  <Phone className="w-4 h-4 mr-3 text-amber-500" /> {contactInfo.phone2}
                 </a>
                 <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center hover:text-amber-500 transition-colors">
                   <MessageCircle className="w-4 h-4 mr-3 text-amber-500" /> WhatsApp Us

@@ -8,9 +8,10 @@ const Auth: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, authenticating logic goes here.
-    // If successfully authenticated, or if user is already signed up, redirect to profile:
-    navigate('/');
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    sessionStorage.setItem('aeropointCustomerEmail', String(formData.get('email') ?? ''));
+    sessionStorage.setItem('aeropointCustomerName', String(formData.get('name') ?? ''));
+    navigate('/dashboard');
   };
 
   return (
@@ -86,13 +87,13 @@ const Auth: React.FC = () => {
             {!isLogin && (
               <div className="relative">
                 <UserIcon className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-                <input type="text" placeholder="Full Name" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+                <input type="text" name="name" placeholder="Full Name" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
               </div>
             )}
             
             <div className="relative">
               <Mail className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-              <input type="email" placeholder="Email Address" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+              <input type="email" name="email" placeholder="Email Address" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
             </div>
 
             <div className="relative">

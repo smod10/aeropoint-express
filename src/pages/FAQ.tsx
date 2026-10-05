@@ -13,7 +13,7 @@ const questions = [
   ['How do I receive my booking documents?', 'Once the supplier confirms a booking, we will provide the confirmation and available travel documents through the contact channel associated with your booking. Check your email, including spam folders.'],
   ['What should I do if my flight is disrupted?', 'Contact the airline promptly for operational assistance and contact our support team for help reviewing your booking options. Airline and passenger rights vary by route and applicable law.'],
   ['How is my personal information handled?', 'We use personal information to respond to requests, arrange services, and meet legal obligations. Read our Privacy Policy for details about use, retention, and your privacy rights.'],
-  ['How can I contact support?', `Email ${contactInfo.email}, call ${contactInfo.phone}, or message us on WhatsApp.`],
+  ['How can I contact support?', `Email ${contactInfo.email}, call ${contactInfo.phone} or ${contactInfo.phone2}, or message us on WhatsApp.`],
 ];
 
 const FAQ: React.FC = () => (

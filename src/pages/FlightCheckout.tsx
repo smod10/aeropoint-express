@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Check, User, Mail, CreditCard, Clock, ShieldCheck, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Check, User, Mail, ShieldCheck, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { dialingCodes } from '../data/countries';
+import PaystackPayment from '../components/PaystackPayment';
 
 const FlightCheckout: React.FC = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const booking = (location.state as any) ?? {};
 
   const [step, setStep] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState('card');
   const [couponCode, setCouponCode] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
 
@@ -188,56 +187,7 @@ const FlightCheckout: React.FC = () => {
                   {couponApplied && <p className="text-emerald-600 font-bold text-sm mt-3 flex items-center"><Check className="w-4 h-4 mr-1" /> Coupon APPLIED (-₦15,000)</p>}
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                  <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
-                    <CreditCard className="w-5 h-5 text-blue-900 mr-2" />
-                    <h2 className="font-bold text-slate-800 text-lg">How would you like to pay?</h2>
-                  </div>
-                  <div className="p-6">
-                    <div className="space-y-4">
-                      
-                      <button 
-                        onClick={() => setPaymentMethod('card')}
-                        className={`w-full p-4 rounded-xl border-2 flex items-center transition-all text-left ${paymentMethod === 'card' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center shrink-0 ${paymentMethod === 'card' ? 'border-blue-900' : 'border-slate-300'}`}>
-                          {paymentMethod === 'card' && <div className="w-2.5 h-2.5 bg-blue-900 rounded-full"></div>}
-                        </div>
-                        <div>
-                          <div className={`font-bold ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-800'}`}>Pay Now (Credit/Debit Card)</div>
-                          <div className="text-sm text-slate-500 mt-0.5">Instant ticket issuance</div>
-                        </div>
-                      </button>
-
-                      <button 
-                        onClick={() => setPaymentMethod('hold')}
-                        className={`w-full p-4 rounded-xl border-2 flex items-center transition-all text-left ${paymentMethod === 'hold' ? 'border-amber-500 bg-amber-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                      >
-                         <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center shrink-0 ${paymentMethod === 'hold' ? 'border-amber-500' : 'border-slate-300'}`}>
-                          {paymentMethod === 'hold' && <div className="w-2.5 h-2.5 bg-amber-500 rounded-full"></div>}
-                        </div>
-                        <div className="flex-1">
-                          <div className={`font-bold flex items-center ${paymentMethod === 'hold' ? 'text-amber-700' : 'text-slate-800'}`}>
-                            Reserve Ticket (Hold for 72 Hrs) <Clock className="w-4 h-4 ml-2" />
-                          </div>
-                          <div className="text-sm text-slate-500 mt-0.5">Secure this price now without paying immediately. Ticket will be canceled if unpaid after 72 hours.</div>
-                        </div>
-                      </button>
-
-                    </div>
-
-                    {paymentMethod === 'card' && (
-                      <div className="mt-6 pt-6 border-t border-slate-100 animate-fade-in space-y-4">
-                        <input type="text" placeholder="Cardholder Name" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                        <input type="text" placeholder="Card Number (0000 0000 0000 0000)" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 tracking-widest" />
-                        <div className="grid grid-cols-2 gap-4">
-                          <input type="text" placeholder="MM/YY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                          <input type="text" placeholder="CVV" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <PaystackPayment amount={total} description="Flight booking" />
               </div>
             )}
 
@@ -253,11 +203,7 @@ const FlightCheckout: React.FC = () => {
                 <button onClick={nextStep} className="px-8 py-3.5 font-bold text-slate-900 bg-amber-500 rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/20 flex items-center transition-all">
                   Continue to Next Step <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
-              ) : (
-                <button onClick={() => navigate('/contact')} className="px-8 py-3.5 font-bold text-white bg-blue-900 rounded-xl hover:bg-blue-800 shadow-lg flex items-center transition-all">
-                  {paymentMethod === 'hold' ? 'Confirm Reservation' : 'Complete Payment'} <ShieldCheck className="w-5 h-5 ml-2" />
-                </button>
-              )}
+              ) : <div />}
             </div>
             
           </main>

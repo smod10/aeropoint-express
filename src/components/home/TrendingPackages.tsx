@@ -34,7 +34,7 @@ const hotelOffers: OfferCard[] = [
 
 const TrendingPackages: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeCategory, setActiveCategory] = useState<OfferCategory>('packages');
+  const [activeCategory, setActiveCategory] = useState<OfferCategory>('flights');
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {

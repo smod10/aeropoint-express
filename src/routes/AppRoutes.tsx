@@ -27,6 +27,7 @@ import HotelCheckout from '../pages/HotelCheckout';
 import PackageDetails from '../pages/PackageDetails';
 import PackageCheckout from '../pages/PackageCheckout';
 import Auth from '../pages/Auth';
+import CustomerDashboard from '../pages/CustomerDashboard';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -63,6 +64,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/blog/:slug" element={<BlogPost />} />
 
           <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={<CustomerDashboard />} />
         </Route>
       </Routes>
     </Router>

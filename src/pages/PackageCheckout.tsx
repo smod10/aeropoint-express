@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { User, Mail, ShieldCheck, LockKeyhole, AlertCircle, CreditCard, Landmark, ArrowRight, MapPin, Calendar, Users, Plane, Hotel } from 'lucide-react';
+import React from 'react';
+import { User, Mail, ShieldCheck, AlertCircle, ArrowRight, MapPin, Calendar, Users, Plane, Hotel } from 'lucide-react';
+import PaystackPayment from '../components/PaystackPayment';
 
 // Temporarily mock country names and dialing codes to resolve imports
 const countryNames = ['Nigeria', 'United Kingdom', 'United States', 'Canada', 'Saudi Arabia', 'Tanzania'];
 const dialingCodes = ['+234', '+44', '+1', '+966', '+255'];
 
 const PackageCheckout: React.FC = () => {
-  const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState('card');
-
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
@@ -112,60 +109,7 @@ const PackageCheckout: React.FC = () => {
           </div>
 
           {/* Payment Method */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 overflow-hidden">
-            <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center">
-              <LockKeyhole className="w-5 h-5 text-blue-900 mr-2" />
-              <h2 className="font-bold text-slate-800 text-lg">Payment Method</h2>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button 
-                  onClick={() => setPaymentMethod('card')}
-                  className={`p-4 rounded-xl border-2 flex items-center transition-all ${paymentMethod === 'card' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                >
-                  <CreditCard className={`w-6 h-6 mr-3 ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-400'}`} />
-                  <div className="text-left">
-                    <div className={`font-bold ${paymentMethod === 'card' ? 'text-blue-900' : 'text-slate-700'}`}>Debit/Credit Card</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Instant confirmation</div>
-                  </div>
-                </button>
-
-                <button 
-                  onClick={() => setPaymentMethod('transfer')}
-                  className={`p-4 rounded-xl border-2 flex items-center transition-all ${paymentMethod === 'transfer' ? 'border-blue-900 bg-blue-50' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
-                >
-                  <Landmark className={`w-6 h-6 mr-3 ${paymentMethod === 'transfer' ? 'text-blue-900' : 'text-slate-400'}`} />
-                  <div className="text-left">
-                    <div className={`font-bold ${paymentMethod === 'transfer' ? 'text-blue-900' : 'text-slate-700'}`}>Bank Transfer</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Pay via local bank</div>
-                  </div>
-                </button>
-              </div>
-
-              {paymentMethod === 'card' && (
-                <div className="mt-6 pt-6 border-t border-slate-100 animate-fade-in">
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cardholder Name</label>
-                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Card Number</label>
-                    <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 tracking-widest" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Expiry Date</label>
-                      <input type="text" placeholder="MM/YY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">CVV</label>
-                      <input type="text" placeholder="123" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          <PaystackPayment amount={3700000} description="Package booking" />
 
         </main>
 
@@ -238,9 +182,6 @@ const PackageCheckout: React.FC = () => {
                 <ShieldCheck className="w-4 h-4" /> <span>100% Safe & Secure Payment</span>
               </div>
 
-              <button onClick={() => navigate('/contact')} className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-lg">
-                Pay ₦3,700,000 <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
             </div>
           </div>
         </aside>

@@ -1,5 +1,11 @@
 # React + TypeScript + Vite
 
+## Payment setup
+
+Copy the payment variable names from `.env.example` into a local `.env` and provide the Paystack public key and Aeropoint's verified bank account details. These values are displayed or used by the browser; never put a Paystack secret key in a `VITE_` variable.
+
+Paystack's browser callback is not proof of payment. Before confirming bookings or issuing tickets, connect checkout references to a backend that verifies each transaction with Paystack. Bank transfers also require confirmation by Aeropoint before a booking is marked paid.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:

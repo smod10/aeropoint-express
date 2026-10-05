@@ -49,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
 
         <div className="hidden lg:flex items-center space-x-4">
           <Link 
-            to="/auth" 
+            to="/dashboard" 
             className={`flex items-center font-bold py-2.5 px-6 rounded-full transition-all shadow-sm ${solidNav ? 'bg-amber-500 text-blue-950 hover:bg-amber-600' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30'}`}
           >
             <User className="w-4 h-4 mr-2" /> My Account
@@ -89,9 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
               <Headset className="w-5 h-5 mr-2 text-amber-500" /> Need Help?
             </h4>
             <div className="space-y-4 text-sm font-semibold text-slate-600">
-              <a href={contactInfo.phoneHref} className="flex items-center hover:text-blue-900 transition-colors">
-                <Phone className="w-4 h-4 mr-3 text-slate-400" /> {contactInfo.phone}
-              </a>
+              {contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="flex items-center hover:text-blue-900 transition-colors"><Phone className="w-4 h-4 mr-3 text-slate-400" /> {phone.number}</a>)}
               <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center hover:text-blue-900 transition-colors">
                 <MessageCircle className="w-4 h-4 mr-3 text-slate-400" /> WhatsApp Us
               </a>
@@ -103,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
           
           <div className="flex flex-col space-y-3 mt-8 mb-4">
             <Link 
-              to="/auth" 
+              to="/dashboard" 
               onClick={() => setMobileMenuOpen(false)}
               className="w-full py-3.5 bg-amber-500 text-blue-950 font-bold rounded-xl shadow-lg flex items-center justify-center transition-colors hover:bg-amber-600"
             >

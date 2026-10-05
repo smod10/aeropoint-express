@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ChevronDown, ArrowRight, ArrowRightLeft, CalendarCheck, CreditCard, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 import FlightsForm from '../components/BookingWidget/FlightsForm';
 import { imageFallbacks } from '../utils/imageFallbacks';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FlightFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -90,7 +90,7 @@ const Flights: React.FC = () => {
       {/* Trust Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
+          <Link to="/dashboard" className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group">
             <div className="flex items-center space-x-4 flex-1">
               <div className="flex-shrink-0 text-blue-900"><CalendarCheck className="w-9 h-9" strokeWidth={1.5} /></div>
               <div>
@@ -99,9 +99,9 @@ const Flights: React.FC = () => {
               </div>
             </div>
             <ArrowRight className="w-5 h-5 text-amber-500 transform group-hover:translate-x-1 transition-transform flex-shrink-0" />
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
+          <Link to="/contact" className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group">
             <div className="flex items-center space-x-4 flex-1">
               <div className="flex-shrink-0 text-blue-900"><MessageSquare className="w-9 h-9" strokeWidth={1.5} /></div>
               <div>
@@ -110,9 +110,9 @@ const Flights: React.FC = () => {
               </div>
             </div>
             <ArrowRight className="w-5 h-5 text-amber-500 transform group-hover:translate-x-1 transition-transform flex-shrink-0" />
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
+          <Link to="/dashboard" className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group">
             <div className="flex items-center space-x-4 flex-1">
               <div className="flex-shrink-0 text-blue-900"><CreditCard className="w-9 h-9" strokeWidth={1.5} /></div>
               <div>
@@ -121,7 +121,7 @@ const Flights: React.FC = () => {
               </div>
             </div>
             <ArrowRight className="w-5 h-5 text-amber-500 transform group-hover:translate-x-1 transition-transform flex-shrink-0" />
-          </div>
+          </Link>
         </div>
       </section>
 
