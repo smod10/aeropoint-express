@@ -26,7 +26,9 @@ import HotelDetails from '../pages/HotelDetails';
 import HotelCheckout from '../pages/HotelCheckout';
 import PackageDetails from '../pages/PackageDetails';
 import PackageCheckout from '../pages/PackageCheckout';
+import AdminTours from '../pages/AdminTours';
 import Auth from '../pages/Auth';
+import EmailVerification from '../pages/EmailVerification.tsx';
 import CustomerDashboard from '../pages/CustomerDashboard.tsx';
 import BookingDetails from '../pages/BookingDetails';
 import EditProfile from '../pages/EditProfile';
@@ -51,6 +53,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/packages/details" element={<PackageDetails />} />
           <Route path="/packages/details/:slug" element={<PackageDetails />} />
           <Route path="/packages/checkout" element={<PackageCheckout />} />
+          <Route path="/admin/tours" element={<AdminTours />} />
 
           <Route path="/visas" element={<Visas />} />
           <Route path="/visas/apply" element={<VisaApplication />} />
@@ -66,6 +69,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/blog/:slug" element={<BlogPost />} />
 
           <Route path="/auth" element={<Auth />} />
+          <Route path="/auth/verify" element={<EmailVerification />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/dashboard/profile" element={<EditProfile />} />
           <Route path="/dashboard/bookings/:reference" element={<BookingDetails />} />

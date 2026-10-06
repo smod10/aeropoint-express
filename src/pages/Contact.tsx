@@ -2,6 +2,8 @@ import React, { useState, type FormEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, Plane, ShieldCheck } from 'lucide-react';
 import { contactInfo } from '../data/contactInfo';
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
+import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js';
 
 const Contact: React.FC = () => {
   const [status, setStatus] = useState('');
@@ -12,11 +14,12 @@ const Contact: React.FC = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const phoneCountry = String(formData.get('phoneCountry') || 'NG') as CountryCode;
     const subject = encodeURIComponent(`${formData.get('topic')} enquiry from ${formData.get('fullName')}`);
     const body = encodeURIComponent([
       `Name: ${formData.get('fullName')}`,
       `Email: ${formData.get('email')}`,
-      `Phone: ${formData.get('phone')}`,
+      `Phone: +${getCountryCallingCode(phoneCountry)} ${formData.get('phone')}`,
       `Request type: ${formData.get('topic')}`,
       `Booking reference: ${formData.get('bookingReference') || 'Not provided'}`,
       `Airline / flight number: ${formData.get('flightNumber') || 'Not provided'}`,
@@ -72,7 +75,7 @@ const Contact: React.FC = () => {
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="text-sm font-semibold text-slate-700">Full name<input name="fullName" autoComplete="name" required defaultValue={bookingRequest?.customerName} className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>
             <label className="text-sm font-semibold text-slate-700">Email address<input name="email" type="email" autoComplete="email" required defaultValue={bookingRequest?.customerEmail} className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>
-            <label className="text-sm font-semibold text-slate-700">Phone number<input name="phone" type="tel" autoComplete="tel" required className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>
+            <div className="text-sm font-semibold text-slate-700"><label htmlFor="contact-phone" className="block">Phone number</label><div className="mt-2 flex gap-2"><PhoneCountrySelect name="phoneCountry" aria-label="Phone country code" className="w-[46%] min-w-0 rounded-md border border-slate-300 bg-white px-2 py-3 text-xs font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /><input id="contact-phone" name="phone" type="tel" autoComplete="tel-national" inputMode="tel" pattern="[0-9+ .-]{6,20}" required className="w-full min-w-0 rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></div></div>
             <label className="text-sm font-semibold text-slate-700">What can we help with?<select name="topic" required defaultValue={bookingRequest?.requestType ? requestTopic : ''} className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15"><option value="" disabled>Select a request type</option><option>New booking</option><option>Existing booking</option><option>Flight change or cancellation</option><option>Refund request</option><option>Flight disruption</option><option>Baggage or special assistance</option><option>Stay or tour</option><option>Study or visa enquiry</option><option>Feedback about a completed booking</option><option>Other</option></select></label>
             <label className="text-sm font-semibold text-slate-700">Booking reference <span className="font-normal text-slate-400">(optional)</span><input name="bookingReference" autoComplete="off" defaultValue={bookingRequest?.bookingReference} className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>
             <label className="text-sm font-semibold text-slate-700">Airline and flight number <span className="font-normal text-slate-400">(optional)</span><input name="flightNumber" placeholder="e.g. Airline, flight number" className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></label>

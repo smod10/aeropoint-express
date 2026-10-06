@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Calendar, CheckCircle2, FileText, Globe2, Mail, 
 import { countryNames } from '../data/countries';
 import { getVisaCountryByCode, visaCountryOptions } from '../data/visaData';
 import { imageFallbacks } from '../utils/imageFallbacks';
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 interface VisaApplicationState {
   nationality?: string;
@@ -18,6 +19,7 @@ interface VisaApplicationForm {
   travelDate: string;
   fullName: string;
   email: string;
+  phoneCountry: string;
   phone: string;
   notes: string;
 }
@@ -39,6 +41,7 @@ const VisaApplication: React.FC = () => {
     travelDate: '',
     fullName: '',
     email: '',
+    phoneCountry: 'NG',
     phone: '',
     notes: '',
   });
@@ -190,19 +193,22 @@ const VisaApplication: React.FC = () => {
                     </label>
                   </div>
 
-                  <label className="block">
+                  <div className="block">
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 inline-flex items-center">
                       <Phone className="w-4 h-4 mr-1.5" /> Phone Number
                     </span>
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      onChange={(event) => updateField('phone', event.target.value)}
-                      placeholder="Enter your phone number"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-semibold text-slate-800"
-                      required
-                    />
-                  </label>
+                    <div className="flex gap-2">
+                      <PhoneCountrySelect value={form.phoneCountry} onChange={(event) => updateField('phoneCountry', event.target.value)} aria-label="Phone country code" className="w-[44%] min-w-0 bg-slate-50 border border-slate-200 rounded-xl px-2 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-semibold text-slate-800 text-sm" />
+                      <input
+                        type="tel"
+                        value={form.phone}
+                        onChange={(event) => updateField('phone', event.target.value)}
+                        placeholder="Enter your phone number"
+                        className="w-full min-w-0 bg-slate-50 border border-slate-200 rounded-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-semibold text-slate-800"
+                        required
+                      />
+                    </div>
+                  </div>
 
                   <label className="block">
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 inline-flex items-center">

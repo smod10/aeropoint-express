@@ -2,6 +2,8 @@ import React, { useState, type FormEvent } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, LockKeyhole, Save } from 'lucide-react';
 import { customerBookings } from '../data/customerBookings';
+import { parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js';
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 interface ProfileDetails {
   name: string;
@@ -14,10 +16,13 @@ interface ProfileDetails {
 const EditProfile: React.FC = () => {
   const signedInEmail = sessionStorage.getItem('aeropointCustomerEmail') || '';
   const sampleName = customerBookings.find((booking) => booking.ownerEmail.toLowerCase() === signedInEmail.toLowerCase())?.customerName || '';
+  const storedPhone = sessionStorage.getItem('aeropointCustomerPhone') || '+234 803 555 0142';
+  const parsedStoredPhone = parsePhoneNumberFromString(storedPhone);
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>(parsedStoredPhone?.country || 'NG');
   const [profile, setProfile] = useState<ProfileDetails>(() => ({
     name: sessionStorage.getItem('aeropointCustomerName') || sampleName,
     email: signedInEmail,
-    phone: sessionStorage.getItem('aeropointCustomerPhone') || '+234 803 555 0142',
+    phone: parsedStoredPhone?.nationalNumber || storedPhone,
     city: sessionStorage.getItem('aeropointCustomerCity') || 'Ibadan',
     country: sessionStorage.getItem('aeropointCustomerCountry') || 'Nigeria',
   }));
@@ -44,10 +49,16 @@ const EditProfile: React.FC = () => {
       return;
     }
     if (!nextProfile.email) return;
+    const parsedPhone = nextProfile.phone ? parsePhoneNumberFromString(nextProfile.phone, phoneCountry) : null;
+    if (nextProfile.phone && !parsedPhone?.isValid()) {
+      setProfileMessage('Enter a valid phone number for the selected country.');
+      return;
+    }
+    const savedPhone = parsedPhone?.formatInternational() || '';
 
     sessionStorage.setItem('aeropointCustomerName', nextProfile.name);
     sessionStorage.setItem('aeropointCustomerEmail', nextProfile.email);
-    sessionStorage.setItem('aeropointCustomerPhone', nextProfile.phone);
+    sessionStorage.setItem('aeropointCustomerPhone', savedPhone);
     sessionStorage.setItem('aeropointCustomerCity', nextProfile.city);
     sessionStorage.setItem('aeropointCustomerCountry', nextProfile.country);
     setProfile(nextProfile);
@@ -97,9 +108,7 @@ const EditProfile: React.FC = () => {
             <label className="block text-sm font-semibold text-slate-700">Email address
               <input name="email" type="email" autoComplete="email" required value={profile.email} onChange={(event) => { setProfile({ ...profile, email: event.target.value }); setProfileMessage(''); }} className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" />
             </label>
-            <label className="block text-sm font-semibold text-slate-700">Phone number
-              <input name="phone" type="tel" autoComplete="tel" pattern="[+0-9() .-]{7,20}" title="Enter a valid phone number." value={profile.phone} onChange={(event) => { setProfile({ ...profile, phone: event.target.value }); setProfileMessage(''); }} className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" />
-            </label>
+            <div className="block text-sm font-semibold text-slate-700"><label htmlFor="profile-phone">Phone number</label><div className="mt-1.5 flex gap-2"><PhoneCountrySelect name="phoneCountry" value={phoneCountry} onChange={(event) => { setPhoneCountry(event.target.value as CountryCode); setProfileMessage(''); }} aria-label="Phone country code" className="w-[44%] min-w-0 rounded-md border border-slate-300 bg-white px-2 py-2.5 text-xs font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /><input id="profile-phone" name="phone" type="tel" autoComplete="tel-national" inputMode="tel" pattern="[0-9+ .-]{6,20}" value={profile.phone} onChange={(event) => { setProfile({ ...profile, phone: event.target.value }); setProfileMessage(''); }} className="w-full min-w-0 rounded-md border border-slate-300 px-3 py-2.5 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" /></div></div>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block text-sm font-semibold text-slate-700">Home city
                 <input name="city" autoComplete="address-level2" value={profile.city} onChange={(event) => { setProfile({ ...profile, city: event.target.value }); setProfileMessage(''); }} className="mt-1.5 w-full rounded-md border border-slate-300 px-3 py-2.5 font-normal focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/15" />

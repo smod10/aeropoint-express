@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Check, User, ShieldCheck, Coffee, ArrowRight, ArrowLeft, BedDouble } from 'lucide-react';
 import PaystackPayment from '../components/PaystackPayment';
-
-const dialingCodes = ['+1', '+44', '+234', '+971', '+254', '+27'];
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 const HotelCheckout: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -74,9 +73,7 @@ const HotelCheckout: React.FC = () => {
                       <div>
                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
                         <div className="flex">
-                          <select className="bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0 w-24">
-                            {dialingCodes?.map((code) => <option key={code} value={code}>{code}</option>)}
-                          </select>
+                          <PhoneCountrySelect aria-label="Phone country code" className="bg-slate-50 border border-slate-200 rounded-l-xl px-2 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0 w-[44%] min-w-0 text-sm" />
                           <input type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
                         </div>
                       </div>

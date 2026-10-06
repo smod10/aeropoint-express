@@ -1,16 +1,50 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Plane, Mail, Lock, User as UserIcon } from 'lucide-react';
+import { parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js';
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const signInEmail = (location.state as { email?: string } | null)?.email || '';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
-    sessionStorage.setItem('aeropointCustomerEmail', String(formData.get('email') ?? ''));
-    sessionStorage.setItem('aeropointCustomerName', String(formData.get('name') ?? ''));
+    const email = String(formData.get('email') ?? '').trim().toLowerCase();
+
+    if (!isLogin) {
+      const form = e.currentTarget as HTMLFormElement;
+      const phoneInput = form.elements.namedItem('phone') as HTMLInputElement;
+      const phone = String(formData.get('phone') ?? '').trim();
+      const countryCode = String(formData.get('phoneCountry') || 'NG') as CountryCode;
+      const parsedPhone = parsePhoneNumberFromString(phone, countryCode);
+
+      phoneInput.setCustomValidity('');
+      if (!parsedPhone?.isValid()) {
+        phoneInput.setCustomValidity('Enter a valid phone number for the selected country.');
+        phoneInput.reportValidity();
+        return;
+      }
+
+      sessionStorage.setItem('aeropointPendingEmail', email);
+      sessionStorage.setItem('aeropointPendingName', String(formData.get('name') ?? '').trim());
+      sessionStorage.setItem('aeropointPendingPhone', parsedPhone.formatInternational());
+      navigate('/auth/verify', { state: { email } });
+      return;
+    }
+
+    sessionStorage.setItem('aeropointCustomerEmail', email);
+    const pendingEmail = sessionStorage.getItem('aeropointPendingEmail');
+    if (pendingEmail?.toLowerCase() === email) {
+      sessionStorage.setItem('aeropointCustomerName', sessionStorage.getItem('aeropointPendingName') || '');
+      sessionStorage.setItem('aeropointCustomerPhone', sessionStorage.getItem('aeropointPendingPhone') || '');
+      sessionStorage.removeItem('aeropointPendingEmail');
+      sessionStorage.removeItem('aeropointPendingName');
+      sessionStorage.removeItem('aeropointPendingPhone');
+    }
     navigate('/dashboard');
   };
 
@@ -87,18 +121,26 @@ const Auth: React.FC = () => {
             {!isLogin && (
               <div className="relative">
                 <UserIcon className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-                <input type="text" name="name" placeholder="Full Name" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+                <input type="text" name="name" placeholder="Full Name" autoComplete="name" minLength={2} required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
               </div>
             )}
             
             <div className="relative">
               <Mail className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-              <input type="email" name="email" placeholder="Email Address" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+              <input type="email" name="email" placeholder="Email Address" autoComplete="email" defaultValue={signInEmail} required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
             </div>
+
+            {!isLogin && <div>
+              <label htmlFor="signup-phone" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Phone Number</label>
+              <div className="flex gap-2">
+                <PhoneCountrySelect name="phoneCountry" aria-label="Phone country code" className="w-[44%] min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-2 py-3.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-900/20" />
+                <input id="signup-phone" type="tel" name="phone" autoComplete="tel-national" inputMode="tel" placeholder="Phone number" minLength={6} maxLength={20} pattern="[0-9+ .-]{6,20}" onChange={(event) => event.currentTarget.setCustomValidity('')} required className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-900/20" />
+              </div>
+            </div>}
 
             <div className="relative">
               <Lock className="w-5 h-5 absolute top-3.5 left-4 text-slate-400" />
-              <input type="password" placeholder="Password" required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
+              <input type="password" name="password" placeholder="Password" autoComplete={isLogin ? 'current-password' : 'new-password'} minLength={8} required className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 transition-shadow" />
             </div>
 
             {isLogin && (

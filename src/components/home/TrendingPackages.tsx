@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { trendingPackages } from '../../data/packages';
+import { getTourPackages } from '../../data/packages';
 import { imageFallbacks } from '../../utils/imageFallbacks';
 
 type OfferCategory = 'packages' | 'flights' | 'hotels';
@@ -45,7 +45,7 @@ const TrendingPackages: React.FC = () => {
   };
 
   const cards: OfferCard[] = activeCategory === 'packages'
-    ? trendingPackages.map((pkg) => ({
+    ? getTourPackages().map((pkg) => ({
       id: pkg.slug,
       title: pkg.title,
       location: pkg.location,

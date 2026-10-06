@@ -1,10 +1,10 @@
 import React from 'react';
 import { User, Mail, ShieldCheck, AlertCircle, ArrowRight, MapPin, Calendar, Users, Plane, Hotel } from 'lucide-react';
 import PaystackPayment from '../components/PaystackPayment';
+import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 // Temporarily mock country names and dialing codes to resolve imports
 const countryNames = ['Nigeria', 'United Kingdom', 'United States', 'Canada', 'Saudi Arabia', 'Tanzania'];
-const dialingCodes = ['+234', '+44', '+1', '+966', '+255'];
 
 const PackageCheckout: React.FC = () => {
   return (
@@ -96,11 +96,7 @@ const PackageCheckout: React.FC = () => {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile Number</label>
                   <div className="flex">
-                    <select className="bg-slate-50 border border-slate-200 rounded-l-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0 max-w-[120px]">
-                      {dialingCodes.map((code) => (
-                        <option key={code} value={code}>{code}</option>
-                      ))}
-                    </select>
+                    <PhoneCountrySelect aria-label="Phone country code" className="bg-slate-50 border border-slate-200 rounded-l-xl px-2 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800 border-r-0 w-[44%] min-w-0 text-sm" />
                     <input type="tel" placeholder="800 000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-900/20 font-bold text-slate-800" />
                   </div>
                 </div>

@@ -2,21 +2,19 @@ import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { MapPin, Star, Calendar, Users, CheckCircle2, Plane, Hotel, Car, ArrowRight, Share2, Heart, ChevronDown } from 'lucide-react';
 import { imageFallbacks } from '../utils/imageFallbacks';
-import { trendingPackages } from '../data/packages';
+import { getTourPackages } from '../data/packages';
 
 const PackageDetails: React.FC = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const [activeTab, setActiveTab] = useState('overview');
-  const pkg = slug
-    ? trendingPackages.find((item) => item.slug === slug)
-    : trendingPackages.find((item) => item.slug === 'zanzibar-white-sands');
+  const pkg = slug ? getTourPackages().find((item) => item.slug === slug) : undefined;
 
   if (!pkg) return <Navigate to="/packages" replace />;
 
   const nights = Math.max(Number.parseInt(pkg.days, 10) - 1, 0);
   const totalForTwo = (Number(pkg.price.replace(/[^\d]/g, '')) * 2).toLocaleString('en-NG');
-  const galleryImages = [pkg.image, pkg.image];
+  const galleryImages = pkg.images.length > 1 ? pkg.images.slice(1, 3) : [pkg.image, pkg.image];
 
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
@@ -76,7 +74,7 @@ const PackageDetails: React.FC = () => {
           {/* Quick Highlights */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8 flex flex-wrap gap-6 justify-between items-center">
             <div className="flex items-center text-slate-700 font-semibold"><Calendar className="w-5 h-5 mr-3 text-amber-500" /> {pkg.days}, {nights} Nights</div>
-            <div className="flex items-center text-slate-700 font-semibold"><Plane className="w-5 h-5 mr-3 text-amber-500" /> Flight options</div>
+            <div className="flex items-center text-slate-700 font-semibold"><Plane className="w-5 h-5 mr-3 text-amber-500" /> {pkg.flightIncluded ? 'Flights included' : 'Flights not included'}</div>
             <div className="flex items-center text-slate-700 font-semibold"><Hotel className="w-5 h-5 mr-3 text-amber-500" /> Accommodation</div>
             <div className="flex items-center text-slate-700 font-semibold"><Car className="w-5 h-5 mr-3 text-amber-500" /> Travel arrangements</div>
           </div>
@@ -100,7 +98,7 @@ const PackageDetails: React.FC = () => {
               <div className="space-y-6 text-slate-600 leading-relaxed">
                 <h3 className="text-xl font-extrabold text-blue-950">Tour Overview</h3>
                 <p>{pkg.description}</p>
-                <p className="text-sm">Availability, exact inclusions, and supplier conditions are confirmed before booking.</p>
+                <p className="text-sm">{pkg.conditions}</p>
                 
                 <h4 className="font-bold text-slate-800 pt-4">Accommodations</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -120,12 +118,7 @@ const PackageDetails: React.FC = () => {
                 <h3 className="text-xl font-extrabold text-blue-950 mb-6">Day-by-Day Itinerary</h3>
                 <div className="border-l-2 border-amber-200 ml-3 space-y-8 pb-4">
                   
-                  {[
-                    { title: `Arrival in ${pkg.location}`, detail: `Arrive and follow the confirmed transfer and accommodation information in your booking.` },
-                    { title: 'Explore the destination', detail: pkg.description },
-                    { title: 'Time at your own pace', detail: pkg.highlights.join('. ') + '.' },
-                    { title: 'Departure', detail: `Check out and travel home according to the confirmed ${pkg.days.toLowerCase()} itinerary.` },
-                  ].map((item, index) => (
+                  {pkg.itinerary.map((item, index) => (
                     <div key={item.title} className="relative pl-8">
                       <div className={`absolute w-4 h-4 rounded-full ${index < 2 ? 'bg-amber-500' : 'bg-blue-900'} -left-[9px] top-1 border-4 border-white box-content`} />
                       <h4 className="font-bold text-slate-800 text-lg mb-2">{item.title}</h4>

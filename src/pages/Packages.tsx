@@ -4,6 +4,7 @@ import { MapPin, Star, Calendar, Filter, ChevronDown, Headset, Phone, MessageCir
 import PackagesForm from '../components/BookingWidget/PackagesForm';
 import { imageFallbacks } from '../utils/imageFallbacks';
 import { contactInfo } from '../data/contactInfo';
+import { getTourPackages } from '../data/packages';
 
 const Packages: React.FC = () => {
   const navigate = useNavigate();
@@ -21,15 +22,7 @@ const Packages: React.FC = () => {
     setOpenFilters(prev => ({ ...prev, [filterKey]: !prev[filterKey] }));
   };
 
-  // Comprehensive mock data for the packages page
-  const holidayPackages = [
-    { title: "Zanzibar White Sands", location: "Zanzibar, Tanzania", image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?w=800&q=80", days: "7 Days", price: "₦1,850,000", rating: 4.8, badge: "Vacations" },
-    { title: "Premium Umrah Tour", location: "Mecca & Medina, KSA", image: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80", days: "10 Days", price: "₦2,850,000", rating: 4.9, badge: "Umrah & Hajj" },
-    { title: "Footsteps of Christ", location: "Jerusalem, Israel", image: "https://images.unsplash.com/photo-1549880181-59a4413fad88?w=800&q=80", days: "10 Days", price: "₦3,100,000", rating: 4.9, badge: "Christian Pilgrimage" },
-    { title: "Holy City Discovery", location: "Nazareth & Jerusalem", image: "https://images.unsplash.com/photo-1518349619113-03114f06ac3a?w=800&q=80", days: "7 Days", price: "₦2,200,000", rating: 4.7, badge: "Christian Pilgrimage" },
-    { title: "Maldives Overwater Retreat", location: "Male, Maldives", image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80", days: "5 Days", price: "₦3,600,000", rating: 5.0, badge: "Vacations" },
-    { title: "Dubai Luxury Escape", location: "Dubai, UAE", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", days: "6 Days", price: "₦1,450,000", rating: 4.7, badge: "Vacations" },
-  ];
+  const holidayPackages = getTourPackages();
 
   return (
     <div className="bg-slate-50 min-h-screen pb-20">
@@ -198,7 +191,7 @@ const Packages: React.FC = () => {
             {holidayPackages.map((pkg, idx) => (
               <div 
                 key={idx} 
-                onClick={() => navigate('/packages/details')}
+                onClick={() => navigate(`/packages/details/${pkg.slug}`)}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group cursor-pointer flex flex-col h-full transform transition duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative h-56 overflow-hidden shrink-0">
@@ -236,7 +229,7 @@ const Packages: React.FC = () => {
                       <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Per Person from</span>
                       <span className="text-xl font-black text-blue-900">{pkg.price}</span>
                     </div>
-                    <button onClick={() => navigate('/packages/details')} className="bg-amber-500 text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm group-hover:bg-amber-600 transition-colors shadow-sm">
+                    <button onClick={(event) => { event.stopPropagation(); navigate(`/packages/details/${pkg.slug}`); }} className="bg-amber-500 text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm group-hover:bg-amber-600 transition-colors shadow-sm">
                       View Details
                     </button>
                   </div>

@@ -34,7 +34,23 @@ export const allCountries: CountryOption[] = regions
   .filter((country): country is CountryOption => Boolean(country))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-export const dialingCountries = allCountries.filter((country) => country.dialCode);
+const nonCountryNorthAmericanCodes = new Set([
+  'AS', 'AI', 'BM', 'VG', 'KY', 'GU', 'MP', 'MS', 'PR', 'SX', 'TC', 'VI', 'MF', 'PM',
+]);
+const preferredDialingOrder = ['NG', 'US', 'GB'];
+
+export const dialingCountries = allCountries
+  .filter((country) => country.dialCode && !(country.dialCode === '+1' && nonCountryNorthAmericanCodes.has(country.code)))
+  .sort((a, b) => {
+    const aPriority = preferredDialingOrder.indexOf(a.code);
+    const bPriority = preferredDialingOrder.indexOf(b.code);
+    if (aPriority !== -1 || bPriority !== -1) {
+      if (aPriority === -1) return 1;
+      if (bPriority === -1) return -1;
+      return aPriority - bPriority;
+    }
+    return a.name.localeCompare(b.name);
+  });
 
 export const countryNames = allCountries.map((country) => country.name);
 
