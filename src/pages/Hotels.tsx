@@ -8,10 +8,10 @@ const HotelFAQs: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   
   const faqs = [
-    { q: "What is your hotel cancellation policy?", a: "Cancellation policies vary by hotel and room type. Most of our partners offer free cancellation up to 24 or 48 hours before check-in. You can view the specific policy on the checkout page before confirming." },
-    { q: "Are taxes and fees included in the price?", a: "Yes, the total price shown on our checkout page includes all standard taxes and booking fees. Please note that some cities may charge a local 'city tax' directly at the hotel." },
+    { q: "What is the cancellation policy for a stay?", a: "Cancellation policies vary by property and room type. Most of our partners offer free cancellation up to 24 or 48 hours before check-in. You can view the specific policy on the checkout page before confirming." },
+    { q: "Are taxes and fees included in the price?", a: "Yes, the total price shown on our checkout page includes all standard taxes and booking fees. Please note that some cities may charge a local 'city tax' directly at the property." },
     { q: "Can I request an early check-in or late check-out?", a: "Absolutely. You can add special requests during the checkout process. While we forward all requests to the property, they are subject to availability upon your arrival." },
-    { q: "Do you offer 'Book Now, Pay Later' options?", a: "Many of our hotel partners offer 'Pay at Property' options. Just look for the 'Pay at Property' badge when selecting your room." }
+    { q: "Do you offer 'Book Now, Pay Later' options?", a: "Many property partners offer 'Pay at Property' options. Look for that badge when selecting your room." }
   ];
 
   return (
@@ -66,7 +66,7 @@ const Hotels: React.FC = () => {
         <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1542314831-c6a4d142104d?w=2000&q=80')] bg-cover bg-center"></div>
         <div className="relative z-10 max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Find Your Perfect Stay</h1>
-          <p className="text-blue-200 text-lg">Compare deals on over 2 million hotels, resorts, and villas worldwide.</p>
+          <p className="text-blue-200 text-lg">Compare stays at over 2 million properties, resorts, and villas worldwide.</p>
         </div>
       </div>
 

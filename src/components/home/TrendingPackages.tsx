@@ -58,9 +58,9 @@ const TrendingPackages: React.FC = () => {
     }))
     : activeCategory === 'flights' ? flightOffers : hotelOffers;
 
-  const sectionTitle = activeCategory === 'packages' ? 'Curated Experiences' : activeCategory === 'flights' ? 'Flight Offers' : 'Hotel Offers';
+  const sectionTitle = activeCategory === 'packages' ? 'Tours' : activeCategory === 'flights' ? 'Flight Offers' : 'Stay Offers';
   const sectionDescription = activeCategory === 'packages'
-    ? 'Discover our handpicked holiday and pilgrimage packages designed for ultimate comfort and memorable moments.'
+    ? 'Discover our handpicked holiday and pilgrimage tours designed for comfort and memorable moments.'
     : activeCategory === 'flights'
       ? 'Explore featured routes and fares from destinations across the region and around the world.'
       : 'Browse featured stays in popular destinations and find the right base for your trip.';
@@ -81,9 +81,9 @@ const TrendingPackages: React.FC = () => {
           </div>
           <div className="mt-5 flex w-full flex-wrap gap-2" role="group" aria-label="Choose featured offers">
             {[
-              { id: 'packages', label: 'Curated experiences' },
+              { id: 'packages', label: 'Tours' },
               { id: 'flights', label: 'Flight offers' },
-              { id: 'hotels', label: 'Hotel offers' },
+              { id: 'hotels', label: 'Stays' },
             ].map((category) => (
               <button
                 key={category.id}
@@ -101,7 +101,7 @@ const TrendingPackages: React.FC = () => {
           </div>
           <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
             <Link to={activeCategory === 'packages' ? '/packages' : activeCategory === 'flights' ? '/flights' : '/hotels'} className="text-amber-500 font-semibold flex items-center hover:text-amber-400 transition-colors">
-              View All {activeCategory === 'packages' ? 'packages' : activeCategory} <ArrowRight className="w-4 h-4 ml-2" />
+              View All {activeCategory === 'packages' ? 'tours' : activeCategory === 'flights' ? 'flights' : 'stays'} <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
             <div className="flex gap-2">
               <button type="button" aria-label="Scroll curated experiences left" onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-blue-800 flex items-center justify-center text-blue-200 hover:bg-blue-800 hover:text-white transition-colors">
@@ -117,14 +117,14 @@ const TrendingPackages: React.FC = () => {
         {/* 4-Column Slider */}
         <div 
           ref={scrollRef} 
-          className="flex overflow-x-auto gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth"
+          className="flex overflow-x-auto gap-5 pb-6 pt-3 snap-x snap-mandatory hide-scrollbar scroll-smooth"
         >
           {cards.map((offer) => (
             <Link
               key={offer.id}
               to={offer.href}
-              aria-label={`View ${offer.title} ${activeCategory === 'packages' ? 'package details' : 'offer'}`}
-              className="bg-white rounded-2xl overflow-hidden shadow-2xl group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(25%-1.125rem)] transform transition duration-300 hover:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+              aria-label={`View ${offer.title} ${activeCategory === 'packages' ? 'tour details' : 'offer'}`}
+              className="bg-white rounded-2xl overflow-hidden shadow-2xl group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(25%-0.9375rem)] transform transition duration-300 hover:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <div className="relative h-56 overflow-hidden">
                 <img
@@ -144,17 +144,17 @@ const TrendingPackages: React.FC = () => {
                 </div>
               </div>
               
-              <div className="p-5 flex flex-col flex-grow">
+              <div className="p-4 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-bold text-slate-800 leading-tight group-hover:text-blue-900 transition-colors line-clamp-2">{offer.title}</h3>
                 </div>
-                <div className="flex items-center gap-2 bg-slate-100 px-2 py-1 rounded text-xs font-bold text-slate-700 w-max mb-4">
+                <div className="flex items-center gap-2 bg-slate-100 px-2 py-1 rounded text-xs font-bold text-slate-700 w-max mb-3">
                   {offer.rating !== undefined
                     ? <><Star className="w-3 h-3 text-amber-500 fill-amber-500" /> {offer.rating}</>
-                    : activeCategory === 'flights' ? 'Featured flight offer' : 'Featured hotel stay'}
+                    : activeCategory === 'flights' ? 'Featured flight offer' : 'Featured stay'}
                 </div>
-                <p className="text-slate-500 text-sm mb-6 flex-grow line-clamp-2">{offer.detail}</p>
-                <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                <p className="text-slate-500 text-sm mb-3 line-clamp-2">{offer.detail}</p>
+                <div className="flex justify-between items-center pt-3 border-t border-slate-100">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Starting from</span>
                     <span className="text-lg font-extrabold text-blue-900">{offer.price}</span>

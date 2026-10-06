@@ -46,7 +46,7 @@ const Umrah: React.FC = () => {
       rating: 4.9, 
       reviews: 328,
       image: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&q=80',
-      features: ['5-Star Clock Tower Hotels', 'Direct Premium Flights', 'Haramain Train Tickets', 'Guided Ziyarat Tours']
+      features: ['5-Star Clock Tower Accommodation', 'Direct Premium Flights', 'Haramain Train Tickets', 'Guided Ziyarat Tours']
     },
     { 
       id: 'al-quds',
@@ -85,7 +85,7 @@ const Umrah: React.FC = () => {
       rating: 4.8, 
       reviews: 512,
       image: 'https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?w=800&q=80',
-      features: ['Premium 4-Star Hotels', '24/7 Haram Shuttle', 'Return Economy Flights', 'Group Ziyarat Tours']
+      features: ['Premium 4-Star Accommodation', '24/7 Haram Shuttle', 'Return Economy Flights', 'Group Ziyarat Tours']
     },
     { 
       id: 'noor',
@@ -98,7 +98,7 @@ const Umrah: React.FC = () => {
       rating: 4.7, 
       reviews: 890,
       image: 'https://images.unsplash.com/photo-1552084117-56a98a9463c6?w=800&q=80',
-      features: ['Comfortable 3-Star Hotels', 'Economy Flights included', 'Group Coach Transfers', 'Umrah Visa Processing']
+      features: ['Comfortable 3-Star Accommodation', 'Economy Flights included', 'Group Coach Transfers', 'Umrah Visa Processing']
     },
     { 
       id: 'mina-explorer',
@@ -133,7 +133,7 @@ const Umrah: React.FC = () => {
             Answer the Call. <br className="hidden md:block"/> Embark on Your <span className="text-amber-500">Sacred Journey</span>.
           </h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto font-medium drop-shadow-md">
-            Experience absolute peace of mind with our exclusive, meticulously planned pilgrimage packages.
+            Experience absolute peace of mind with our exclusive, meticulously planned pilgrimage tours.
           </p>
         </div>
       </div>
@@ -161,17 +161,17 @@ const Umrah: React.FC = () => {
                 <HeartHandshake className="w-7 h-7" />
               </div>
               <h3 className="font-bold text-slate-800 mb-2">End-to-End Care</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">From your doorstep to the Holy Lands and back, our team handles flights, hotels, and all ground logistics.</p>
+              <p className="text-sm text-slate-500 leading-relaxed">From your doorstep to the Holy Lands and back, our team handles flights, stays, and all ground logistics.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Exclusive Packages Section */}
+      {/* Exclusive Tours Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Exclusive Tier Packages</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-lg">Select the spiritual path that best suits your needs. Every package guarantees our standard of excellence and dedicated support.</p>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Exclusive Tier Tours</h2>
+          <p className="text-slate-600 max-w-2xl mx-auto text-lg">Select the spiritual path that best suits your needs. Every tour includes our standard of care and dedicated support.</p>
         </div>
 
         {/* explicitly 3 columns per row on large screens using lg:grid-cols-3 */}
@@ -243,8 +243,8 @@ const Umrah: React.FC = () => {
       {/* Pre-Booking Info / CTA */}
       <section className="bg-blue-900 py-16 px-4 sm:px-6 lg:px-8 text-center text-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-4">Custom Spiritual Packages Available</h2>
-          <p className="text-blue-200 mb-8 text-lg">Traveling with a large family, group, or need specific dates? Our consultants can tailor a bespoke package perfectly suited to your requirements.</p>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-4">Custom Spiritual Tours Available</h2>
+          <p className="text-blue-200 mb-8 text-lg">Traveling with a large family, group, or need specific dates? Our consultants can tailor a bespoke tour to your requirements.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-xl transition-colors shadow-lg shadow-amber-500/20">
               Request Custom Quote

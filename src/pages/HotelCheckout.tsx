@@ -22,7 +22,7 @@ const HotelCheckout: React.FC = () => {
         
         {/* Checkout Header & Stepper */}
         <div className="mb-10 text-center">
-          <h1 className="text-3xl font-extrabold text-blue-950 mb-6">Complete Your Hotel Booking</h1>
+          <h1 className="text-3xl font-extrabold text-blue-950 mb-6">Complete Your Stay Booking</h1>
           <div className="flex justify-center items-center max-w-2xl mx-auto">
             {[1, 2, 3].map((num, i) => (
               <React.Fragment key={num}>
@@ -117,10 +117,10 @@ const HotelCheckout: React.FC = () => {
                      <input type="checkbox" className="w-5 h-5 text-blue-900 rounded border-slate-300 mt-1 focus:ring-blue-900" />
                      <div className="ml-4 flex-1">
                        <span className="font-bold text-slate-800 block group-hover:text-blue-900 flex justify-between">
-                         <span>Premium Dining Package</span>
+                         <span>Premium Dining Add-on</span>
                          <span>+₦50,000</span>
                        </span>
-                       <span className="text-sm text-slate-500 mt-1 block">Includes daily buffet dinner at the hotel's main restaurant.</span>
+                       <span className="text-sm text-slate-500 mt-1 block">Includes daily buffet dinner at the property’s main restaurant.</span>
                      </div>
                    </label>
                 </div>
@@ -154,7 +154,7 @@ const HotelCheckout: React.FC = () => {
                   {couponApplied && <p className="text-emerald-600 font-bold text-sm mt-3 flex items-center"><Check className="w-4 h-4 mr-1" /> Coupon APPLIED (-10% OFF)</p>}
                 </div>
 
-                <PaystackPayment amount={couponApplied ? 630000 : 700000} description="Hotel booking" />
+                <PaystackPayment amount={couponApplied ? 630000 : 700000} description="Stay booking" />
               </div>
             )}
 

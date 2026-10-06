@@ -98,7 +98,7 @@ const PackageDetails: React.FC = () => {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8 animate-fade-in">
             {activeTab === 'overview' && (
               <div className="space-y-6 text-slate-600 leading-relaxed">
-                <h3 className="text-xl font-extrabold text-blue-950">Package Overview</h3>
+                <h3 className="text-xl font-extrabold text-blue-950">Tour Overview</h3>
                 <p>{pkg.description}</p>
                 <p className="text-sm">Availability, exact inclusions, and supplier conditions are confirmed before booking.</p>
                 

@@ -41,7 +41,7 @@ export const blogArticles: BlogArticle[] = [
     readTime: '7 min read',
     content: [
       'Preparing for Umrah is both a personal and practical process. Begin by checking current entry and permit requirements through official Saudi government sources and your airline. Requirements can change, and your passport validity, travel dates, and personal circumstances may affect what applies to you.',
-      'Before confirming a package, review the itinerary, accommodation names and locations, room arrangements, transport inclusions, meal details, and what is not included. Keep copies of booking confirmations and the provider’s contact information in a place you can access while travelling.',
+      'Before confirming a tour, review the itinerary, accommodation names and locations, room arrangements, transport inclusions, meal details, and what is not included. Keep copies of booking confirmations and the provider’s contact information in a place you can access while travelling.',
       'Pack comfortable walking footwear, weather-appropriate clothing, any regular medication in its original packaging, and a small day bag for essentials. If you have a health or mobility need, discuss it with your travel provider and airline early so you can understand what assistance is available.',
       'Build some flexibility into your plans, stay hydrated, and follow local guidance at each holy site. A trusted group leader can help with logistics, but always confirm religious guidance with a knowledgeable scholar or guide you trust. Travel providers can support arrangements but cannot guarantee immigration decisions or entry.',
     ],

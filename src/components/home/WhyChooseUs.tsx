@@ -22,7 +22,7 @@ const WhyChooseUs: React.FC = () => (
             <CreditCard className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-bold text-slate-800 mb-3">Best Price Guarantee</h3>
-          <p className="text-slate-500">We aggregate fares globally to ensure you receive the most competitive prices for flights and packages.</p>
+          <p className="text-slate-500">We aggregate fares globally to ensure you receive the most competitive prices for flights and tours.</p>
         </div>
         <div className="flex flex-col items-center text-center">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 text-blue-900">

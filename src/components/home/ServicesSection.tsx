@@ -4,8 +4,8 @@ import { Plane, Hotel, Map, FileText } from 'lucide-react';
 const ServicesSection: React.FC = () => {
   const services = [
     { icon: Plane, title: "Global Flights", desc: "Best fares across 500+ airlines worldwide." },
-    { icon: Hotel, title: "Luxury Hotels", desc: "Curated stays from boutique to 5-star." },
-    { icon: Map, title: "Hajj & Umrah", desc: "Premium, spiritually guided pilgrimage packages." },
+    { icon: Hotel, title: "Luxury Stays", desc: "Curated stays from boutique to 5-star." },
+    { icon: Map, title: "Hajj & Umrah", desc: "Premium, spiritually guided pilgrimage tours." },
     { icon: FileText, title: "Visa Assistance", desc: "Fast, stress-free visa processing." },
   ];
 

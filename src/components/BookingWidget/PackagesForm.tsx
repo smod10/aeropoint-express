@@ -5,19 +5,19 @@ import { useNavigate } from 'react-router-dom';
 const PackagesForm: React.FC = () => {
   const navigate = useNavigate();
   const [pkgDate, setPkgDate] = useState('');
-  const [activeCategory, setActiveCategory] = useState('All Packages');
+  const [activeCategory, setActiveCategory] = useState('All Tours');
   const [destination, setDestination] = useState('');
   const today = new Date().toISOString().split('T')[0];
 
   // Christian Pilgrimage removed from the quick-select tabs
-  const categories = ['All Packages', 'Umrah & Hajj', 'Vacations'];
+  const categories = ['All Tours', 'Umrah & Hajj', 'Vacations'];
 
-  // Destinations still include Christian Pilgrimages under 'All Packages'
+  // Destinations still include Christian Pilgrimages under 'All Tours'
   const allDestinations = [
     // Umrah & Hajj
     { name: 'Mecca & Medina (Umrah)', type: 'Umrah & Hajj' },
     { name: 'Ramadan in Mecca (Last 10 Days)', type: 'Umrah & Hajj' },
-    { name: 'Hajj Premium Package 2026', type: 'Umrah & Hajj' },
+    { name: 'Hajj Premium Tour 2026', type: 'Umrah & Hajj' },
     { name: 'Jerusalem Islamic Tour (Al-Aqsa)', type: 'Umrah & Hajj' },
     { name: 'Family Umrah Plus Dubai', type: 'Umrah & Hajj' },
     { name: 'VIP Umrah Retreat', type: 'Umrah & Hajj' },
@@ -43,7 +43,7 @@ const PackagesForm: React.FC = () => {
   ];
 
   // Filter destinations based on the active category
-  const filteredDestinations = activeCategory === 'All Packages' 
+  const filteredDestinations = activeCategory === 'All Tours'
     ? allDestinations 
     : allDestinations.filter(d => d.type === activeCategory);
 

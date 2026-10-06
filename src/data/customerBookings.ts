@@ -1,4 +1,4 @@
-export type BookingCategory = 'Flight' | 'Stay' | 'Tours & Packages' | 'Umrah' | 'Visa';
+export type BookingCategory = 'Flight' | 'Stay' | 'Tours' | 'Umrah' | 'Visa';
 
 export interface CustomerBooking {
   reference: string;
@@ -87,20 +87,20 @@ export const customerBookings: CustomerBooking[] = [
     paymentStatus: 'Deposit paid',
     travellers: 'Amara Okafor and guest · 2 guests',
     details: [
-      { label: 'Hotel', value: 'Eko Hotel & Suites, Lagos' },
+      { label: 'Stay', value: 'Eko Hotel & Suites, Lagos' },
       { label: 'Room', value: 'Deluxe Ocean View · 1 room' },
       { label: 'Check-in', value: '08 Dec 2026 · from 15:00' },
       { label: 'Check-out', value: '12 Dec 2026 · by 11:00' },
       { label: 'Guests', value: '2 adults' },
     ],
-    documents: ['Invoice', 'Hotel confirmation'],
+    documents: ['Invoice', 'Stay confirmation'],
     notes: 'Late arrival expected after 21:00.',
   },
   {
     reference: 'APX-550284',
     ownerEmail,
     customerName,
-    category: 'Tours & Packages',
+    category: 'Tours',
     title: 'Zanzibar Escape',
     summary: 'Zanzibar, Tanzania · 5 nights',
     dateLabel: '18 – 23 Jan 2027',
@@ -111,12 +111,12 @@ export const customerBookings: CustomerBooking[] = [
     paymentStatus: 'Balance due · ₦1,200,000',
     travellers: 'Amara Okafor and guest · 2 travellers',
     details: [
-      { label: 'Package', value: 'Zanzibar Escape · 5 nights' },
+      { label: 'Tour', value: 'Zanzibar Escape · 5 nights' },
       { label: 'Destination', value: 'Zanzibar, Tanzania' },
       { label: 'Dates', value: '18 – 23 Jan 2027' },
       { label: 'Travellers', value: '2 adults' },
     ],
-    documents: ['Invoice', 'Package itinerary'],
+    documents: ['Invoice', 'Tour itinerary'],
     notes: 'Please confirm the preferred airport transfer time.',
   },
   {
@@ -124,7 +124,7 @@ export const customerBookings: CustomerBooking[] = [
     ownerEmail,
     customerName,
     category: 'Umrah',
-    title: 'Ramadan Umrah Package',
+    title: 'Ramadan Umrah Tour',
     summary: 'Makkah & Madinah · 10 nights',
     dateLabel: '12 – 22 Feb 2027',
     startDate: '2027-02-12',
@@ -134,7 +134,7 @@ export const customerBookings: CustomerBooking[] = [
     paymentStatus: 'Paid in full',
     travellers: 'Amara Okafor · 1 traveller',
     details: [
-      { label: 'Package', value: 'Ramadan Umrah Package · 10 nights' },
+      { label: 'Tour', value: 'Ramadan Umrah Tour · 10 nights' },
       { label: 'Destination', value: 'Makkah and Madinah, Saudi Arabia' },
       { label: 'Dates', value: '12 – 22 Feb 2027' },
       { label: 'Travellers', value: '1 adult' },

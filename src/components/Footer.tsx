@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
           <img src={brandLogoWhite} alt="Aeropoint Express Travel Ltd" className="h-auto w-[220px]" />
         </Link>
         <p className="text-sm leading-relaxed text-slate-300">
-          Your trusted partner for global travel, specializing in premium flights, luxury stays, and seamless Umrah packages.
+          Your trusted partner for global travel, specializing in premium flights, luxury stays, and guided Umrah tours.
         </p>
         <div className="space-y-2 text-xs leading-relaxed text-[#D7C4F0]">
           {contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="flex items-center gap-2 hover:text-white"><Phone className="h-3.5 w-3.5 shrink-0" />{phone.number}</a>)}
@@ -49,8 +49,8 @@ const Footer: React.FC = () => {
         <h4 className="text-white font-bold mb-6 uppercase text-sm tracking-wider">Services</h4>
         <ul className="space-y-3 text-sm">
           <li><Link to="/flights" className="hover:text-amber-500 transition-colors">Flight Booking</Link></li>
-          <li><Link to="/hotels" className="hover:text-amber-500 transition-colors">Hotel Reservations</Link></li>
-          <li><Link to="/umrah" className="hover:text-amber-500 transition-colors">Hajj & Umrah Packages</Link></li>
+          <li><Link to="/hotels" className="hover:text-amber-500 transition-colors">Stays</Link></li>
+          <li><Link to="/umrah" className="hover:text-amber-500 transition-colors">Hajj & Umrah Tours</Link></li>
           <li><Link to="/visas" className="hover:text-amber-500 transition-colors">Visa Applications</Link></li>
           <li><Link to="/study" className="hover:text-amber-500 transition-colors">Study Abroad</Link></li>
           <li><Link to="/blog" className="hover:text-amber-500 transition-colors">Travel Blog</Link></li>

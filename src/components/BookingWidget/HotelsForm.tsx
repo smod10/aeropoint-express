@@ -32,7 +32,7 @@ const HotelsForm: React.FC = () => {
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <MapPin className="h-5 w-5 text-slate-400" />
           </div>
-          <input type="text" className="w-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold focus:outline-none rounded-xl placeholder-slate-400" placeholder="City, hotel, or destination" />
+          <input type="text" className="w-full pl-12 pr-4 py-4 md:py-5 bg-white text-slate-800 font-semibold focus:outline-none rounded-xl placeholder-slate-400" placeholder="City, stay, or destination" />
           <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Destination</span>
         </div>
 

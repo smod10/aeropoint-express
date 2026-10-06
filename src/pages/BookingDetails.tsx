@@ -22,7 +22,7 @@ const BookingDetails: React.FC = () => {
   }
 
   const balance = Math.max(booking.amount - booking.amountPaid, 0);
-  const bookingType = booking.category === 'Tours & Packages' ? 'Package' : booking.category;
+  const bookingType = booking.category === 'Tours' ? 'Tour' : booking.category;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16 pt-28">

@@ -29,6 +29,7 @@ import PackageCheckout from '../pages/PackageCheckout';
 import Auth from '../pages/Auth';
 import CustomerDashboard from '../pages/CustomerDashboard.tsx';
 import BookingDetails from '../pages/BookingDetails';
+import EditProfile from '../pages/EditProfile';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -66,6 +67,7 @@ const AppRoutes: React.FC = () => {
 
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/dashboard/profile" element={<EditProfile />} />
           <Route path="/dashboard/bookings/:reference" element={<BookingDetails />} />
         </Route>
       </Routes>

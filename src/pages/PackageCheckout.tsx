@@ -109,7 +109,7 @@ const PackageCheckout: React.FC = () => {
           </div>
 
           {/* Payment Method */}
-          <PaystackPayment amount={3700000} description="Package booking" />
+          <PaystackPayment amount={3700000} description="Tour booking" />
 
         </main>
 

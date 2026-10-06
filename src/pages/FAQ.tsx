@@ -4,9 +4,9 @@ import { ArrowRight } from 'lucide-react';
 import { contactInfo } from '../data/contactInfo';
 
 const questions = [
-  ['How do I book a flight, hotel, or package?', 'Use the relevant search form to review available options, then follow the booking steps. A booking is confirmed only when we or the supplier issue confirmation and any required payment is accepted.'],
+  ['How do I book a flight, stay, or tour?', 'Use the relevant search form to review available options, then follow the booking steps. A booking is confirmed only when we or the supplier issue confirmation and any required payment is accepted.'],
   ['Are the prices shown final?', 'Prices and availability can change until a supplier confirms the booking. Any taxes, fees, baggage, and supplier conditions shown during checkout apply. Contact us if a quote is unclear before paying.'],
-  ['Can I change or cancel a booking?', 'Change and cancellation rules depend on the airline, hotel, or package supplier and the fare or rate selected. Review those rules before purchase. Some bookings are non-refundable, and supplier fees may apply.'],
+  ['Can I change or cancel a booking?', 'Change and cancellation rules depend on the airline, accommodation or tour provider, and the fare or rate selected. Review those rules before purchase. Some bookings are non-refundable, and supplier fees may apply.'],
   ['What documents do I need to travel?', 'Entry and transit requirements depend on your passport, route, and destination. Check current requirements with the destination government, transit authorities, and your airline before travel.'],
   ['Do you guarantee that a visa will be approved?', 'No. Visa decisions are made solely by the relevant government authority. We can help organize travel-related information, but we do not control processing times or decisions.'],
   ['Can Aeropoint help me apply to study abroad?', 'Yes. Our Study page explains how we can support destination and program research, application organization, and travel planning. Admission and immigration decisions remain with the relevant institutions and authorities.'],

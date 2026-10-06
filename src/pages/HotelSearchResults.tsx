@@ -164,7 +164,7 @@ const HotelSearchResults: React.FC = () => {
                   </div>
                   {openFilters.propertyType && (
                     <div className="space-y-3 mt-4 animate-fade-in">
-                      {['Hotel', 'Resort', 'Apartment', 'Villa'].map((type, i) => (
+                      {['Stay', 'Resort', 'Apartment', 'Villa'].map((type, i) => (
                         <label key={i} className="flex items-center space-x-3 cursor-pointer group">
                           <input type="checkbox" className="w-4 h-4 text-blue-900 rounded border-slate-300 focus:ring-blue-900" />
                           <span className="text-slate-600 text-sm font-semibold group-hover:text-blue-900 flex-1">{type}</span>
@@ -230,7 +230,7 @@ const HotelSearchResults: React.FC = () => {
 
           <div className="mt-8 text-center">
             <button onClick={() => navigate('/hotels')} className="bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold py-3 px-8 rounded-xl transition-colors border border-blue-100">
-              Load More Hotels
+              Load More Stays
             </button>
           </div>
         </main>

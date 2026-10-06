@@ -118,7 +118,7 @@ const HotelDetails: React.FC = () => {
 
             {/* Policies */}
             <div>
-              <h3 className="text-xl font-bold text-slate-800 mb-4">Hotel Policies</h3>
+              <h3 className="text-xl font-bold text-slate-800 mb-4">Stay Policies</h3>
               <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-5 flex items-start">
                 <CheckCircle2 className="w-6 h-6 text-emerald-600 mr-4 shrink-0" />
                 <div>

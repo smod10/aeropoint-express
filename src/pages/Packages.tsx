@@ -24,7 +24,7 @@ const Packages: React.FC = () => {
   // Comprehensive mock data for the packages page
   const holidayPackages = [
     { title: "Zanzibar White Sands", location: "Zanzibar, Tanzania", image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?w=800&q=80", days: "7 Days", price: "₦1,850,000", rating: 4.8, badge: "Vacations" },
-    { title: "Premium Umrah Package", location: "Mecca & Medina, KSA", image: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80", days: "10 Days", price: "₦2,850,000", rating: 4.9, badge: "Umrah & Hajj" },
+    { title: "Premium Umrah Tour", location: "Mecca & Medina, KSA", image: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80", days: "10 Days", price: "₦2,850,000", rating: 4.9, badge: "Umrah & Hajj" },
     { title: "Footsteps of Christ", location: "Jerusalem, Israel", image: "https://images.unsplash.com/photo-1549880181-59a4413fad88?w=800&q=80", days: "10 Days", price: "₦3,100,000", rating: 4.9, badge: "Christian Pilgrimage" },
     { title: "Holy City Discovery", location: "Nazareth & Jerusalem", image: "https://images.unsplash.com/photo-1518349619113-03114f06ac3a?w=800&q=80", days: "7 Days", price: "₦2,200,000", rating: 4.7, badge: "Christian Pilgrimage" },
     { title: "Maldives Overwater Retreat", location: "Male, Maldives", image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80", days: "5 Days", price: "₦3,600,000", rating: 5.0, badge: "Vacations" },
@@ -189,7 +189,7 @@ const Packages: React.FC = () => {
         <main className="w-full lg:flex-1">
           <div className="flex justify-between items-end mb-6 border-b border-slate-200 pb-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-blue-950 mb-1">Featured Packages</h2>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-blue-950 mb-1">Featured Tours</h2>
               <p className="text-sm md:text-base text-slate-500">Discover all-inclusive deals for your next adventure.</p>
             </div>
           </div>

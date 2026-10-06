@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Headset, Phone, MessageCircle, Mail, User } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Headset, Phone, MessageCircle, Mail, User, UserRound, LogOut } from 'lucide-react';
 import brandLogo from '../assets/aeropoint-express-logo.svg';
 import brandLogoWhite from '../assets/aeropoint-express-logo-white.svg';
 import { contactInfo } from '../data/contactInfo';
@@ -13,6 +13,8 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMenuOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const isSignedIn = Boolean(sessionStorage.getItem('aeropointCustomerEmail'));
   
   // Apply transparent navbar logic to all relevant landing and search pages
   const transparentRoutes = ['/', '/flights', '/flights/search', '/hotels', '/hotels/search', '/packages', '/umrah'];
@@ -20,13 +22,22 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
   const solidNav = isScrolled || mobileMenuOpen || !isTransparentTop;
 
   const links = [
-    { name: 'Flight', path: '/flights' },
-    { name: 'Hotel', path: '/hotels' },
-    { name: 'Visa', path: '/visas' },
+    { name: 'Flights', path: '/flights' },
+    { name: 'Stays', path: '/hotels' },
+    { name: 'Visas', path: '/visas' },
     { name: 'Study', path: '/study' },
     { name: 'Hajj & Umrah', path: '/umrah' },
-    { name: 'Packages', path: '/packages' }
+    { name: 'Tours', path: '/packages' }
   ];
+
+  const signOut = () => {
+    sessionStorage.removeItem('aeropointCustomerEmail');
+    sessionStorage.removeItem('aeropointCustomerName');
+    sessionStorage.removeItem('aeropointCustomerPhone');
+    sessionStorage.removeItem('aeropointCustomerCity');
+    setMobileMenuOpen(false);
+    navigate('/auth');
+  };
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${solidNav ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
@@ -56,57 +67,57 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, mobileMenuOpen, setMobileMe
           </Link>
         </div>
 
-        <button 
-          className="lg:hidden z-50 p-2 rounded-md"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? 
-            <X className={`w-6 h-6 ${solidNav ? 'text-slate-800' : 'text-white'}`} /> : 
-            <Menu className={`w-6 h-6 ${solidNav ? 'text-slate-800' : 'text-white'}`} />
-          }
-        </button>
+        <div className="z-50 flex items-center gap-1 lg:hidden">
+          {isSignedIn && <Link to="/dashboard/profile" aria-label="Profile" title="Profile" className={`rounded-md p-2 ${solidNav ? 'text-slate-800' : 'text-white'}`}><UserRound className="h-5 w-5" /></Link>}
+          <button
+            className="rounded-md p-2"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ?
+              <X className={`w-6 h-6 ${solidNav ? 'text-slate-800' : 'text-white'}`} /> :
+              <Menu className={`w-6 h-6 ${solidNav ? 'text-slate-800' : 'text-white'}`} />
+            }
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-24 px-6 pb-6 shadow-2xl lg:hidden flex flex-col overflow-y-auto">
-          <div className="flex flex-col space-y-6">
+        <div className="fixed inset-0 z-40 bg-white px-5 pb-4 pt-20 shadow-2xl lg:hidden flex flex-col overflow-y-auto">
+          <div className="flex flex-col space-y-2">
             {[{name: 'Home', path: '/'}, ...links].map((item) => (
               <Link 
                 key={item.name} 
                 to={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-lg font-semibold text-left border-b pb-2 ${location.pathname === item.path ? 'text-amber-500 border-amber-500' : 'text-slate-800 border-slate-100'}`}
+                className={`text-sm font-semibold text-left border-b pb-1 ${location.pathname === item.path ? 'text-amber-500 border-amber-500' : 'text-slate-800 border-slate-100'}`}
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* Need Help Flyer (Mobile Menu) */}
-          <div className="bg-slate-50 rounded-2xl p-5 mt-8 border border-slate-100 shrink-0">
-            <h4 className="font-black text-blue-950 mb-4 flex items-center">
+          <div className="mt-5 flex shrink-0 items-center gap-3">
+            <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 font-bold text-blue-950 transition-colors hover:bg-amber-600">
+              <User className="h-5 w-5" /> My Account
+            </Link>
+            {isSignedIn && <button type="button" onClick={signOut} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-900 hover:text-blue-900"><LogOut className="h-4 w-4" /> Sign Out</button>}
+          </div>
+
+          <div className="bg-slate-50 rounded-lg p-4 mt-5 border border-slate-100 shrink-0">
+            <h4 className="font-black text-blue-950 mb-3 flex items-center">
               <Headset className="w-5 h-5 mr-2 text-amber-500" /> Need Help?
             </h4>
-            <div className="space-y-4 text-sm font-semibold text-slate-600">
-              {contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="flex items-center hover:text-blue-900 transition-colors"><Phone className="w-4 h-4 mr-3 text-slate-400" /> {phone.number}</a>)}
+            <div className="space-y-2.5 text-xs font-semibold text-slate-600">
+              {contactInfo.phones.map((phone) => <a key={phone.number} href={phone.href} className="flex items-center hover:text-blue-900 transition-colors"><Phone className="w-4 h-4 mr-2 text-slate-400" /> {phone.number}</a>)}
               <a href={contactInfo.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center hover:text-blue-900 transition-colors">
-                <MessageCircle className="w-4 h-4 mr-3 text-slate-400" /> WhatsApp Us
+                <MessageCircle className="w-4 h-4 mr-2 text-slate-400" /> WhatsApp Us
               </a>
               <a href={contactInfo.emailHref} className="flex items-center hover:text-blue-900 transition-colors">
-                <Mail className="w-4 h-4 mr-3 text-slate-400" /> {contactInfo.email}
+                <Mail className="w-4 h-4 mr-2 text-slate-400" /> {contactInfo.email}
               </a>
             </div>
-          </div>
-          
-          <div className="flex flex-col space-y-3 mt-8 mb-4">
-            <Link 
-              to="/dashboard" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3.5 bg-amber-500 text-blue-950 font-bold rounded-xl shadow-lg flex items-center justify-center transition-colors hover:bg-amber-600"
-            >
-              <User className="w-5 h-5 mr-2" /> My Account
-            </Link>
           </div>
 
         </div>
