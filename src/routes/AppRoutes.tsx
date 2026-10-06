@@ -27,7 +27,8 @@ import HotelCheckout from '../pages/HotelCheckout';
 import PackageDetails from '../pages/PackageDetails';
 import PackageCheckout from '../pages/PackageCheckout';
 import Auth from '../pages/Auth';
-import CustomerDashboard from '../pages/CustomerDashboard';
+import CustomerDashboard from '../pages/CustomerDashboard.tsx';
+import BookingDetails from '../pages/BookingDetails';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -65,6 +66,7 @@ const AppRoutes: React.FC = () => {
 
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/dashboard/bookings/:reference" element={<BookingDetails />} />
         </Route>
       </Routes>
     </Router>

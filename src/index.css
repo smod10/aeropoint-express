@@ -24,3 +24,20 @@
 	--color-amber-900: #9f2d2d;
 	--color-amber-950: #701f1f;
 }
+
+@media print {
+	body * {
+		visibility: hidden;
+	}
+
+	#booking-detail-print,
+	#booking-detail-print * {
+		visibility: visible;
+	}
+
+	#booking-detail-print {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+	}
+}

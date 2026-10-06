@@ -1,14 +1,45 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, CalendarDays, CircleHelp, LogOut, Plane, UserRound, WalletCards } from 'lucide-react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { ArrowRight, CalendarDays, ChevronDown, CircleHelp, LogOut, Plane, UserRound, WalletCards } from 'lucide-react';
+import { customerBookings, formatBookingAmount, type BookingCategory, type CustomerBooking } from '../data/customerBookings';
 
 type DashboardView = 'overview' | 'bookings' | 'refunds' | 'profile';
+type BookingFilter = 'all' | 'upcoming' | 'manage' | 'refunds';
+
+const categories: { label: string; value: BookingCategory | 'all' }[] = [
+  { label: 'All Bookings', value: 'all' },
+  { label: 'Flights', value: 'Flight' },
+  { label: 'Stays', value: 'Stay' },
+  { label: 'Tours & Packages', value: 'Tours & Packages' },
+  { label: 'Umrah', value: 'Umrah' },
+  { label: 'Visa', value: 'Visa' },
+];
+
+const newBookingLinks = [
+  { label: 'Flights', to: '/flights' },
+  { label: 'Stays', to: '/hotels' },
+  { label: 'Tours & Packages', to: '/packages' },
+  { label: 'Umrah', to: '/umrah' },
+  { label: 'Visa', to: '/visas' },
+];
 
 const CustomerDashboard: React.FC = () => {
   const [view, setView] = useState<DashboardView>('overview');
+  const [bookingFilter, setBookingFilter] = useState<BookingFilter>('all');
+  const [activeCategory, setActiveCategory] = useState<BookingCategory | 'all'>('all');
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [openManageReference, setOpenManageReference] = useState('');
+  const [bookingMenuOpen, setBookingMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const email = sessionStorage.getItem('aeropointCustomerEmail') || 'amara.okafor@example.com';
-  const name = sessionStorage.getItem('aeropointCustomerName') || 'Amara Okafor';
+  const email = (sessionStorage.getItem('aeropointCustomerEmail') || '').trim().toLowerCase();
+  const today = new Date().toISOString().slice(0, 10);
+  const bookings = customerBookings.filter((booking) => booking.ownerEmail.toLowerCase() === email);
+  const name = sessionStorage.getItem('aeropointCustomerName') || bookings[0]?.customerName || 'Traveller';
+  const upcomingBookings = bookings.filter((booking) => booking.status === 'Confirmed' && booking.startDate >= today);
+  const bookingsToManage = bookings.filter((booking) => booking.status === 'Action required');
+  const refundsInProgress = bookings.filter((booking) => booking.status === 'Refund in progress');
+
+  if (!email) return <Navigate to="/auth" replace />;
 
   const signOut = () => {
     sessionStorage.removeItem('aeropointCustomerEmail');
@@ -23,6 +54,71 @@ const CustomerDashboard: React.FC = () => {
     { id: 'profile', label: 'Personal details', icon: UserRound },
   ];
 
+  const filteredBookings = bookings
+    .filter((booking) => activeCategory === 'all' || booking.category === activeCategory)
+    .filter((booking) => {
+      if (bookingFilter === 'upcoming') return booking.status === 'Confirmed' && booking.startDate >= today;
+      if (bookingFilter === 'manage') return booking.status === 'Action required';
+      if (bookingFilter === 'refunds') return booking.status === 'Refund in progress';
+      return true;
+    });
+
+  const openBookings = (filter: BookingFilter) => {
+    setBookingFilter(filter);
+    setActiveCategory('all');
+    setVisibleCount(5);
+    setView('bookings');
+  };
+
+  const canChange = (booking: CustomerBooking) => booking.status === 'Confirmed' && booking.startDate >= today && booking.category !== 'Visa';
+  const canCancel = (booking: CustomerBooking) => booking.startDate >= today && ['Confirmed', 'Action required'].includes(booking.status);
+  const canViewInvoice = (booking: CustomerBooking) => booking.amountPaid > 0;
+
+  const manageBooking = (action: 'Change' | 'Cancel' | 'Invoice', booking: CustomerBooking) => {
+    setOpenManageReference('');
+    if (action === 'Invoice') {
+      navigate(`/dashboard/bookings/${booking.reference}#documents`);
+      return;
+    }
+    navigate('/contact', {
+      state: {
+        bookingReference: booking.reference,
+        requestType: action.toLowerCase(),
+        customerName: booking.customerName,
+        customerEmail: email,
+      },
+    });
+  };
+
+  const renderManageMenu = (booking: CustomerBooking) => {
+    const actions = [
+      ...(canChange(booking) ? ['Change' as const] : []),
+      ...(canCancel(booking) ? ['Cancel' as const] : []),
+      ...(canViewInvoice(booking) ? ['Invoice' as const] : []),
+    ];
+    return (
+      <div className="relative inline-block text-left">
+        <button type="button" aria-expanded={openManageReference === booking.reference} onClick={() => setOpenManageReference(openManageReference === booking.reference ? '' : booking.reference)} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-blue-950 hover:border-blue-900">
+          Manage <ChevronDown className="h-4 w-4" />
+        </button>
+        {openManageReference === booking.reference && <div className="absolute right-0 z-20 mt-2 w-40 rounded-md border border-slate-200 bg-white py-1 shadow-lg">
+          {actions.map((action) => <button key={action} type="button" onClick={() => manageBooking(action, booking)} className="block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-900">{action}</button>)}
+        </div>}
+      </div>
+    );
+  };
+
+  const statusClass = (status: CustomerBooking['status']) => {
+    if (status === 'Confirmed') return 'bg-emerald-50 text-emerald-800';
+    if (status === 'Action required') return 'bg-amber-50 text-amber-800';
+    if (status === 'Refund in progress') return 'bg-sky-50 text-sky-800';
+    return 'bg-slate-100 text-slate-700';
+  };
+
+  const emptyBookingMessage = activeCategory === 'all'
+    ? 'No bookings match this filter.'
+    : `You have no ${categories.find((category) => category.value === activeCategory)?.label.toLowerCase()} bookings yet.`;
+
   return (
     <div className="min-h-screen bg-slate-50 pb-16 pt-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -32,123 +128,95 @@ const CustomerDashboard: React.FC = () => {
             <h1 className="mt-2 text-3xl font-extrabold text-blue-950">Welcome, {name}</h1>
             <p className="mt-2 text-slate-600">Manage your trips, account details, and refund requests.</p>
           </div>
-          <button type="button" onClick={signOut} className="inline-flex items-center gap-2 self-start text-sm font-semibold text-slate-600 hover:text-blue-900 sm:self-auto">
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
+          <button type="button" onClick={signOut} className="inline-flex items-center gap-2 self-start text-sm font-semibold text-slate-600 hover:text-blue-900 sm:self-auto"><LogOut className="h-4 w-4" /> Sign out</button>
         </header>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[240px_1fr]">
           <nav aria-label="Account sections" className="flex gap-2 overflow-x-auto border-b border-slate-200 pb-3 lg:block lg:space-y-1 lg:overflow-visible lg:border-0 lg:pb-0">
-            {navigation.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                type="button"
-                aria-current={view === id ? 'page' : undefined}
-                onClick={() => setView(id)}
-                className={`flex shrink-0 items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold transition lg:w-full ${view === id ? 'bg-blue-900 text-white' : 'text-slate-600 hover:bg-white hover:text-blue-900'}`}
-              >
-                <Icon className="h-4 w-4" /> {label}
-              </button>
-            ))}
-            <Link to="/contact" className="flex shrink-0 items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-white hover:text-blue-900 lg:w-full">
-              <CircleHelp className="h-4 w-4" /> Contact support
-            </Link>
+            {navigation.map(({ id, label, icon: Icon }) => <button key={id} type="button" aria-current={view === id ? 'page' : undefined} onClick={() => setView(id)} className={`flex shrink-0 items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold transition lg:w-full ${view === id ? 'bg-blue-900 text-white' : 'text-slate-600 hover:bg-white hover:text-blue-900'}`}><Icon className="h-4 w-4" /> {label}</button>)}
+            <Link to="/contact" className="flex shrink-0 items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-white hover:text-blue-900 lg:w-full"><CircleHelp className="h-4 w-4" /> Contact support</Link>
           </nav>
 
           <main className="min-w-0">
-            {view === 'overview' && (
-              <div>
-                <h2 className="text-xl font-extrabold text-blue-950">Account overview</h2>
-                <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                  {[['Upcoming trips', '1'], ['Bookings to manage', '2'], ['Refunds in progress', '1']].map(([label, value]) => (
-                    <div key={label} className="border border-slate-200 bg-white p-5">
-                      <p className="text-sm text-slate-500">{label}</p>
-                      <p className="mt-2 text-3xl font-extrabold text-blue-950">{value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-8 border-y border-slate-200 py-6">
-                  <h3 className="font-bold text-slate-900">Your trips</h3>
-                  <div className="mt-4 border border-slate-200 bg-white p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Confirmed</p>
-                      <h3 className="mt-2 text-lg font-bold text-blue-950">Lagos to London</h3>
-                      <p className="mt-1 text-sm text-slate-600">Virgin Atlantic · Return · Economy</p>
-                      <p className="mt-2 text-sm font-semibold text-slate-800">24 Nov 2026 – 02 Dec 2026 <span className="font-normal text-slate-500">· APX-482916</span></p>
-                    </div>
-                    <button type="button" onClick={() => setView('bookings')} className="mt-4 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2 sm:mt-0">View booking <ArrowRight className="h-4 w-4" /></button>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-4">
-                    <button type="button" onClick={() => setView('bookings')} className="text-sm font-bold text-blue-900 underline underline-offset-2">Manage bookings</button>
-                    <button type="button" onClick={() => setView('refunds')} className="text-sm font-bold text-blue-900 underline underline-offset-2">Track a refund</button>
-                    <Link to="/flights" className="text-sm font-bold text-blue-900 underline underline-offset-2">Find a flight</Link>
-                  </div>
+            {view === 'overview' && <section>
+              <h2 className="text-xl font-extrabold text-blue-950">Account overview</h2>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: 'Upcoming Trips', count: upcomingBookings.length, filter: 'upcoming' as const },
+                  { label: 'Bookings to Manage', count: bookingsToManage.length, filter: 'manage' as const },
+                  { label: 'Refunds in Progress', count: refundsInProgress.length, filter: 'refunds' as const },
+                ].map((card) => <button key={card.filter} type="button" onClick={() => openBookings(card.filter)} className="border border-slate-200 bg-white p-5 text-left transition hover:border-blue-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900">
+                  <span className="text-sm font-semibold text-slate-600">{card.label}</span><span className="mt-2 block text-3xl font-extrabold text-blue-950">{card.count}</span><span className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-blue-900">View bookings <ArrowRight className="h-4 w-4" /></span>
+                </button>)}
+              </div>
+              <div className="mt-8 border-y border-slate-200 py-6">
+                <h3 className="font-bold text-slate-900">Your next trip</h3>
+                {upcomingBookings.length ? <div className="mt-4 flex flex-col gap-4 border border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div><p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Confirmed</p><h3 className="mt-2 text-lg font-bold text-blue-950">{upcomingBookings[0].title}</h3><p className="mt-1 text-sm text-slate-600">{upcomingBookings[0].summary}</p><p className="mt-2 text-sm font-semibold text-slate-800">{upcomingBookings[0].dateLabel} · {upcomingBookings[0].reference}</p></div>
+                  <Link to={`/dashboard/bookings/${upcomingBookings[0].reference}`} className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2">Booking details <ArrowRight className="h-4 w-4" /></Link>
+                </div> : <p className="mt-4 text-sm text-slate-600">No upcoming trips yet.</p>}
+                <div className="mt-4 flex flex-wrap gap-4"><button type="button" onClick={() => openBookings('all')} className="text-sm font-bold text-blue-900 underline underline-offset-2">Manage bookings</button><button type="button" onClick={() => setView('refunds')} className="text-sm font-bold text-blue-900 underline underline-offset-2">Track a refund</button></div>
+              </div>
+            </section>}
+
+            {view === 'bookings' && <section>
+              <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+                <div><h2 className="text-xl font-extrabold text-blue-950">My bookings</h2><p className="mt-1 text-sm text-slate-600">{filteredBookings.length} booking{filteredBookings.length === 1 ? '' : 's'}</p></div>
+                <div className="relative self-start">
+                  <button type="button" aria-expanded={bookingMenuOpen} onClick={() => setBookingMenuOpen(!bookingMenuOpen)} className="inline-flex items-center gap-2 rounded-md bg-blue-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-950">Make a New Booking <ChevronDown className="h-4 w-4" /></button>
+                  {bookingMenuOpen && <div className="absolute right-0 z-20 mt-2 w-52 rounded-md border border-slate-200 bg-white py-1 shadow-lg">{newBookingLinks.map((item) => <Link key={item.to} to={item.to} onClick={() => setBookingMenuOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-900">{item.label}</Link>)}</div>}
                 </div>
               </div>
-            )}
 
-            {view === 'bookings' && (
-              <section>
-                <h2 className="text-xl font-extrabold text-blue-950">Manage bookings</h2>
-                <div className="mt-5 border-y border-slate-200 py-8">
-                  <div className="divide-y divide-slate-200 border-y border-slate-200">
-                    <article className="py-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Confirmed · Upcoming</p>
-                        <h3 className="mt-2 font-bold text-blue-950">Lagos (LOS) to London (LHR)</h3>
-                        <p className="mt-1 text-sm text-slate-600">Virgin Atlantic · Return · Economy · 24 Nov – 02 Dec 2026</p>
-                        <p className="mt-2 text-xs font-semibold text-slate-500">Booking reference: APX-482916</p>
-                      </div>
-                      <Link to="/contact" className="mt-4 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2 sm:mt-0">Change or cancel <ArrowRight className="h-4 w-4" /></Link>
-                    </article>
-                    <article className="py-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Completed</p>
-                        <h3 className="mt-2 font-bold text-blue-950">Abuja (ABV) to Dubai (DXB)</h3>
-                        <p className="mt-1 text-sm text-slate-600">Emirates · Return · Economy · 10 Sep – 17 Sep 2026</p>
-                        <p className="mt-2 text-xs font-semibold text-slate-500">Booking reference: APX-319704</p>
-                      </div>
-                      <button type="button" onClick={() => setView('refunds')} className="mt-4 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2 sm:mt-0">Check refund <ArrowRight className="h-4 w-4" /></button>
-                    </article>
-                  </div>
-                </div>
-              </section>
-            )}
+              <div className="mt-5 flex gap-1 overflow-x-auto border-b border-slate-200" role="tablist" aria-label="Booking categories">
+                {categories.map((category) => <button key={category.value} type="button" role="tab" aria-selected={activeCategory === category.value} onClick={() => { setActiveCategory(category.value); setVisibleCount(5); }} className={`shrink-0 border-b-2 px-3 py-3 text-sm font-semibold ${activeCategory === category.value ? 'border-amber-500 text-blue-950' : 'border-transparent text-slate-500 hover:text-blue-900'}`}>{category.label}</button>)}
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm"><span className="text-slate-500">Showing:</span>
+                {[
+                  { label: 'All', value: 'all' as const }, { label: 'Upcoming Trips', value: 'upcoming' as const }, { label: 'To Manage', value: 'manage' as const }, { label: 'Refunds', value: 'refunds' as const },
+                ].map((filter) => <button key={filter.value} type="button" onClick={() => { setBookingFilter(filter.value); setVisibleCount(5); }} className={`rounded-full px-3 py-1.5 font-semibold ${bookingFilter === filter.value ? 'bg-blue-900 text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:text-blue-900'}`}>{filter.label}</button>)}
+              </div>
 
-            {view === 'refunds' && (
-              <section>
-                <h2 className="text-xl font-extrabold text-blue-950">Refund status</h2>
-                <div className="mt-5 border-y border-slate-200 py-8">
-                  <div className="flex flex-col justify-between gap-4 border-y border-slate-200 py-5 sm:flex-row sm:items-center">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-amber-700">Processing</p>
-                      <h3 className="mt-2 font-bold text-blue-950">Refund for APX-319704</h3>
-                      <p className="mt-1 text-sm text-slate-600">Abuja to Dubai · Submitted 18 Sep 2026</p>
-                    </div>
-                    <span className="text-lg font-extrabold text-blue-950">₦245,000</span>
-                  </div>
-                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">The supplier is reviewing this request. Refund eligibility and timing depend on the fare conditions and supplier confirmation.</p>
-                  <Link to="/contact" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2">Contact support <ArrowRight className="h-4 w-4" /></Link>
+              {filteredBookings.length ? <>
+                <div className="mt-5 hidden overflow-x-auto border-y border-slate-200 lg:block">
+                  <table className="w-full min-w-[850px] border-collapse text-left text-sm">
+                    <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600"><tr>{['Booking Reference', 'Type', 'Booking Details', 'Date', 'Status', 'Amount', 'Manage'].map((heading) => <th key={heading} className="px-3 py-3 font-bold">{heading}</th>)}</tr></thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">{filteredBookings.slice(0, visibleCount).map((booking) => <tr key={booking.reference} className="align-top">
+                      <td className="px-3 py-4"><Link to={`/dashboard/bookings/${booking.reference}`} className="font-bold text-blue-900 underline underline-offset-2">{booking.reference}</Link></td><td className="px-3 py-4 text-slate-700">{booking.category}</td>
+                      <td className="max-w-[260px] px-3 py-4"><span className="block font-semibold text-slate-900">{booking.title}</span><span className="mt-1 block text-xs text-slate-500">{booking.summary}</span></td><td className="whitespace-nowrap px-3 py-4 text-slate-700">{booking.dateLabel}</td>
+                      <td className="px-3 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold ${statusClass(booking.status)}`}>{booking.status}</span></td><td className="whitespace-nowrap px-3 py-4 font-semibold text-slate-900">{formatBookingAmount(booking.amount)}</td><td className="px-3 py-4">{renderManageMenu(booking)}</td>
+                    </tr>)}</tbody>
+                  </table>
                 </div>
-              </section>
-            )}
+                <div className="mt-4 space-y-3 lg:hidden">{filteredBookings.slice(0, visibleCount).map((booking) => <article key={booking.reference} className="border-y border-slate-200 bg-white p-4">
+                  <div className="flex items-start justify-between gap-3"><div><Link to={`/dashboard/bookings/${booking.reference}`} className="font-bold text-blue-900 underline underline-offset-2">{booking.reference}</Link><p className="mt-1 text-xs text-slate-500">{booking.category}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${statusClass(booking.status)}`}>{booking.status}</span></div>
+                  <h3 className="mt-3 font-bold text-slate-900">{booking.title}</h3><p className="mt-1 text-sm text-slate-600">{booking.summary}</p>
+                  <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3 text-sm"><div><dt className="text-xs text-slate-500">Date</dt><dd className="mt-1 font-medium text-slate-800">{booking.dateLabel}</dd></div><div><dt className="text-xs text-slate-500">Amount</dt><dd className="mt-1 font-semibold text-slate-900">{formatBookingAmount(booking.amount)}</dd></div></dl>
+                  <div className="mt-4 border-t border-slate-100 pt-3">{renderManageMenu(booking)}</div>
+                </article>)}</div>
+                {filteredBookings.length > visibleCount && <button type="button" onClick={() => setVisibleCount((count) => count + 5)} className="mt-5 w-full border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-blue-900 hover:border-blue-900 sm:w-auto">Load More</button>}
+              </> : <div className="mt-8 border-y border-slate-200 py-12 text-center">
+                <CalendarDays className="mx-auto h-8 w-8 text-slate-400" /><h3 className="mt-3 font-bold text-blue-950">No bookings found</h3><p className="mt-1 text-sm text-slate-600">{emptyBookingMessage}</p>
+                <Link to={newBookingLinks.find((item) => item.label === categories.find((category) => category.value === activeCategory)?.label)?.to || '/flights'} className="mt-5 inline-flex items-center rounded-md bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-amber-600">Book Now</Link>
+              </div>}
+            </section>}
 
-            {view === 'profile' && (
-              <section>
-                <h2 className="text-xl font-extrabold text-blue-950">Personal details</h2>
-                <div className="mt-5 border-y border-slate-200 py-6">
-                  <p className="text-sm text-slate-500">Email address</p>
-                  <p className="mt-1 font-semibold text-slate-900">{email}</p>
-                  <div className="mt-5 grid gap-5 border-t border-slate-200 pt-5 sm:grid-cols-2">
-                    <div><p className="text-sm text-slate-500">Full name</p><p className="mt-1 font-semibold text-slate-900">{name}</p></div>
-                    <div><p className="text-sm text-slate-500">Phone number</p><p className="mt-1 font-semibold text-slate-900">+234 803 555 0142</p></div>
-                    <div><p className="text-sm text-slate-500">Home city</p><p className="mt-1 font-semibold text-slate-900">Ibadan, Nigeria</p></div>
-                    <div><p className="text-sm text-slate-500">Member since</p><p className="mt-1 font-semibold text-slate-900">January 2024</p></div>
-                  </div>
-                  <button type="button" className="mt-6 rounded-md border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-900 hover:text-blue-900">Edit profile</button>
-                </div>
-              </section>
-            )}
+            {view === 'refunds' && <section>
+              <h2 className="text-xl font-extrabold text-blue-950">Refund status</h2>
+              {refundsInProgress.length ? refundsInProgress.map((booking) => <div key={booking.reference} className="mt-5 border-y border-slate-200 py-6">
+                <p className="text-xs font-bold uppercase tracking-wider text-sky-700">Processing</p><h3 className="mt-2 font-bold text-blue-950">Refund for <Link className="underline" to={`/dashboard/bookings/${booking.reference}`}>{booking.reference}</Link></h3>
+                <p className="mt-1 text-sm text-slate-600">{booking.title} · {booking.dateLabel}</p><p className="mt-3 font-extrabold text-blue-950">{booking.paymentStatus}</p>
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">The supplier is reviewing this request. Refund eligibility and timing depend on the fare conditions and supplier confirmation.</p><Link to="/contact" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-900 underline underline-offset-2">Contact support <ArrowRight className="h-4 w-4" /></Link>
+              </div>) : <p className="mt-5 border-y border-slate-200 py-10 text-sm text-slate-600">You have no refunds in progress.</p>}
+            </section>}
+
+            {view === 'profile' && <section>
+              <h2 className="text-xl font-extrabold text-blue-950">Personal details</h2><div className="mt-5 border-y border-slate-200 py-6">
+                <p className="text-sm text-slate-500">Email address</p><p className="mt-1 font-semibold text-slate-900">{email}</p>
+                <div className="mt-5 grid gap-5 border-t border-slate-200 pt-5 sm:grid-cols-2"><div><p className="text-sm text-slate-500">Full name</p><p className="mt-1 font-semibold text-slate-900">{name}</p></div><div><p className="text-sm text-slate-500">Phone number</p><p className="mt-1 font-semibold text-slate-900">+234 803 555 0142</p></div><div><p className="text-sm text-slate-500">Home city</p><p className="mt-1 font-semibold text-slate-900">Ibadan, Nigeria</p></div><div><p className="text-sm text-slate-500">Member since</p><p className="mt-1 font-semibold text-slate-900">January 2024</p></div></div>
+                <button type="button" className="mt-6 rounded-md border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-900 hover:text-blue-900">Edit profile</button>
+              </div>
+            </section>}
           </main>
         </div>
       </div>
