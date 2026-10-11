@@ -22,7 +22,7 @@ const HotelsForm: React.FC = () => {
   };
 
   const handleSearch = () => {
-    navigate('/hotels/search');
+    navigate('/hotels/search', { state: { checkInDate, checkOutDate } });
   };
 
   return (

@@ -185,7 +185,7 @@ const FlightCheckout: React.FC = () => {
                   {couponApplied && <p className="text-emerald-600 font-bold text-sm mt-3 flex items-center"><Check className="w-4 h-4 mr-1" /> Coupon APPLIED (-₦15,000)</p>}
                 </div>
 
-                <PaystackPayment amount={total} description="Flight booking" />
+                <PaystackPayment amount={total} description="Flight booking" depositRate={0.75} travelDate={booking.departDate} />
               </div>
             )}
 

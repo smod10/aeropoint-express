@@ -175,7 +175,7 @@ const HotelDetails: React.FC = () => {
               </div>
 
               <button
-                onClick={() => navigate('/hotels/checkout')}
+                onClick={() => navigate('/hotels/checkout', { state: { checkInDate: location.state?.checkInDate } })}
                 className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-black text-lg py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20 flex justify-center items-center group mb-4"
               >
                 Proceed to Checkout <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" />

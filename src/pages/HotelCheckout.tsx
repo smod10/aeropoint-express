@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Check, User, ShieldCheck, Coffee, ArrowRight, ArrowLeft, BedDouble } from 'lucide-react';
 import PaystackPayment from '../components/PaystackPayment';
 import PhoneCountrySelect from '../components/PhoneCountrySelect';
 
 const HotelCheckout: React.FC = () => {
+  const checkInDate: string | undefined = useLocation().state?.checkInDate;
   const [step, setStep] = useState(1);
   const [couponCode, setCouponCode] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
@@ -151,7 +153,7 @@ const HotelCheckout: React.FC = () => {
                   {couponApplied && <p className="text-emerald-600 font-bold text-sm mt-3 flex items-center"><Check className="w-4 h-4 mr-1" /> Coupon APPLIED (-10% OFF)</p>}
                 </div>
 
-                <PaystackPayment amount={couponApplied ? 630000 : 700000} description="Stay booking" />
+                <PaystackPayment amount={couponApplied ? 630000 : 700000} description="Stay booking" depositRate={0.3} travelDate={checkInDate} />
               </div>
             )}
 

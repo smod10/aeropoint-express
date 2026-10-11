@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Filter, Search, ChevronDown, X, MapPin, Star } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import HotelCard from '../components/hotels/HotelCard';
 import HotelsForm from '../components/BookingWidget/HotelsForm';
 
 const HotelSearchResults: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [priceRange, setPriceRange] = useState(2500000);
   const [activeTab, setActiveTab] = useState('recommended');
 
@@ -224,7 +225,7 @@ const HotelSearchResults: React.FC = () => {
           {/* Render Hotel Cards */}
           <div>
             {mockHotels.map((hotel) => (
-              <HotelCard key={hotel.id} {...hotel} onBookNow={() => navigate('/hotels/details', { state: { hotel } })} />
+              <HotelCard key={hotel.id} {...hotel} onBookNow={() => navigate('/hotels/details', { state: { hotel, checkInDate: location.state?.checkInDate } })} />
             ))}
           </div>
 

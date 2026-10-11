@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, CalendarDays, ChevronDown, CircleHelp, LogOut, Plane, UserRound, WalletCards } from 'lucide-react';
 import { customerBookings, formatBookingAmount, type BookingCategory, type CustomerBooking } from '../data/customerBookings';
 
@@ -24,7 +24,8 @@ const newBookingLinks = [
 ];
 
 const CustomerDashboard: React.FC = () => {
-  const [view, setView] = useState<DashboardView>('overview');
+  const initialView = useLocation().state?.view;
+  const [view, setView] = useState<DashboardView>(() => (initialView === 'bookings' ? 'bookings' : 'overview'));
   const [bookingFilter, setBookingFilter] = useState<BookingFilter>('all');
   const [activeCategory, setActiveCategory] = useState<BookingCategory | 'all'>('all');
   const [visibleCount, setVisibleCount] = useState(5);
@@ -198,7 +199,7 @@ const CustomerDashboard: React.FC = () => {
               </div>
 
               {filteredBookings.length ? <>
-                <div className="mt-5 hidden overflow-x-auto border-y border-slate-200 lg:block">
+                <div className="mt-5 hidden overflow-x-auto border-y border-slate-200 lg:block lg:overflow-visible">
                   <table className="w-full min-w-[850px] border-collapse text-left text-sm">
                     <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600"><tr>{['Booking Reference', 'Type', 'Booking Details', 'Date', 'Status', 'Amount', 'Manage'].map((heading) => <th key={heading} className="px-3 py-3 font-bold">{heading}</th>)}</tr></thead>
                     <tbody className="divide-y divide-slate-200 bg-white">{filteredBookings.slice(0, visibleCount).map((booking) => <tr key={booking.reference} className="align-top">
@@ -239,7 +240,7 @@ const CustomerDashboard: React.FC = () => {
             </section>}
           </main>
         </div>
-        <div className="mt-3 flex justify-start pt-0 sm:mt-10 sm:justify-end sm:border-t sm:border-slate-200 sm:pt-5">
+        <div className="mt-3 flex justify-start pt-0 sm:mt-6 lg:pl-[272px]">
           <button type="button" onClick={signOut} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-900"><LogOut className="h-4 w-4" /> Sign Out</button>
         </div>
       </div>
