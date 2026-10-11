@@ -107,7 +107,7 @@ const CustomerDashboard: React.FC = () => {
         <button type="button" aria-expanded={openManageReference === booking.reference} onClick={() => setOpenManageReference(openManageReference === booking.reference ? '' : booking.reference)} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-blue-950 hover:border-blue-900">
           Manage <ChevronDown className="h-4 w-4" />
         </button>
-        {openManageReference === booking.reference && <div className="absolute right-0 z-20 mt-2 w-40 rounded-md border border-slate-200 bg-white py-1 shadow-lg">
+        {openManageReference === booking.reference && <div className="absolute left-0 lg:left-auto lg:right-0 z-20 mt-2 w-40 rounded-md border border-slate-200 bg-white py-1 shadow-lg">
           {actions.map((action) => <button key={action} type="button" onClick={() => manageBooking(action, booking)} className="block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-900">{action}</button>)}
         </div>}
       </div>
@@ -178,7 +178,7 @@ const CustomerDashboard: React.FC = () => {
                 <div><h2 className="text-xl font-extrabold text-blue-950">My bookings</h2><p className="mt-1 text-sm text-slate-600">{filteredBookings.length} booking{filteredBookings.length === 1 ? '' : 's'}</p></div>
                 <div className="relative self-start">
                   <button type="button" aria-expanded={bookingMenuOpen} onClick={() => setBookingMenuOpen(!bookingMenuOpen)} className="inline-flex items-center gap-2 rounded-md bg-blue-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-950">Make a New Booking <ChevronDown className="h-4 w-4" /></button>
-                  {bookingMenuOpen && <div className="absolute right-0 z-20 mt-2 w-52 rounded-md border border-slate-200 bg-white py-1 shadow-lg">{newBookingLinks.map((item) => <Link key={item.to} to={item.to} onClick={() => setBookingMenuOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-900">{item.label}</Link>)}</div>}
+                  {bookingMenuOpen && <div className="absolute left-0 sm:left-auto sm:right-0 z-20 mt-2 w-52 rounded-md border border-slate-200 bg-white py-1 shadow-lg">{newBookingLinks.map((item) => <Link key={item.to} to={item.to} onClick={() => setBookingMenuOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-900">{item.label}</Link>)}</div>}
                 </div>
               </div>
 

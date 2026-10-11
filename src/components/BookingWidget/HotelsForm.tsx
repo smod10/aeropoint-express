@@ -83,7 +83,7 @@ const HotelsForm: React.FC = () => {
           {showGuests && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowGuests(false)}></div>
-              <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-100 p-4 z-20 flex flex-col space-y-4">
+              <div className="absolute top-full left-0 mt-2 w-72 max-w-[calc(100vw-3rem)] bg-white rounded-xl shadow-2xl border border-slate-100 p-4 z-20 flex flex-col space-y-4">
                 {[
                   { id: 'rooms', label: 'Rooms', desc: '' },
                   { id: 'adults', label: 'Adults', desc: '18+ years' },
