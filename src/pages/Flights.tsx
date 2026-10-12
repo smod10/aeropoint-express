@@ -145,7 +145,15 @@ const Flights: React.FC = () => {
         {/* 2-Row Horizontal Slider utilizing CSS Grid */}
         <div ref={scrollRef} className="grid grid-rows-2 grid-flow-col gap-4 md:gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth auto-cols-[calc(50%-0.5rem)] lg:auto-cols-[calc(25%-1.125rem)] overflow-x-auto">
           {flightDeals.map((deal, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start h-full">
+            <div
+              key={idx}
+              role="link"
+              tabIndex={0}
+              onClick={() => navigate('/flights/search', { state: { tripType: deal.type, from: deal.from, to: deal.to } })}
+              onKeyDown={(event) => { if (event.key === 'Enter') navigate('/flights/search', { state: { tripType: deal.type, from: deal.from, to: deal.to } }); }}
+              aria-label={`${deal.from} to ${deal.to}, from ${deal.price}`}
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start h-full"
+            >
               <div className="h-32 md:h-40 overflow-hidden relative shrink-0">
                 <img
                   src={deal.img}
@@ -178,15 +186,8 @@ const Flights: React.FC = () => {
                     <div className="text-sm md:text-lg font-black text-blue-900">{deal.price}</div>
                   </div>
                   <button
-                    onClick={() =>
-                      navigate('/flights/search', {
-                        state: {
-                          tripType: deal.type,
-                          from: deal.from,
-                          to: deal.to,
-                        },
-                      })
-                    }
+                    type="button"
+                    tabIndex={-1}
                     className="bg-slate-50 text-blue-900 px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors"
                   >
                     Select

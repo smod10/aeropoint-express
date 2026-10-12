@@ -30,7 +30,7 @@ const Blog: React.FC = () => {
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visibleArticles.map((article) => (
-            <article key={article.id} className="group flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+            <article key={article.id} className="group relative flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
               <Link to={`/blog/${article.slug}`} className="relative block aspect-[16/10] overflow-hidden" aria-label={`Read ${article.title}`}>
                 <img src={article.image} alt="" onError={(event) => { event.currentTarget.src = imageFallbacks.blog; }} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 <span className="absolute left-4 top-4 rounded bg-white px-3 py-1 text-xs font-bold uppercase text-blue-900">{article.category}</span>
@@ -40,7 +40,7 @@ const Blog: React.FC = () => {
                   <span className="inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{article.date}</span>
                   <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" />{article.readTime}</span>
                 </div>
-                <h2 className="text-xl font-bold leading-snug text-blue-950 group-hover:text-blue-800"><Link to={`/blog/${article.slug}`}>{article.title}</Link></h2>
+                <h2 className="text-xl font-bold leading-snug text-blue-950 group-hover:text-blue-800"><Link to={`/blog/${article.slug}`} className="after:absolute after:inset-0 after:content-['']">{article.title}</Link></h2>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{article.excerpt}</p>
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                   <span className="inline-flex items-center gap-1 text-xs text-slate-500"><User className="h-3.5 w-3.5" />{article.author}</span>

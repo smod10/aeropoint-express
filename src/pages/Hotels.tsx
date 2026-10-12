@@ -119,7 +119,15 @@ const Hotels: React.FC = () => {
 
         <div ref={scrollRef} className="flex overflow-x-auto gap-4 md:gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth">
           {trendingHotels.map((hotel, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]">
+            <div
+              key={idx}
+              role="link"
+              tabIndex={0}
+              onClick={() => navigate('/hotels/search')}
+              onKeyDown={(event) => { if (event.key === 'Enter') navigate('/hotels/search'); }}
+              aria-label={`${hotel.name}, ${hotel.location}, ${hotel.price} per night`}
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden flex flex-col snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]"
+            >
               <div className="h-56 overflow-hidden relative">
                 <img
                   src={hotel.img}
@@ -146,7 +154,8 @@ const Hotels: React.FC = () => {
                     <span className="text-xl font-black text-blue-900">{hotel.price}</span>
                   </div>
                   <button
-                    onClick={() => navigate('/hotels/search')}
+                    type="button"
+                    tabIndex={-1}
                     className="bg-slate-50 text-blue-900 px-4 py-2 rounded-lg font-semibold text-sm group-hover:bg-blue-900 group-hover:text-white transition-colors"
                   >
                     Select

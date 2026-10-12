@@ -45,7 +45,7 @@ const BlogSection: React.FC = () => {
 
         <div ref={scrollRef} className="flex overflow-x-auto gap-6 pb-8 pt-4 snap-x snap-mandatory hide-scrollbar scroll-smooth">
           {blogArticles.map((post) => (
-            <div key={post.id} className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden group hover:shadow-lg transition-all duration-300 snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]">
+            <div key={post.id} className="relative bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden group hover:shadow-lg transition-all duration-300 snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[calc(33.333%-1rem)]">
               <div className="h-56 overflow-hidden relative">
                 <img
                   src={post.image}
@@ -65,7 +65,7 @@ const BlogSection: React.FC = () => {
                   <div className="flex items-center"><User className="w-3.5 h-3.5 mr-1.5" /> {post.author}</div>
                 </div>
                 <h3 className="text-xl font-bold text-blue-950 mb-3 leading-snug group-hover:text-amber-500 transition-colors line-clamp-2">
-                  <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                  <Link to={`/blog/${post.slug}`} className="after:absolute after:inset-0 after:content-['']">{post.title}</Link>
                 </h3>
                 <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
                   {post.excerpt}

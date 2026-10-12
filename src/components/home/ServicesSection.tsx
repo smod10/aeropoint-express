@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Plane, Hotel, Map, FileText } from 'lucide-react';
 
 const ServicesSection: React.FC = () => {
   const services = [
-    { icon: Plane, title: "Global Flights", desc: "Best fares across 500+ airlines worldwide." },
-    { icon: Hotel, title: "Luxury Stays", desc: "Curated stays from boutique to 5-star." },
-    { icon: Map, title: "Hajj & Umrah", desc: "Premium, spiritually guided pilgrimage tours." },
-    { icon: FileText, title: "Visa Assistance", desc: "Fast, stress-free visa processing." },
+    { icon: Plane, title: "Global Flights", desc: "Best fares across 500+ airlines worldwide.", to: '/flights' },
+    { icon: Hotel, title: "Luxury Stays", desc: "Curated stays from boutique to 5-star.", to: '/hotels' },
+    { icon: Map, title: "Hajj & Umrah", desc: "Premium, spiritually guided pilgrimage tours.", to: '/umrah' },
+    { icon: FileText, title: "Visa Assistance", desc: "Fast, stress-free visa processing.", to: '/visas' },
   ];
 
   return (
@@ -17,13 +18,13 @@ const ServicesSection: React.FC = () => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
         {services.map((service, idx) => (
-          <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group cursor-pointer">
+          <Link key={idx} to={service.to} className="block bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group">
             <div className="w-14 h-14 bg-blue-50 text-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-900 group-hover:text-amber-500 transition-colors">
               <service.icon className="w-7 h-7" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">{service.title}</h3>
             <p className="text-slate-500 leading-relaxed">{service.desc}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

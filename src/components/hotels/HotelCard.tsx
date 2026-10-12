@@ -23,7 +23,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
   pricePerNight, totalPrice, image, amenities, isTopPick, onBookNow 
 }) => {
   return (
-    <div className={`bg-white border rounded-xl shadow-sm hover:shadow-md transition-shadow mb-5 overflow-hidden flex flex-col md:flex-row ${isTopPick ? 'border-amber-400' : 'border-slate-200'}`}>
+    <div onClick={onBookNow} className={`bg-white border rounded-xl shadow-sm hover:shadow-md transition-shadow mb-5 overflow-hidden flex flex-col md:flex-row cursor-pointer ${isTopPick ? 'border-amber-400' : 'border-slate-200'}`}>
       
       {/* Image Section */}
       <div className="w-full md:w-1/3 lg:w-1/4 h-56 md:h-auto relative shrink-0">
@@ -91,7 +91,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
               <span className="text-xs text-slate-500 font-medium">{pricePerNight} / night</span>
             </div>
             <button 
-              onClick={onBookNow}
+              type="button"
               className="md:mt-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm flex items-center shrink-0"
             >
               Book Now <ChevronRight className="w-4 h-4 ml-1" />
