@@ -17,7 +17,7 @@ const PackagesForm: React.FC = () => {
     // Umrah & Hajj
     { name: 'Mecca & Medina (Umrah)', type: 'Umrah & Hajj' },
     { name: 'Ramadan in Mecca (Last 10 Days)', type: 'Umrah & Hajj' },
-    { name: 'Hajj Premium Tour 2026', type: 'Umrah & Hajj' },
+    { name: 'Hajj Premium Tour', type: 'Umrah & Hajj' },
     { name: 'Jerusalem Islamic Tour (Al-Aqsa)', type: 'Umrah & Hajj' },
     { name: 'Family Umrah Plus Dubai', type: 'Umrah & Hajj' },
     { name: 'VIP Umrah Retreat', type: 'Umrah & Hajj' },
