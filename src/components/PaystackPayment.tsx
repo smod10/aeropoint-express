@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Landmark, LockKeyhole } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { contactInfo } from '../data/contactInfo';
@@ -24,6 +24,8 @@ interface PaystackPaymentProps {
   description: string;
   depositRate?: number;
   travelDate?: string;
+  autoOpen?: boolean;
+  totalLabel?: string;
 }
 
 const depositEligible = (travelDate?: string) => {
@@ -36,7 +38,7 @@ const depositEligible = (travelDate?: string) => {
   return travel >= minDate;
 };
 
-const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, description, depositRate, travelDate }) => {
+const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, description, depositRate, travelDate, autoOpen, totalLabel = 'Booking total' }) => {
   const [email] = useState(() => sessionStorage.getItem('aeropointCustomerEmail') || contactInfo.email);
   const navigate = useNavigate();
   const [payOption, setPayOption] = useState<'full' | 'deposit'>('full');
@@ -85,12 +87,21 @@ const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, 
 
   const hasBankDetails = Boolean(bankName && accountName && accountNumber);
 
+  const autoOpened = useRef(false);
+  useEffect(() => {
+    if (autoOpen && sdkReady && publicKey && !autoOpened.current) {
+      autoOpened.current = true;
+      startPayment();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpen, sdkReady, publicKey]);
+
   return (
     <div className="space-y-5">
       <section className="rounded-lg border border-slate-200 bg-white p-5">
         <h3 className="font-bold text-blue-950">Payment breakdown</h3>
         <dl className="mt-3 space-y-2 text-sm">
-          <div className="flex justify-between"><dt className="text-slate-600">Booking total</dt><dd className="font-semibold text-slate-900">₦{totalAmount.toLocaleString()}</dd></div>
+          <div className="flex justify-between"><dt className="text-slate-600">{totalLabel}</dt><dd className="font-semibold text-slate-900">₦{totalAmount.toLocaleString()}</dd></div>
           {useDeposit && <div className="flex justify-between"><dt className="text-slate-600">Balance due before travel</dt><dd className="font-semibold text-slate-900">₦{(totalAmount - amount).toLocaleString()}</dd></div>}
           <div className="flex justify-between border-t border-slate-200 pt-2"><dt className="font-bold text-slate-800">{description} – payable now</dt><dd className="font-black text-blue-900">₦{amount.toLocaleString()}</dd></div>
         </dl>

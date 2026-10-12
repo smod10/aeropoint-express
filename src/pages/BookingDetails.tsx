@@ -69,6 +69,10 @@ const BookingDetails: React.FC = () => {
               { label: 'Payment status', value: booking.paymentStatus },
             ].map((item) => <div key={item.label}><dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</dt><dd className="mt-1 font-bold text-slate-900">{item.value}</dd></div>)}
           </dl>
+          {balance > 0 && <div className="print:hidden mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-slate-600">{booking.balanceDueDate ? `Balance of ${formatBookingAmount(balance)} is due by ${new Date(booking.balanceDueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}.` : `Balance of ${formatBookingAmount(balance)} is outstanding.`}</p>
+            <Link to={`/dashboard/bookings/${booking.reference}/pay`} className="inline-flex items-center justify-center rounded-md bg-amber-500 px-5 py-3 text-sm font-bold text-slate-900 hover:bg-amber-600">Pay balance {formatBookingAmount(balance)}</Link>
+          </div>}
         </section>
 
         <section id="documents" className="mt-4 scroll-mt-28 border border-slate-200 bg-white p-5">

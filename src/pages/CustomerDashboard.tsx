@@ -80,9 +80,17 @@ const CustomerDashboard: React.FC = () => {
   const canChange = (booking: CustomerBooking) => booking.status === 'Confirmed' && booking.startDate >= today && booking.category !== 'Visa';
   const canCancel = (booking: CustomerBooking) => booking.startDate >= today && ['Confirmed', 'Action required'].includes(booking.status);
   const canViewInvoice = (booking: CustomerBooking) => booking.amountPaid > 0;
+  const canPayBalance = (booking: CustomerBooking) => booking.amount > booking.amountPaid && booking.amountPaid > 0 && ['Confirmed', 'Action required'].includes(booking.status);
+  const balanceOf = (booking: CustomerBooking) => booking.amount - booking.amountPaid;
+  const bookingsWithBalance = bookings.filter(canPayBalance);
+  const balanceBadge = (booking: CustomerBooking) => canPayBalance(booking) && <span className="mt-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-900">Balance due {formatBookingAmount(balanceOf(booking))}</span>;
 
-  const manageBooking = (action: 'Change' | 'Cancel' | 'Invoice', booking: CustomerBooking) => {
+  const manageBooking = (action: 'Change' | 'Cancel' | 'Invoice' | 'Pay balance', booking: CustomerBooking) => {
     setOpenManageReference('');
+    if (action === 'Pay balance') {
+      navigate(`/dashboard/bookings/${booking.reference}/pay`);
+      return;
+    }
     if (action === 'Invoice') {
       navigate(`/dashboard/bookings/${booking.reference}#documents`);
       return;
@@ -99,6 +107,7 @@ const CustomerDashboard: React.FC = () => {
 
   const renderManageMenu = (booking: CustomerBooking) => {
     const actions = [
+      ...(canPayBalance(booking) ? ['Pay balance' as const] : []),
       ...(canChange(booking) ? ['Change' as const] : []),
       ...(canCancel(booking) ? ['Cancel' as const] : []),
       ...(canViewInvoice(booking) ? ['Invoice' as const] : []),
@@ -153,6 +162,13 @@ const CustomerDashboard: React.FC = () => {
           </nav>
 
           <main className="min-w-0">
+            {(view === 'overview' || view === 'bookings') && bookingsWithBalance.length > 0 && <div role="alert" className="mb-5 border-l-4 border-amber-500 bg-amber-50 p-4">
+              <p className="font-extrabold text-amber-900">Balance to pay on {bookingsWithBalance.length} booking{bookingsWithBalance.length === 1 ? '' : 's'}</p>
+              <ul className="mt-3 space-y-3">{bookingsWithBalance.map((booking) => <li key={booking.reference} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <span className="text-sm text-amber-950"><strong>{booking.title}</strong> ({booking.reference}) · {formatBookingAmount(balanceOf(booking))} remaining{booking.balanceDueDate ? ` · due ${new Date(booking.balanceDueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}` : ''}</span>
+                <Link to={`/dashboard/bookings/${booking.reference}/pay`} className="inline-flex shrink-0 items-center justify-center rounded-md bg-amber-500 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-amber-600">Pay balance</Link>
+              </li>)}</ul>
+            </div>}
             {view === 'overview' && <section>
               <h2 className="text-xl font-extrabold text-blue-950">Account overview</h2>
               <div className="mt-3 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
@@ -202,17 +218,16 @@ const CustomerDashboard: React.FC = () => {
                 <div className="mt-5 hidden overflow-x-auto border-y border-slate-200 lg:block lg:overflow-visible">
                   <table className="w-full min-w-[850px] border-collapse text-left text-sm">
                     <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600"><tr>{['Booking Reference', 'Type', 'Booking Details', 'Date', 'Status', 'Amount', 'Manage'].map((heading) => <th key={heading} className="px-3 py-3 font-bold">{heading}</th>)}</tr></thead>
-                    <tbody className="divide-y divide-slate-200 bg-white">{filteredBookings.slice(0, visibleCount).map((booking) => <tr key={booking.reference} className="align-top">
+                    <tbody className="divide-y divide-slate-200 bg-white">{filteredBookings.slice(0, visibleCount).map((booking) => <tr key={booking.reference} className={`align-top ${canPayBalance(booking) ? 'bg-amber-50/60' : ''}`}>
                       <td className="px-3 py-4"><Link to={`/dashboard/bookings/${booking.reference}`} className="font-bold text-blue-900 underline underline-offset-2">{booking.reference}</Link></td><td className="px-3 py-4 text-slate-700">{booking.category}</td>
-                      <td className="max-w-[260px] px-3 py-4"><span className="block font-semibold text-slate-900">{booking.title}</span><span className="mt-1 block text-xs text-slate-500">{booking.summary}</span></td><td className="whitespace-nowrap px-3 py-4 text-slate-700">{booking.dateLabel}</td>
+                      <td className="max-w-[260px] px-3 py-4"><span className="block font-semibold text-slate-900">{booking.title}</span><span className="mt-1 block text-xs text-slate-500">{booking.summary}</span>{balanceBadge(booking)}</td><td className="whitespace-nowrap px-3 py-4 text-slate-700">{booking.dateLabel}</td>
                       <td className="px-3 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold ${statusClass(booking.status)}`}>{booking.status}</span></td><td className="whitespace-nowrap px-3 py-4 font-semibold text-slate-900">{formatBookingAmount(booking.amount)}</td><td className="px-3 py-4">{renderManageMenu(booking)}</td>
                     </tr>)}</tbody>
                   </table>
                 </div>
-                <div className="mt-3 space-y-2 lg:hidden sm:mt-4 sm:space-y-3">{filteredBookings.slice(0, visibleCount).map((booking) => <article key={booking.reference} className="border-y border-slate-200 bg-white p-3 sm:p-4">
+                <div className="mt-3 space-y-2 lg:hidden sm:mt-4 sm:space-y-3">{filteredBookings.slice(0, visibleCount).map((booking) => <article key={booking.reference} className={`border-y border-slate-200 p-3 sm:p-4 ${canPayBalance(booking) ? 'border-l-4 border-l-amber-500 bg-amber-50/60' : 'bg-white'}`}>
                   <div className="flex items-start justify-between gap-3"><div><Link to={`/dashboard/bookings/${booking.reference}`} className="font-bold text-blue-900 underline underline-offset-2">{booking.reference}</Link><p className="mt-1 text-xs text-slate-500">{booking.category}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${statusClass(booking.status)}`}>{booking.status}</span></div>
-                  <h3 className="mt-2 font-bold text-slate-900">{booking.title}</h3><p className="mt-1 text-sm text-slate-600">{booking.summary}</p>
-                  <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm"><div><dt className="text-xs text-slate-500">Date</dt><dd className="mt-1 font-medium text-slate-800">{booking.dateLabel}</dd></div><div><dt className="text-xs text-slate-500">Amount</dt><dd className="mt-1 font-semibold text-slate-900">{formatBookingAmount(booking.amount)}</dd></div></dl>
+                  <h3 className="mt-2 font-bold text-slate-900">{booking.title}</h3><p className="mt-1 text-sm text-slate-600">{booking.summary}</p>{balanceBadge(booking)}                  <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm"><div><dt className="text-xs text-slate-500">Date</dt><dd className="mt-1 font-medium text-slate-800">{booking.dateLabel}</dd></div><div><dt className="text-xs text-slate-500">Amount</dt><dd className="mt-1 font-semibold text-slate-900">{formatBookingAmount(booking.amount)}</dd></div></dl>
                   <div className="mt-3 border-t border-slate-100 pt-2.5">{renderManageMenu(booking)}</div>
                 </article>)}</div>
                 {filteredBookings.length > visibleCount && <button type="button" onClick={() => setVisibleCount((count) => count + 5)} className="mt-3 w-full border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-blue-900 hover:border-blue-900 sm:mt-5 sm:w-auto">Load More</button>}

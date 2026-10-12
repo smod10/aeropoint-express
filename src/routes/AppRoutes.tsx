@@ -31,6 +31,7 @@ import Auth from '../pages/Auth';
 import EmailVerification from '../pages/EmailVerification.tsx';
 import CustomerDashboard from '../pages/CustomerDashboard.tsx';
 import BookingDetails from '../pages/BookingDetails';
+import BalancePayment from '../pages/BalancePayment';
 import EditProfile from '../pages/EditProfile';
 
 const AppRoutes: React.FC = () => {
@@ -73,6 +74,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/dashboard/profile" element={<EditProfile />} />
           <Route path="/dashboard/bookings/:reference" element={<BookingDetails />} />
+          <Route path="/dashboard/bookings/:reference/pay" element={<BalancePayment />} />
         </Route>
       </Routes>
     </Router>

@@ -17,6 +17,7 @@ export interface CustomerBooking {
   details: { label: string; value: string }[];
   documents: string[];
   notes?: string;
+  balanceDueDate?: string;
 }
 
 const ownerEmail = 'amara.okafor@example.com';
@@ -140,6 +141,31 @@ export const customerBookings: CustomerBooking[] = [
       { label: 'Travellers', value: '1 adult' },
     ],
     documents: ['Invoice', 'Umrah confirmation', 'Travel itinerary'],
+  },
+  {
+    reference: 'APX-905731',
+    ownerEmail,
+    customerName,
+    category: 'Flight',
+    title: 'Lagos (LOS) to Dubai (DXB)',
+    summary: 'Emirates · Return · Economy',
+    dateLabel: '20 – 27 Jan 2027',
+    startDate: '2027-01-20',
+    status: 'Action required',
+    amount: 1200000,
+    amountPaid: 900000,
+    paymentStatus: '75% deposit paid · balance due',
+    travellers: 'Amara Okafor · 1 adult',
+    details: [
+      { label: 'Airline', value: 'Emirates · EK 784' },
+      { label: 'Route', value: 'Lagos (LOS) to Dubai (DXB)' },
+      { label: 'Departure', value: '20 Jan 2027 · 23:55' },
+      { label: 'Return', value: '27 Jan 2027 · 09:30' },
+      { label: 'Cabin', value: 'Economy' },
+    ],
+    documents: ['Invoice', 'Booking confirmation'],
+    notes: 'Tickets are issued once the balance is paid.',
+    balanceDueDate: '2026-12-20',
   },
   {
     reference: 'APX-118903',
