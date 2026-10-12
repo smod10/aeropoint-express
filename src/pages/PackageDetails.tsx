@@ -14,7 +14,7 @@ const PackageDetails: React.FC = () => {
 
   const nights = Math.max(Number.parseInt(pkg.days, 10) - 1, 0);
   const totalForTwo = (Number(pkg.price.replace(/[^\d]/g, '')) * 2).toLocaleString('en-NG');
-  const galleryImages = pkg.images.length > 1 ? pkg.images.slice(1, 3) : [pkg.image, pkg.image];
+  const galleryImages = pkg.images && pkg.images.length > 1 ? pkg.images.slice(1, 3) : [pkg.image, pkg.image];
 
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
@@ -118,7 +118,7 @@ const PackageDetails: React.FC = () => {
                 <h3 className="text-xl font-extrabold text-blue-950 mb-6">Day-by-Day Itinerary</h3>
                 <div className="border-l-2 border-amber-200 ml-3 space-y-8 pb-4">
                   
-                  {pkg.itinerary.map((item, index) => (
+                  {(pkg.itinerary ?? []).map((item, index) => (
                     <div key={item.title} className="relative pl-8">
                       <div className={`absolute w-4 h-4 rounded-full ${index < 2 ? 'bg-amber-500' : 'bg-blue-900'} -left-[9px] top-1 border-4 border-white box-content`} />
                       <h4 className="font-bold text-slate-800 text-lg mb-2">{item.title}</h4>

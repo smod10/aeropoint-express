@@ -76,9 +76,9 @@ const AdminTours: React.FC = () => {
     setTours(updatedTours);
     setEditingSlug(nextTour.slug);
     setForm(nextTour);
-    setImagesText(nextTour.images.join('\n'));
+    setImagesText(nextTour.images?.join('\n') ?? '');
     setHighlightsText(nextTour.highlights.join('\n'));
-    setItineraryText(nextTour.itinerary.map((item) => `${item.title} | ${item.detail}`).join('\n'));
+    setItineraryText((nextTour.itinerary ?? []).map((item) => `${item.title} | ${item.detail}`).join('\n'));
     setMessage('Tour saved in this browser.');
   };
 
