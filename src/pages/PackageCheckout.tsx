@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { User, Mail, ShieldCheck, AlertCircle, ArrowRight, MapPin, Calendar, Users, Plane, Hotel } from 'lucide-react';
 import PaystackPayment from '../components/PaystackPayment';
 import PhoneCountrySelect from '../components/PhoneCountrySelect';
@@ -7,6 +8,7 @@ import PhoneCountrySelect from '../components/PhoneCountrySelect';
 const countryNames = ['Nigeria', 'United Kingdom', 'United States', 'Canada', 'Saudi Arabia', 'Tanzania'];
 
 const PackageCheckout: React.FC = () => {
+  const departDate: string | undefined = useLocation().state?.departDate;
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
@@ -105,7 +107,7 @@ const PackageCheckout: React.FC = () => {
           </div>
 
           {/* Payment Method */}
-          <PaystackPayment amount={3700000} description="Tour booking" />
+          <PaystackPayment amount={3700000} description="Tour booking" depositRate={0.75} travelDate={departDate} minDepositDays={31} />
 
         </main>
 

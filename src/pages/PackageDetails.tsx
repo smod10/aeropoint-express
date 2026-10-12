@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { MapPin, Star, Calendar, Users, CheckCircle2, Plane, Hotel, Car, ArrowRight, Share2, Heart, ChevronDown } from 'lucide-react';
 import { imageFallbacks } from '../utils/imageFallbacks';
 import { getTourPackages } from '../data/packages';
+import { addDays, openDatePicker } from '../utils/dates';
 
 const PackageDetails: React.FC = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const [activeTab, setActiveTab] = useState('overview');
+  const [departDate, setDepartDate] = useState('');
+  const [dateError, setDateError] = useState('');
+  const returnInputRef = useRef<HTMLInputElement>(null);
   const pkg = slug ? getTourPackages().find((item) => item.slug === slug) : undefined;
 
   if (!pkg) return <Navigate to="/packages" replace />;
@@ -15,6 +19,17 @@ const PackageDetails: React.FC = () => {
   const nights = Math.max(Number.parseInt(pkg.days, 10) - 1, 0);
   const totalForTwo = (Number(pkg.price.replace(/[^\d]/g, '')) * 2).toLocaleString('en-NG');
   const galleryImages = pkg.images && pkg.images.length > 1 ? pkg.images.slice(1, 3) : [pkg.image, pkg.image];
+  const tourDays = Math.max(Number.parseInt(pkg.days, 10) || 1, 1);
+  const today = new Date().toISOString().split('T')[0];
+  const returnDate = departDate ? addDays(departDate, tourDays - 1) : '';
+
+  const handleCheckout = () => {
+    if (!departDate) {
+      setDateError('Select your departure date to continue.');
+      return;
+    }
+    navigate('/packages/checkout', { state: { departDate, returnDate } });
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-20">
@@ -162,16 +177,42 @@ const PackageDetails: React.FC = () => {
               </div>
 
               <div className="space-y-4 mb-6">
-                <div className="border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-900/20">
-                  <div className="relative group p-3 flex items-center cursor-pointer hover:bg-slate-50">
-                    <Calendar className="h-5 w-5 text-slate-400 mr-3" />
-                    <div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Select Date</div>
-                      <div className="text-slate-800 font-bold text-sm">Available dates confirmed on request</div>
+                <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 focus-within:ring-2 focus-within:ring-blue-900/20">
+                  <label className="relative p-3 flex items-center cursor-pointer hover:bg-slate-50">
+                    <Calendar className="h-5 w-5 text-slate-400 mr-3 shrink-0" />
+                    <div className="flex-1">
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Departure Date</div>
+                      <input
+                        type="date"
+                        min={today}
+                        value={departDate}
+                        onChange={(event) => {
+                          setDepartDate(event.target.value);
+                          setDateError('');
+                          if (event.target.value) openDatePicker(returnInputRef.current);
+                        }}
+                        className="w-full bg-transparent text-slate-800 font-bold text-sm focus:outline-none"
+                      />
                     </div>
-                    <ChevronDown className="w-4 h-4 text-slate-400 ml-auto" />
-                  </div>
+                  </label>
+                  <label className={`relative p-3 flex items-center ${departDate ? 'cursor-pointer hover:bg-slate-50' : 'opacity-60'}`}>
+                    <Calendar className="h-5 w-5 text-slate-400 mr-3 shrink-0" />
+                    <div className="flex-1">
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Return Date ({pkg.days}, {nights} Nights)</div>
+                      <input
+                        type="date"
+                        ref={returnInputRef}
+                        disabled={!departDate}
+                        min={returnDate}
+                        max={returnDate}
+                        value={returnDate}
+                        onChange={() => undefined}
+                        className="w-full bg-transparent text-slate-800 font-bold text-sm focus:outline-none disabled:cursor-not-allowed"
+                      />
+                    </div>
+                  </label>
                 </div>
+                {dateError && <p role="alert" className="text-sm font-semibold text-red-600">{dateError}</p>}
 
                 <div className="border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-900/20">
                   <div className="relative group p-3 flex items-center cursor-pointer hover:bg-slate-50">
@@ -190,8 +231,12 @@ const PackageDetails: React.FC = () => {
                 <span className="text-lg">₦{totalForTwo}</span>
               </div>
 
+              <div className="mb-6 rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-sm font-semibold text-emerald-800">
+                Part payment of 75% is allowed if you book more than 30 days ahead.
+              </div>
+
               <button 
-                onClick={() => navigate('/packages/checkout')}
+                onClick={handleCheckout}
                 className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-black text-lg py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20 flex justify-center items-center group"
               >
                 Proceed to Checkout <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" />

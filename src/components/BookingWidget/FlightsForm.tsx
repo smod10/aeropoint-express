@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Plane, MapPin, Calendar, Users, ChevronDown, Search, Plus, Trash2 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Plane, MapPin, Calendar, Users, ChevronDown, Search, Plus, Trash2, ArrowLeftRight, ArrowUpDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AirportInput from './AirportInput.tsx';
+import { openDatePicker } from '../../utils/dates';
 
 const FlightsForm: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const FlightsForm: React.FC = () => {
   
   const [departDate, setDepartDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
+  const returnInputRef = useRef<HTMLInputElement>(null);
 
   const today = new Date().toISOString().split('T')[0];
   const totalPassengers = passengers.adults + passengers.children + passengers.infants;
@@ -151,8 +153,17 @@ const FlightsForm: React.FC = () => {
       
       {tripType !== 'Multi-city' ? (
         <div className="flex flex-col lg:flex-row gap-4">
-          <div className={`flex flex-col md:flex-row ${tripType === 'One-way' ? 'flex-[2]' : 'flex-1'} bg-white border border-slate-200 rounded-xl divide-y md:divide-y-0 md:divide-x divide-slate-200 focus-within:ring-2 focus-within:ring-blue-900/20`}>
+          <div className={`relative flex flex-col md:flex-row ${tripType === 'One-way' ? 'flex-[2]' : 'flex-1'} bg-white border border-slate-200 rounded-xl divide-y md:divide-y-0 md:divide-x divide-slate-200 focus-within:ring-2 focus-within:ring-blue-900/20`}>
             <AirportInput icon={Plane} placeholder="Leaving from..." label="From" value={fromLocation} onChange={setFromLocation} />
+            <button
+              type="button"
+              onClick={() => { setFromLocation(toLocation); setToLocation(fromLocation); }}
+              aria-label="Swap origin and destination"
+              className="absolute right-4 top-1/2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-blue-900 shadow-sm transition-colors hover:bg-blue-900 hover:text-white md:left-1/2 md:right-auto md:-translate-x-1/2"
+            >
+              <ArrowUpDown className="h-4 w-4 md:hidden" />
+              <ArrowLeftRight className="hidden h-4 w-4 md:block" />
+            </button>
             <AirportInput icon={MapPin} placeholder="Going to..." label="To" value={toLocation} onChange={setToLocation} />
           </div>
 
@@ -166,7 +177,11 @@ const FlightsForm: React.FC = () => {
               </div>
               {departDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Depart</span>}
               <input 
-                type="date" min={today} value={departDate} onChange={(e) => setDepartDate(e.target.value)}
+                type="date" min={today} value={departDate} onChange={(e) => {
+                  setDepartDate(e.target.value);
+                  if (returnDate && returnDate < e.target.value) setReturnDate('');
+                  if (tripType === 'Return' && e.target.value) openDatePicker(returnInputRef.current);
+                }}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer" 
               />
             </div>
@@ -180,7 +195,7 @@ const FlightsForm: React.FC = () => {
                 </div>
                 {returnDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Return</span>}
                 <input 
-                  type="date" min={departDate || today} value={returnDate} onChange={(e) => setReturnDate(e.target.value)}
+                  type="date" ref={returnInputRef} min={departDate || today} value={returnDate} onChange={(e) => setReturnDate(e.target.value)}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer" 
                 />
               </div>

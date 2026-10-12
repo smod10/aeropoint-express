@@ -222,7 +222,8 @@ const Packages: React.FC = () => {
                       <Star className="w-3.5 h-3.5 text-amber-500 mr-1 fill-amber-500" /> {pkg.rating}
                     </div>
                   </div>
-                  <p className="text-slate-500 text-sm mb-6 flex-grow">Includes round-trip flights, luxury accommodation, daily breakfast, and guided tours.</p>
+                  <p className="text-slate-500 text-sm mb-2 flex-grow">Includes round-trip flights, luxury accommodation, daily breakfast, and guided tours.</p>
+                  <p className="text-xs font-semibold text-emerald-700 mb-4">Part payment of 75% allowed if booked more than 30 days ahead.</p>
                   
                   <div className="flex justify-between items-end pt-4 border-t border-slate-100">
                     <div>

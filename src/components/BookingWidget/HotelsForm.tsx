@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MapPin, Calendar, Users, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { openDatePicker } from '../../utils/dates';
 
 const HotelsForm: React.FC = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const HotelsForm: React.FC = () => {
   const [guests, setGuests] = useState({ rooms: 1, adults: 2, children: 0 });
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
+  const checkOutInputRef = useRef<HTMLInputElement>(null);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -46,7 +48,11 @@ const HotelsForm: React.FC = () => {
             </div>
             {checkInDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Check-in</span>}
             <input 
-              type="date" min={today} value={checkInDate} onChange={(e) => setCheckInDate(e.target.value)}
+              type="date" min={today} value={checkInDate} onChange={(e) => {
+                setCheckInDate(e.target.value);
+                if (checkOutDate && checkOutDate < e.target.value) setCheckOutDate('');
+                if (e.target.value) openDatePicker(checkOutInputRef.current);
+              }}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer" 
             />
           </div>
@@ -59,7 +65,7 @@ const HotelsForm: React.FC = () => {
             </div>
             {checkOutDate && <span className="absolute top-1 left-12 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Check-out</span>}
             <input 
-              type="date" min={checkInDate || today} value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)}
+              type="date" ref={checkOutInputRef} min={checkInDate || today} value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer" 
             />
           </div>

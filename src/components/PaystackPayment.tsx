@@ -25,24 +25,26 @@ interface PaystackPaymentProps {
   depositRate?: number;
   travelDate?: string;
   autoOpen?: boolean;
+  minDepositDays?: number;
   totalLabel?: string;
 }
 
-const depositEligible = (travelDate?: string) => {
+const depositEligible = (travelDate?: string, minDays?: number) => {
   if (!travelDate) return false;
   const travel = new Date(travelDate);
   if (Number.isNaN(travel.getTime())) return false;
   const minDate = new Date();
   minDate.setHours(0, 0, 0, 0);
-  minDate.setMonth(minDate.getMonth() + 1);
+  if (minDays) minDate.setDate(minDate.getDate() + minDays);
+  else minDate.setMonth(minDate.getMonth() + 1);
   return travel >= minDate;
 };
 
-const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, description, depositRate, travelDate, autoOpen, totalLabel = 'Booking total' }) => {
+const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, description, depositRate, travelDate, autoOpen, totalLabel = 'Booking total', minDepositDays }) => {
   const [email] = useState(() => sessionStorage.getItem('aeropointCustomerEmail') || contactInfo.email);
   const navigate = useNavigate();
   const [payOption, setPayOption] = useState<'full' | 'deposit'>('full');
-  const canDeposit = Boolean(depositRate) && depositEligible(travelDate);
+  const canDeposit = Boolean(depositRate) && depositEligible(travelDate, minDepositDays);
   const useDeposit = canDeposit && payOption === 'deposit';
   const amount = useDeposit ? Math.round(totalAmount * (depositRate as number)) : totalAmount;
   const [sdkReady, setSdkReady] = useState(Boolean(window.PaystackPop));
@@ -116,7 +118,7 @@ const PaystackPayment: React.FC<PaystackPaymentProps> = ({ amount: totalAmount, 
               </label>
             </div>
           ) : (
-            <p className="mt-3 text-xs text-slate-500">A {Math.round((depositRate as number) * 100)}% deposit is available when travel is at least one month away.</p>
+            <p className="mt-3 text-xs text-slate-500">A {Math.round((depositRate as number) * 100)}% deposit is available when travel is {minDepositDays ? `more than ${minDepositDays - 1} days` : 'at least one month'} away.</p>
           )
         ) : null}
       </section>
