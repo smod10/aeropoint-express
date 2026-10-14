@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Headset, Phone, MessageCircle, Mail, User, UserRound, LogOut } from 'lucide-react';
-import brandLogo from '../assets/aeropoint-express-logo.svg';
-import brandLogoWhite from '../assets/aeropoint-express-logo-white.svg';
+import brandLogo from '../assets/aeropoint-express-logo.png';
+import brandLogoWhite from '../assets/aeropoint-express-logo-white.png';
 import { contactInfo } from '../data/contactInfo';
 
 interface NavbarProps {

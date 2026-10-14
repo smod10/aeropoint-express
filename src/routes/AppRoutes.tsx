@@ -31,7 +31,7 @@ import Auth from '../pages/Auth';
 import EmailVerification from '../pages/EmailVerification.tsx';
 import CustomerDashboard from '../pages/CustomerDashboard.tsx';
 import BookingDetails from '../pages/BookingDetails';
-import BalancePayment from '../pages/BalancePayment';
+import BalancePayment from '../pages/BalancePayment.tsx';
 import EditProfile from '../pages/EditProfile';
 
 const AppRoutes: React.FC = () => {

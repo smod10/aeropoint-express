@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaTiktok, FaXTwitter, FaYoutube } from 'react-icons/fa6';
-import brandLogoWhite from '../assets/aeropoint-express-logo-white.svg';
+import brandLogoWhite from '../assets/aeropoint-express-logo-white.png';
 import { contactInfo } from '../data/contactInfo';
 import amadeusLogo from '../assets/partners/amadeus.png';
 import iataLogo from '../assets/partners/iata.png';
